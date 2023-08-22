@@ -7,6 +7,12 @@ set -e
 echo Starting install.sh
 sudo echo
 
+contains() {
+	case $1 in *"$2"*)
+		return 0;
+	esac
+	return 1;
+}
 # Dependencies
 if ! command -v zsh >/dev/null 2>&1; then
 	echo "Installing zsh"
@@ -17,24 +23,6 @@ if ! command -v git >/dev/null 2>&1; then
 	echo "Installing git"
 	sudo apt install git -y
 fi
-
-rm -f ~/.zshrc
-rm -f ~/.zshrc.pre-oh-my-zsh*
-rm -f ~/.zshrc.omz-uninstalled*
-ln -s ~/.zshconfig/.zshrc ~
-
-if ! command -v omz >/dev/null 2>&1; then
-	echo "Installing oh-my-zsh"
-	sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
-fi
-
-contains() {
-	case $1 in *"$2"*)
-		return 0;
-	esac
-	return 1;
-}
-
 if ! command -v python3 >/dev/null 2>&1; then
 	echo "Input python version 3.X to install (n to skip install)"
 	while true; do
@@ -56,5 +44,19 @@ if ! command -v python3 >/dev/null 2>&1; then
 	done
 fi
 
+
+
+
+rm -f ~/.zshrc.pre-oh-my-zsh*
+rm -f ~/.zshrc.omz-uninstalled*
+
+if ! command -v omz >/dev/null 2>&1; then
+	echo "Installing oh-my-zsh"
+	sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+fi
+
+
+rm -f ~/.zshrc
+ln -s ~/.zshconfig/.zshrc
 
 rm -- "$0"

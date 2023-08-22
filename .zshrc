@@ -93,7 +93,6 @@ source ~/.zshconfig/wsl.zsh
 
 
 
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"

@@ -15,6 +15,7 @@ confirm() {
 
 if ! confirm; then
 	exit 1
+fi
 
 rm -f ~/.zshrc
 rm -f ~/.zshrc.pre-oh-my-zsh*
