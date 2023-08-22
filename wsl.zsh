@@ -1,7 +1,8 @@
-autoload -Uz compinit
-compinit
 
 if [[ -a "/etc/wsl.conf" ]]; then
+	autoload -Uz compinit
+	compinit
+
 	alias root='/mnt/c/'
 	alias home='/mnt/c/Users/Nick'
 	alias desktop='/mnt/c/Users/Nick/Desktop'

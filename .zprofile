@@ -9,7 +9,7 @@ alias ldesktop='ld'
 alias ldesk='ld'
 
 
-alias zshcfg='code -n ~/.zshconfig/.zprofile ~/.zshrc ~/.oh-my-zsh/custom/themes/headline.zsh-theme'
+alias zshcfg="code -n ~/.zshconfig/.zprofile ~/.zshrc $ZSH/custom/themes/headline.zsh-theme"
 
 alias mcd='() { md $1 && cd $_ }'
 alias killssh='kill `pgrep ssh-agent`'
@@ -21,8 +21,8 @@ plugins=(
 	virtualenv
 	virtualenvwrapper
 )
-sed -i "s/\/usr\/local/\$HOME\/.local/g" ~/.oh-my-zsh/plugins/virtualenvwrapper/virtualenvwrapper.plugin.zsh
-sed -i "s/\/usr\/local/\$HOME\/.local/g" ~/.oh-my-zsh/plugins/git/git.plugin.zsh
+sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/virtualenvwrapper/virtualenvwrapper.plugin.zsh
+sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/git/git.plugin.zsh
 
 HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv)
 

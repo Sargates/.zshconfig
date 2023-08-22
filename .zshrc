@@ -75,16 +75,21 @@ source $ZSH/oh-my-zsh.sh
 # source $HOME/.zshconfig/.zprofile
 
 contains() {
-    [[ $1 =~ (^|[[:space:]])$2($|[[:space:]]) ]] && return 1 || return 0
+    if [[ "$1" == *"$2"* ]]; then
+		return 1
+	fi
+	return 0
 }
 
 for f in $HOME/.zshconfig/*
 do
 	file=`basename $f`
-	contains ".zprofile .zshrc autorun.sh readme.md .git" $file
+	contains ".zshrc autorun.sh readme.md .git" $file
 	if [[ $? == 0 ]]; then
-		# echo "Sourcing: " $f
+		echo "Sourcing $file"
 		source $f
+	else
+		echo "Skipped $file"
 	fi;
 
 	# source $f
