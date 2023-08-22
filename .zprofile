@@ -3,7 +3,6 @@ alias pip='python -m pip'
 alias cd..='cd ..'
 alias listapt="comm -23 <(apt-mark showmanual | sort -u) <(gzip -dc /var/log/installer/initial-status.gz | sed -n 's/^Package: //p' | sort -u)"
 alias zshrc='source ~/.zshrc'
-# echo `which zshrc`
 alias python='python3'
 alias ld='~/Desktop'
 alias ldesktop='ld'

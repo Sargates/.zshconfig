@@ -89,18 +89,8 @@ source ~/.zshconfig/path.zsh
 source ~/.zshconfig/ssh.zsh
 source ~/.zshconfig/wsl.zsh
 
-# for f in $HOME/.zshconfig/*; do
-# 	file=`basename $f`
-	
-# 	if ! contains ".zshrc install.sh readme.md .git" $file; then
-# 		echo "fortniting $file"
-# 		source "$f"
-# 	else
-# 		echo "Skipped $file"
-# 	fi;
 
-# 	# source $f
-# done
+
 
 
 

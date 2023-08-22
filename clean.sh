@@ -20,3 +20,4 @@ rm ~/.zshrc
 rm ~/.zshrc.pre-oh-my-zsh*
 rm ~/.zshrc.omz-uninstalled*
 rm -rf ~/.oh-my-zsh
+rm -rf ~/.zshconfig
