@@ -16,8 +16,8 @@ confirm() {
 if ! confirm; then
 	exit 1
 
-rm ~/.zshrc
-rm ~/.zshrc.pre-oh-my-zsh*
-rm ~/.zshrc.omz-uninstalled*
+rm -f ~/.zshrc
+rm -f ~/.zshrc.pre-oh-my-zsh*
+rm -f ~/.zshrc.omz-uninstalled*
 rm -rf ~/.oh-my-zsh
 rm -rf ~/.zshconfig

@@ -18,9 +18,9 @@ if ! command -v git >/dev/null 2>&1; then
 	sudo apt install git -y
 fi
 
-rm ~/.zshrc
-rm ~/.zshrc.pre-oh-my-zsh*
-rm ~/.zshrc.omz-uninstalled*
+rm -f ~/.zshrc
+rm -f ~/.zshrc.pre-oh-my-zsh*
+rm -f ~/.zshrc.omz-uninstalled*
 ln -s ~/.zshconfig/.zshrc ~
 
 if ! command -v omz >/dev/null 2>&1; then
