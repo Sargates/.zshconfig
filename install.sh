@@ -44,19 +44,11 @@ if ! command -v python3 >/dev/null 2>&1; then
 	done
 fi
 
-
-
-
-rm -f ~/.zshrc.pre-oh-my-zsh*
-rm -f ~/.zshrc.omz-uninstalled*
-
 if ! command -v omz >/dev/null 2>&1; then
 	echo "Installing oh-my-zsh"
 	sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 fi
 
 
-rm -f ~/.zshrc
-ln -s ~/.zshconfig/.zshrc
 
 rm -- "$0"
