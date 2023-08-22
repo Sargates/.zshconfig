@@ -59,10 +59,10 @@ ZSH_THEME="headline"
 # "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
+HIST_STAMPS="%a %b %e %H:%M:%S %y"
 
 # Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+ZSH_CUSTOM=~/.zshconfig/custom
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
@@ -74,26 +74,33 @@ source $ZSH/oh-my-zsh.sh
 
 # source $HOME/.zshconfig/.zprofile
 
-contains() {
-    if [[ "$1" == *"$2"* ]]; then
-		return 1
-	fi
-	return 0
-}
+# contains() {
+#     if [[ "$1" == *"$2"* ]]; then
+# 		return 0
+# 	else
+# 		return 1
+# 	fi
+# }
 
-for f in $HOME/.zshconfig/*
-do
-	file=`basename $f`
-	contains ".zshrc autorun.sh readme.md .git" $file
-	if [[ $? == 0 ]]; then
-		echo "Sourcing $file"
-		source $f
-	else
-		echo "Skipped $file"
-	fi;
+source ~/.zshconfig/.zprofile
+source ~/.zshconfig/github.zsh
+source ~/.zshconfig/kbhelper.zsh
+source ~/.zshconfig/path.zsh
+source ~/.zshconfig/ssh.zsh
+source ~/.zshconfig/wsl.zsh
 
-	# source $f
-done
+# for f in $HOME/.zshconfig/*; do
+# 	file=`basename $f`
+	
+# 	if ! contains ".zshrc install.sh readme.md .git" $file; then
+# 		echo "fortniting $file"
+# 		source "$f"
+# 	else
+# 		echo "Skipped $file"
+# 	fi;
+
+# 	# source $f
+# done
 
 
 
