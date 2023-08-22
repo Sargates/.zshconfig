@@ -1,11 +1,13 @@
 # !/bin/bash
 set -e
 
-# COMMAND TO RUN: `sh -c "$(wget https://raw.githubusercontent.com/Sargates/.zshconfig/master/install.sh -O -)"`
 
+cd ~
+rm -rf ~/.zshconfig
+git clone https://Sargates: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@github.com/Sargates/.zshconfig.git
 
 echo Starting install.sh
-sudo echo
+sudo apt update && sudo apt ugrade
 
 contains() {
 	case $1 in *"$2"*)
@@ -44,11 +46,22 @@ if ! command -v python3 >/dev/null 2>&1; then
 	done
 fi
 
+# rm -f ~/.zshrc.pre-oh-my-zsh*
+# rm -f ~/.zshrc.omz-uninstalled*
+# rm -f ~/.zshrc
+# ln -s ~/.zshconfig/.zshrc
+
 if ! command -v omz >/dev/null 2>&1; then
 	echo "Installing oh-my-zsh"
-	sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+	sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" &
 fi
+while true; then
+	if ! command -v omz >/dev/null 2>&1; then
+		break
+	fi
+done
 
+rm -f ~/.zshrc.pre-oh-my-zsh
+rm -f ~/.zshrc
 
-
-rm -- "$0"
+ln -s ~/.zshconfig/.zshrc

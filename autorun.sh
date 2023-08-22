@@ -1,5 +1,6 @@
-#!/bin/bash
-cd ~
-git clone https://Sargates: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@github.com/Sargates/.zshconfig.git
-sh ./.zshconfig/install.sh
+if ! command -v curl >/dev/null 2>&1; then
+	echo "curl must be installed"
+	exit 1
+fi
 
+sh -c "$(curl  -X GET -H "Authorization: token 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" https://raw.githubusercontent.com/Sargates/.zshconfig/master/install.sh)"

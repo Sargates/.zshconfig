@@ -83,17 +83,11 @@ source $ZSH/oh-my-zsh.sh
 # }
 
 source ~/.zshconfig/.zprofile
-source ~/.zshconfig/github.zsh
+source ~/.zshconfig/git.zsh
 source ~/.zshconfig/kbhelper.zsh
 source ~/.zshconfig/path.zsh
 source ~/.zshconfig/ssh.zsh
 source ~/.zshconfig/wsl.zsh
-
-rm -f ~/.zshrc.pre-oh-my-zsh*
-rm -f ~/.zshrc.omz-uninstalled*
-rm -f ~/.zshrc
-ln -s ~/.zshconfig/.zshrc ~
-
 
 
 
