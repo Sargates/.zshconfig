@@ -7,7 +7,7 @@ rm -rf ~/.zshconfig
 git clone https://Sargates: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@github.com/Sargates/.zshconfig.git
 
 echo Starting install.sh
-sudo apt update && sudo apt ugrade
+sudo apt update && sudo apt upgrade
 
 contains() {
 	case $1 in *"$2"*)
