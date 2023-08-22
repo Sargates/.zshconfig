@@ -7,7 +7,7 @@ rm -rf ~/.zshconfig
 git clone https://Sargates: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@github.com/Sargates/.zshconfig.git
 
 echo Starting install.sh
-sudo apt update && sudo apt upgrade
+sudo apt update -y && sudo apt upgrade -y
 
 contains() {
 	case $1 in *"$2"*)
@@ -55,11 +55,11 @@ if ! command -v omz >/dev/null 2>&1; then
 	echo "Installing oh-my-zsh"
 	pid=`sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" &`
 fi
-wait "$pid"
+echo $!
+wait $!
 
 rm -f ~/.zshrc.pre-oh-my-zsh
 rm -f ~/.zshrc
-
-ln -s ~/.zshconfig/.zshrc
+ln -s ~/.zshconfig/.zshrc ~
 
 
