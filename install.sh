@@ -53,15 +53,13 @@ fi
 
 if ! command -v omz >/dev/null 2>&1; then
 	echo "Installing oh-my-zsh"
-	sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" &
+	pid=`sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" &`
 fi
-while true; then
-	if ! command -v omz >/dev/null 2>&1; then
-		break
-	fi
-done
+wait "$pid"
 
 rm -f ~/.zshrc.pre-oh-my-zsh
 rm -f ~/.zshrc
 
 ln -s ~/.zshconfig/.zshrc
+
+
