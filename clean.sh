@@ -17,6 +17,7 @@ if ! confirm; then
 	exit 1
 fi
 
+rm -f ~/.zprofile
 rm -f ~/.zshrc
 rm -f ~/.zshrc.pre-oh-my-zsh*
 rm -f ~/.zshrc.omz-uninstalled*
