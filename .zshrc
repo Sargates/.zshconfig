@@ -72,7 +72,12 @@ ZSH_CUSTOM=~/.zshconfig/custom
 
 source $ZSH/oh-my-zsh.sh
 
-# source $HOME/.zshconfig/.zprofile
+source ~/.zshconfig/.zprofile
+source ~/.zshconfig/git.zsh
+source ~/.zshconfig/kbhelper.zsh
+source ~/.zshconfig/path.zsh
+source ~/.zshconfig/ssh.zsh
+source ~/.zshconfig/wsl.zsh
 
 # contains() {
 #     if [[ "$1" == *"$2"* ]]; then
@@ -81,14 +86,6 @@ source $ZSH/oh-my-zsh.sh
 # 		return 1
 # 	fi
 # }
-
-source ~/.zshconfig/.zprofile
-source ~/.zshconfig/git.zsh
-source ~/.zshconfig/kbhelper.zsh
-source ~/.zshconfig/path.zsh
-source ~/.zshconfig/ssh.zsh
-source ~/.zshconfig/wsl.zsh
-
 # for f in $HOME/.zshconfig/*; do
 # 	file=`basename $f`
 	

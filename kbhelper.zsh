@@ -84,59 +84,37 @@ if [[ -a "/etc/wsl.conf" ]]; then
 		LBUFFER+="$(cat clip.exe)"
 	}
 	zle -N zle-clipboard-paste
-else 
-	function zle-clipboard-cut {
-		if ((REGION_ACTIVE)); then
-			zle copy-region-as-kill
-			print -rn -- $CUTBUFFER | pbcopy
-			zle kill-region
-		fi
+
+	function zle-pre-cmd {
+		stty intr "^@"
 	}
-	zle -N zle-clipboard-cut
-	function zle-clipboard-copy {
-		if ((REGION_ACTIVE)); then
-			zle copy-region-as-kill
-			print -rn -- $CUTBUFFER | pbcopy
+	precmd_functions=("zle-pre-cmd" ${precmd_functions[@]})
+	function zle-pre-exec {
+		stty intr "^C"
+	}
+	preexec_functions=("zle-pre-exec" ${preexec_functions[@]})
+	for key     kcap    seq           widget              arg (
+			cx      _       $'^X'         zle-clipboard-cut   _
+			cc      _       $'^C'         zle-clipboard-copy  _
+			cv      _       $'^V'         zle-clipboard-paste _
+	) {
+		if [ "${arg}" = "_" ]; then
+			eval "key-$key() {
+				zle $widget
+			}"
 		else
-			zle send-break
+			eval "key-$key() {
+				zle-$widget $arg \$@
+			}"
 		fi
+		zle -N key-$key
+		bindkey ${terminfo[$kcap]-$seq} key-$key
 	}
-	zle -N zle-clipboard-copy
-	function zle-clipboard-paste {
-		if ((REGION_ACTIVE)); then
-			zle kill-region
-		fi
-		LBUFFER+="$(cat pbcopy)"
-	}
-	zle -N zle-clipboard-paste
 fi
 
 
-function zle-pre-cmd {
-	stty intr "^@"
-}
-precmd_functions=("zle-pre-cmd" ${precmd_functions[@]})
-function zle-pre-exec {
-	stty intr "^C"
-}
-preexec_functions=("zle-pre-exec" ${preexec_functions[@]})
-for key     kcap    seq           widget              arg (
-		cx      _       $'^X'         zle-clipboard-cut   _
-		cc      _       $'^C'         zle-clipboard-copy  _
-		cv      _       $'^V'         zle-clipboard-paste _
-) {
-	if [ "${arg}" = "_" ]; then
-		eval "key-$key() {
-			zle $widget
-		}"
-	else
-		eval "key-$key() {
-			zle-$widget $arg \$@
-		}"
-	fi
-	zle -N key-$key
-	bindkey ${terminfo[$kcap]-$seq} key-$key
-}
+
+
 # ctrl+a https://stackoverflow.com/a/68987551/13658418
 function widget::select-all() {
 	local buflen=$(echo -n "$BUFFER" | wc -m | bc)
@@ -148,6 +126,7 @@ function widget::select-all() {
 }
 zle -N widget::select-all
 bindkey '^a' widget::select-all
+
 # ctrl+z
 bindkey "^Z" undo
 
