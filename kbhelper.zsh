@@ -56,31 +56,62 @@ for key     kcap   seq        mode   widget (
 export ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(
 	key-right
 )
-# ctrl+x,c,v https://unix.stackexchange.com/a/634916/424080
-function zle-clipboard-cut {
-	if ((REGION_ACTIVE)); then
-		zle copy-region-as-kill
-		print -rn -- $CUTBUFFER | clip.exe
-		zle kill-region
-	fi
-}
-zle -N zle-clipboard-cut
-function zle-clipboard-copy {
-	if ((REGION_ACTIVE)); then
-		zle copy-region-as-kill
-		print -rn -- $CUTBUFFER | clip.exe
-	else
-		zle send-break
-	fi
-}
-zle -N zle-clipboard-copy
-function zle-clipboard-paste {
-	if ((REGION_ACTIVE)); then
-		zle kill-region
-	fi
-	LBUFFER+="$(cat clip.exe)"
-}
-zle -N zle-clipboard-paste
+
+#* Added by Sargates to add dynamic WSL/linux copying
+if [[ -a "/etc/wsl.conf" ]]; then
+	# ctrl+x,c,v https://unix.stackexchange.com/a/634916/424080
+	function zle-clipboard-cut {
+		if ((REGION_ACTIVE)); then
+			zle copy-region-as-kill
+			print -rn -- $CUTBUFFER | clip.exe
+			zle kill-region
+		fi
+	}
+	zle -N zle-clipboard-cut
+	function zle-clipboard-copy {
+		if ((REGION_ACTIVE)); then
+			zle copy-region-as-kill
+			print -rn -- $CUTBUFFER | clip.exe
+		else
+			zle send-break
+		fi
+	}
+	zle -N zle-clipboard-copy
+	function zle-clipboard-paste {
+		if ((REGION_ACTIVE)); then
+			zle kill-region
+		fi
+		LBUFFER+="$(cat clip.exe)"
+	}
+	zle -N zle-clipboard-paste
+else 
+	function zle-clipboard-cut {
+		if ((REGION_ACTIVE)); then
+			zle copy-region-as-kill
+			print -rn -- $CUTBUFFER | pbcopy
+			zle kill-region
+		fi
+	}
+	zle -N zle-clipboard-cut
+	function zle-clipboard-copy {
+		if ((REGION_ACTIVE)); then
+			zle copy-region-as-kill
+			print -rn -- $CUTBUFFER | pbcopy
+		else
+			zle send-break
+		fi
+	}
+	zle -N zle-clipboard-copy
+	function zle-clipboard-paste {
+		if ((REGION_ACTIVE)); then
+			zle kill-region
+		fi
+		LBUFFER+="$(cat pbcopy)"
+	}
+	zle -N zle-clipboard-paste
+fi
+
+
 function zle-pre-cmd {
 	stty intr "^@"
 }
