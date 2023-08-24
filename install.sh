@@ -1,6 +1,11 @@
 # !/bin/bash
 set -e
 
+# Check if APT is installed
+if ! command -v apt >/dev/null 2>&1; then
+	echo "Apt not installed"
+	exit 1
+fi
 
 cd ~
 rm -rf ~/.zshconfig
@@ -16,15 +21,23 @@ contains() {
 	return 1;
 }
 # Dependencies
+## Zsh
 if ! command -v zsh >/dev/null 2>&1; then
-	echo "Installing zsh"
-	sudo apt install zsh -y
+	echo "Installing Zsh"
+	sudo apt install Zsh -y
 	touch ~/.zshrc # To get zsh to shut up on next restart just in case
 fi
-if ! command -v git >/dev/null 2>&1; then
-	echo "Installing git"
-	sudo apt install git -y
+## Gpaste
+if ! command -v zsh >/dev/null 2>&1; then
+	echo "Installing Gpaste"
+	sudo apt install Gpaste -y
 fi
+## Git
+if ! command -v git >/dev/null 2>&1; then
+	echo "Installing Git"
+	sudo apt install Git -y
+fi
+## Python3.X
 if ! command -v python3 >/dev/null 2>&1; then
 	echo "Input python version 3.X to install (n to skip install)"
 	while true; do
@@ -48,6 +61,7 @@ fi
 
 if ! command -v omz >/dev/null 2>&1; then
 	echo "Installing oh-my-zsh"
+	# Background OMZ install and wait for completion. This prevents OMZ from overwriting work done in the lines after
 	pid=`sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" &`
 	echo $!
 	wait $!

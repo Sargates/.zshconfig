@@ -59,58 +59,61 @@ export ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(
 
 #* Added by Sargates to add dynamic WSL/linux copying
 if [[ -a "/etc/wsl.conf" ]]; then
-	# ctrl+x,c,v https://unix.stackexchange.com/a/634916/424080
-	function zle-clipboard-cut {
-		if ((REGION_ACTIVE)); then
-			zle copy-region-as-kill
-			print -rn -- $CUTBUFFER | clip.exe
-			zle kill-region
-		fi
-	}
-	zle -N zle-clipboard-cut
-	function zle-clipboard-copy {
-		if ((REGION_ACTIVE)); then
-			zle copy-region-as-kill
-			print -rn -- $CUTBUFFER | clip.exe
-		else
-			zle send-break
-		fi
-	}
-	zle -N zle-clipboard-copy
-	function zle-clipboard-paste {
-		if ((REGION_ACTIVE)); then
-			zle kill-region
-		fi
-		LBUFFER+="$(cat clip.exe)"
-	}
-	zle -N zle-clipboard-paste
-
-	function zle-pre-cmd {
-		stty intr "^@"
-	}
-	precmd_functions=("zle-pre-cmd" ${precmd_functions[@]})
-	function zle-pre-exec {
-		stty intr "^C"
-	}
-	preexec_functions=("zle-pre-exec" ${preexec_functions[@]})
-	for key     kcap    seq           widget              arg (
-			cx      _       $'^X'         zle-clipboard-cut   _
-			cc      _       $'^C'         zle-clipboard-copy  _
-			cv      _       $'^V'         zle-clipboard-paste _
-	) {
-		if [ "${arg}" = "_" ]; then
-			eval "key-$key() {
-				zle $widget
-			}"
-		else
-			eval "key-$key() {
-				zle-$widget $arg \$@
-			}"
-		fi
-		zle -N key-$key
-		bindkey ${terminfo[$kcap]-$seq} key-$key
-	}
+	clipCommand="clip.exe" # Use clip.exe for windows OS
+else
+	clipCommand="gpaste-client add" # use Gpaste for linux (no general purpose alternative that I could find)
 fi
+# ctrl+x,c,v https://unix.stackexchange.com/a/634916/424080
+function zle-clipboard-cut {
+	if ((REGION_ACTIVE)); then
+		zle copy-region-as-kill
+		print -rn -- $CUTBUFFER | $clipCommand
+		zle kill-region
+	fi
+}
+zle -N zle-clipboard-cut
+function zle-clipboard-copy {
+	if ((REGION_ACTIVE)); then
+		zle copy-region-as-kill
+		print -rn -- $CUTBUFFER | $clipCommand
+	else
+		zle send-break
+	fi
+}
+zle -N zle-clipboard-copy
+function zle-clipboard-paste {
+	if ((REGION_ACTIVE)); then
+		zle kill-region
+	fi
+	LBUFFER+="$(cat $clipCommand)"
+}
+zle -N zle-clipboard-paste
+
+function zle-pre-cmd {
+	stty intr "^@"
+}
+precmd_functions=("zle-pre-cmd" ${precmd_functions[@]})
+function zle-pre-exec {
+	stty intr "^C"
+}
+preexec_functions=("zle-pre-exec" ${preexec_functions[@]})
+for key     kcap    seq           widget              arg (
+		cx      _       $'^X'         zle-clipboard-cut   _
+		cc      _       $'^C'         zle-clipboard-copy  _
+		cv      _       $'^V'         zle-clipboard-paste _
+) {
+	if [ "${arg}" = "_" ]; then
+		eval "key-$key() {
+			zle $widget
+		}"
+	else
+		eval "key-$key() {
+			zle-$widget $arg \$@
+		}"
+	fi
+	zle -N key-$key
+	bindkey ${terminfo[$kcap]-$seq} key-$key
+}
 
 
 
