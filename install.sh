@@ -24,19 +24,25 @@ contains() {
 ## Zsh
 if ! command -v zsh >/dev/null 2>&1; then
 	echo "Installing Zsh"
-	sudo apt install Zsh -y
+	sudo apt install zsh -y
 	touch ~/.zshrc # To get zsh to shut up on next restart just in case
 fi
 ## Gpaste
 if ! command -v zsh >/dev/null 2>&1; then
 	echo "Installing Gpaste"
-	sudo apt install Gpaste -y
+	sudo apt install gpaste -y
 fi
 ## Git
 if ! command -v git >/dev/null 2>&1; then
 	echo "Installing Git"
-	sudo apt install Git -y
+	sudo apt install git -y
 fi
+# If is not WSL instance, install xsel (needed for cutting and copying from native ZSH selection buffer)
+if [[ ! -a "/etc/wsl.conf" ]]; then
+	echo "Installing Xsel"
+	sudo apt install xsel -y
+fi
+
 ## Python3.X
 if ! command -v python3 >/dev/null 2>&1; then
 	echo "Input python version 3.X to install (n to skip install)"

@@ -69,7 +69,7 @@ if [[ -a "/etc/wsl.conf" ]]; then
 	}
 	zle -N zle-clipboard-paste
 else
-	clipCommand="xsel --clipboard" # use Gpaste for linux (no general purpose alternative that I could find)
+	clipCommand="xsel --clipboard"
 fi
 # ctrl+x,c,v https://unix.stackexchange.com/a/634916/424080
 function zle-clipboard-cut {

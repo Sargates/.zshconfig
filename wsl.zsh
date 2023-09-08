@@ -8,6 +8,10 @@ if [[ -a "/etc/wsl.conf" ]]; then
 	alias dl='/mnt/c/Users/Nick/Downloads'
 	alias dev='/mnt/c/Users/Nick/Desktop/Production'
 	alias obs='/mnt/c/Users/Nick/Desktop/Obsidian'
+	
+	alias ld='~/Desktop'
+	alias ldesktop='ld'
+	alias ldesk='ld'
 
 	alias cmd="cmd.exe"
 	alias cmdx="cmd /C"
