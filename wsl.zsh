@@ -1,8 +1,7 @@
 
+autoload -Uz compinit
+compinit
 if [[ -a "/etc/wsl.conf" ]]; then
-	autoload -Uz compinit
-	compinit
-
 	alias root='/mnt/c/'
 	alias home='/mnt/c/Users/Nick'
 	alias desktop='/mnt/c/Users/Nick/Desktop'
@@ -12,12 +11,11 @@ if [[ -a "/etc/wsl.conf" ]]; then
 
 	alias cmd="cmd.exe"
 	alias cmdx="cmd /C"
-	alias psx="powershell.exe"
 
 	powershellOpen() {
-		
-		psx start `wslpath -w $1`
+		powershell.exe start `wslpath -w $1`
 	}
+	alias psx="powershell.exe"
 	alias open="powershellOpen"
 
 	# alias open="powershell.exe start '`wslpath -w $1`'"
@@ -27,15 +25,50 @@ if [[ -a "/etc/wsl.conf" ]]; then
 	alias winpython='winpy'
 
 	alias fixmono='sudo update-binfmts --disable cli' # required for Mono on WSL instance
-	alias gaming='python $(cs-stuff Python/+utils/gigachad.py)'
+	alias gaming='python `cs-stuff Python/+utils/gigachad.py`'
 	alias dnr="psx dotnet run"
 	alias dnb="psx dotnet build"
 
 	cs_stuff() {
-		cd /mnt/c/Users/Nick/Desktop/Production/CS_Stuff/$1
+		BASEPATH="/mnt/c/Users/Nick/Desktop/Production/CS_Stuff"
+		SUBPATH=$1
+		if [ -d "$BASEPATH/$SUBPATH" ]; then
+			$BASEPATH/$SUBPATH
+			return 0
+		fi
+		echo $BASEPATH/$SUBPATH
 	}
 	compdef '_directories -/ -W /mnt/c/Users/Nick/Desktop/Production/CS_Stuff' cs_stuff
 	alias cs-stuff='cs_stuff'
+
+
+	# export DISPLAY=192.168.176.1:0.0 # garbage for xserver
+	# export LIBGL_ALWAYS_INDIRECT=1
+else
+	alias desktop='~/Desktop'
+	alias desk='desktop'
+	alias dl='~/Downloads'
+	alias dev='~/Desktop/Production'
+
+	if [[! -d "~/Desktop/Production" ]]; then
+		mkdir ~/Desktop/Production
+	fi
+	if [[! -d "~/Desktop/Production/CS_Stuff" ]]; then
+		mkdir ~/Desktop/Production/CS_Stuff
+	fi
+
+	cs_stuff() {
+		BASEPATH="~/Desktop/Production/CS_Stuff"
+		SUBPATH=$1
+		if [ -d "$BASEPATH/$SUBPATH" ]; then
+			$BASEPATH/$SUBPATH
+			return 0
+		fi
+		echo $BASEPATH/$SUBPATH
+	}
+	compdef '_directories -/ -W ~/Desktop/Production/CS_Stuff' cs_stuff
+	alias cs-stuff='cs_stuff'
+
 
 
 	# export DISPLAY=192.168.176.1:0.0 # garbage for xserver

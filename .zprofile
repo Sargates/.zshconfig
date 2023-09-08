@@ -7,6 +7,7 @@ alias python='python3'
 alias ld='~/Desktop'
 alias ldesktop='ld'
 alias ldesk='ld'
+alias debug='source ./test.zsh'
 
 
 alias zshcfg="code -n ~/.zshconfig"
@@ -15,15 +16,3 @@ alias mcd='() { md $1 && cd $_ }'
 alias killssh='kill `pgrep ssh-agent`'
 
 setopt globdots
-
-plugins=(
-	git
-	virtualenv
-	virtualenvwrapper
-)
-sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/virtualenvwrapper/virtualenvwrapper.plugin.zsh
-sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/git/git.plugin.zsh
-
-HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv)
-
-

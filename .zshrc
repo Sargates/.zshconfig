@@ -70,6 +70,20 @@ ZSH_CUSTOM=~/.zshconfig/custom
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 
+
+plugins=(
+	git
+	virtualenv
+	# virtualenvwrapper
+)
+sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/virtualenvwrapper/virtualenvwrapper.plugin.zsh
+sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/git/git.plugin.zsh
+
+HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv)
+
+
+
+
 source $ZSH/oh-my-zsh.sh
 
 source ~/.zshconfig/.zprofile
@@ -78,6 +92,7 @@ source ~/.zshconfig/kbhelper.zsh
 source ~/.zshconfig/path.zsh
 source ~/.zshconfig/ssh.zsh
 source ~/.zshconfig/wsl.zsh
+# source ~/.zshconfig/test.zsh
 
 # contains() {
 #     if [[ "$1" == *"$2"* ]]; then

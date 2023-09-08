@@ -59,51 +59,37 @@ export ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(
 
 #* Added by Sargates to add dynamic WSL/linux copying
 if [[ -a "/etc/wsl.conf" ]]; then
-	function zle-clipboard-cut {
+	clipCommand="clip.exe" # Use clip.exe for windows OS
+	
+	function zle-clipboard-paste {
 		if ((REGION_ACTIVE)); then
-			zle copy-region-as-kill
-			print -rn -- $CUTBUFFER | "clip.exe"
 			zle kill-region
 		fi
+		LBUFFER+="$(cat clip.exe)"
 	}
-	zle -N zle-clipboard-cut
-	function zle-clipboard-copy {
-		if ((REGION_ACTIVE)); then
-			zle copy-region-as-kill
-			print -rn -- $CUTBUFFER | "clip.exe"
-		else
-			zle send-break
-		fi
-	}
-	zle -N zle-clipboard-copy
-	# function zle-clipboard-paste {
-	# 	if ((REGION_ACTIVE)); then
-	# 		zle kill-region
-	# 	fi
-	# 	LBUFFER+="$(cat clip.exe)"
-	# }
-	# zle -N zle-clipboard-paste
+	zle -N zle-clipboard-paste
 else
-	function zle-clipboard-cut {
-		if ((REGION_ACTIVE)); then
-			zle copy-region-as-kill
-			print -rn -- $CUTBUFFER | "gpaste-client add"
-			zle kill-region
-		fi
-	}
-	zle -N zle-clipboard-cut
-	function zle-clipboard-copy {
-		if ((REGION_ACTIVE)); then
-			zle copy-region-as-kill
-			print -rn -- $CUTBUFFER | "gpaste-client add"
-		else
-			zle send-break
-		fi
-	}
-	zle -N zle-clipboard-copy
+	clipCommand="xclip -selection clipboard" # use Gpaste for linux (no general purpose alternative that I could find)
 fi
-
 # ctrl+x,c,v https://unix.stackexchange.com/a/634916/424080
+function zle-clipboard-cut {
+	if ((REGION_ACTIVE)); then
+		zle copy-region-as-kill
+		print -rn -- $CUTBUFFER | $clipCommand
+		zle kill-region
+	fi
+}
+zle -N zle-clipboard-cut
+function zle-clipboard-copy {
+	if ((REGION_ACTIVE)); then
+		zle copy-region-as-kill
+		print -rn -- $CUTBUFFER | $clipCommand
+	else
+		zle send-break
+	fi
+}
+zle -N zle-clipboard-copy
+
 function zle-pre-cmd {
 	stty intr "^@"
 }
@@ -115,6 +101,7 @@ preexec_functions=("zle-pre-exec" ${preexec_functions[@]})
 for key     kcap    seq           widget              arg (
 		cx      _       $'^X'         zle-clipboard-cut   _
 		cc      _       $'^C'         zle-clipboard-copy  _
+		cv      _       $'^V'         zle-clipboard-paste _
 ) {
 	if [ "${arg}" = "_" ]; then
 		eval "key-$key() {
