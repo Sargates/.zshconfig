@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 set -e
 
 # Check if APT is installed
@@ -26,11 +26,6 @@ if ! command -v zsh >/dev/null 2>&1; then
 	echo "Installing Zsh"
 	sudo apt install zsh -y
 	touch ~/.zshrc # To get zsh to shut up on next restart just in case
-fi
-## Gpaste
-if ! command -v zsh >/dev/null 2>&1; then
-	echo "Installing Gpaste"
-	sudo apt install gpaste -y
 fi
 ## Git
 if ! command -v git >/dev/null 2>&1; then

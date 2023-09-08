@@ -57,25 +57,22 @@ export ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(
 	key-right
 )
 
-#* Added by Sargates to add dynamic WSL/linux copying
+# #* Added by Sargates to add dynamic WSL/linux copying
 if [[ -a "/etc/wsl.conf" ]]; then
-	clipCommand="clip.exe" # Use clip.exe for windows OS
-	
 	function zle-clipboard-paste {
 		if ((REGION_ACTIVE)); then
 			zle kill-region
 		fi
-		LBUFFER+="$(cat clip.exe)"
+		LBUFFER+=`xsel --output --clipboard`
 	}
 	zle -N zle-clipboard-paste
-else
-	clipCommand="xsel --clipboard"
 fi
+
 # ctrl+x,c,v https://unix.stackexchange.com/a/634916/424080
 function zle-clipboard-cut {
 	if ((REGION_ACTIVE)); then
 		zle copy-region-as-kill
-		print -rn -- $CUTBUFFER | "${clipCommand}"
+		print -rn -- $CUTBUFFER | xsel --clipboard
 		zle kill-region
 	fi
 }
@@ -83,7 +80,7 @@ zle -N zle-clipboard-cut
 function zle-clipboard-copy {
 	if ((REGION_ACTIVE)); then
 		zle copy-region-as-kill
-		print -rn -- $CUTBUFFER | "${clipCommand}"
+		print -rn -- $CUTBUFFER | xsel --clipboard
 	else
 		zle send-break
 	fi
