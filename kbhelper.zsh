@@ -69,13 +69,13 @@ if [[ -a "/etc/wsl.conf" ]]; then
 	}
 	zle -N zle-clipboard-paste
 else
-	clipCommand="xclip -selection clipboard" # use Gpaste for linux (no general purpose alternative that I could find)
+	clipCommand="xsel --clipboard" # use Gpaste for linux (no general purpose alternative that I could find)
 fi
 # ctrl+x,c,v https://unix.stackexchange.com/a/634916/424080
 function zle-clipboard-cut {
 	if ((REGION_ACTIVE)); then
 		zle copy-region-as-kill
-		print -rn -- $CUTBUFFER | $clipCommand
+		print -rn -- $CUTBUFFER | "${clipCommand}"
 		zle kill-region
 	fi
 }
@@ -83,7 +83,7 @@ zle -N zle-clipboard-cut
 function zle-clipboard-copy {
 	if ((REGION_ACTIVE)); then
 		zle copy-region-as-kill
-		print -rn -- $CUTBUFFER | $clipCommand
+		print -rn -- $CUTBUFFER | "${clipCommand}"
 	else
 		zle send-break
 	fi

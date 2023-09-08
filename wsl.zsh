@@ -45,16 +45,17 @@ if [[ -a "/etc/wsl.conf" ]]; then
 	# export DISPLAY=192.168.176.1:0.0 # garbage for xserver
 	# export LIBGL_ALWAYS_INDIRECT=1
 else
+	alias home='~'
 	alias desktop='~/Desktop'
 	alias desk='desktop'
 	alias dl='~/Downloads'
 	alias dev='~/Desktop/Production'
 
-	if [[! -d "~/Desktop/Production" ]]; then
-		mkdir ~/Desktop/Production
+	mkdir -p ~/Desktop/Production
+	mkdir -p ~/Desktop/Production/CS_Stuff
+	if [ ! -d "~/Desktop/Production" ]; then
 	fi
-	if [[! -d "~/Desktop/Production/CS_Stuff" ]]; then
-		mkdir ~/Desktop/Production/CS_Stuff
+	if [ ! -d "~/Desktop/Production/CS_Stuff" ]; then
 	fi
 
 	cs_stuff() {
