@@ -1,6 +1,7 @@
 alias glfuzz="getGitCommitBySubstring"
 alias glf="glfuzz"
 alias grget='git remote get-url'
+alias gl="git log"
 
 getGitCommitBySubstring() {
 	git log --pretty=oneline | cat | grep -B 1 -A 1 --color=always -i '.*'$1'.*'

@@ -1,6 +1,18 @@
 #!/bin/bash
 set -e
 
+if ! command -v omz >/dev/null 2>&1; then
+	echo "Installing oh-my-zsh"
+	# Background OMZ install and wait for completion. This prevents OMZ from overwriting work done in the lines after
+	pid=`sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" &`
+	echo $!
+	wait $!
+fi
+
+rm -f ~/.zshrc.pre-oh-my-zsh
+rm -f ~/.zshrc
+ln -s ~/.zshconfig/.zshrc ~
+
 # Check if APT is installed
 if ! command -v apt >/dev/null 2>&1; then
 	echo "Apt not installed"
@@ -59,17 +71,3 @@ if ! command -v python3 >/dev/null 2>&1; then
 		fi
 	done
 fi
-
-if ! command -v omz >/dev/null 2>&1; then
-	echo "Installing oh-my-zsh"
-	# Background OMZ install and wait for completion. This prevents OMZ from overwriting work done in the lines after
-	pid=`sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" &`
-	echo $!
-	wait $!
-fi
-
-rm -f ~/.zshrc.pre-oh-my-zsh
-rm -f ~/.zshrc
-ln -s ~/.zshconfig/.zshrc ~
-
-

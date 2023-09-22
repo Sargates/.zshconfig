@@ -16,11 +16,11 @@ if [[ -a "/etc/wsl.conf" ]]; then
 	alias cmd="cmd.exe"
 	alias cmdx="cmd /C"
 
-	powershellOpen() {
-		powershell.exe start `wslpath -w $1`
+	PowershellOpen() {
+		explorer.exe `wslpath -w "$PWD/$1"`
 	}
 	alias psx="powershell.exe"
-	alias open="powershellOpen"
+	alias open="PowershellOpen"
 
 	# alias open="powershell.exe start '`wslpath -w $1`'"
 	# alias start="powershell.exe `wslpath -w $1`"
@@ -33,17 +33,7 @@ if [[ -a "/etc/wsl.conf" ]]; then
 	alias dnr="psx dotnet run"
 	alias dnb="psx dotnet build"
 
-	cs_stuff() {
-		BASEPATH="/mnt/c/Users/Nick/Desktop/Production/CS_Stuff"
-		SUBPATH=$1
-		if [ -d "$BASEPATH/$SUBPATH" ]; then
-			$BASEPATH/$SUBPATH
-			return 0
-		fi
-		echo $BASEPATH/$SUBPATH
-	}
-	compdef '_directories -/ -W /mnt/c/Users/Nick/Desktop/Production/CS_Stuff' cs_stuff
-	alias cs-stuff='cs_stuff'
+	csStuff='/mnt/c/Users/Nick/Desktop/Production/CS_Stuff'
 
 
 	# export DISPLAY=192.168.176.1:0.0 # garbage for xserver
@@ -57,25 +47,21 @@ else
 
 	mkdir -p ~/Desktop/Production
 	mkdir -p ~/Desktop/Production/CS_Stuff
-	if [ ! -d "~/Desktop/Production" ]; then
-	fi
-	if [ ! -d "~/Desktop/Production/CS_Stuff" ]; then
-	fi
-
-	cs_stuff() {
-		BASEPATH="~/Desktop/Production/CS_Stuff"
-		SUBPATH=$1
-		if [ -d "$BASEPATH/$SUBPATH" ]; then
-			$BASEPATH/$SUBPATH
-			return 0
-		fi
-		echo $BASEPATH/$SUBPATH
-	}
-	compdef '_directories -/ -W ~/Desktop/Production/CS_Stuff' cs_stuff
-	alias cs-stuff='cs_stuff'
+	csStuff='~/Desktop/Production/CS_Stuff'
 
 
 
 	# export DISPLAY=192.168.176.1:0.0 # garbage for xserver
 	# export LIBGL_ALWAYS_INDIRECT=1
 fi
+cs_stuff() {
+	BASEPATH="$csStuff"
+	SUBPATH=$1
+	if [ -d "$BASEPATH/$SUBPATH" ]; then
+		$BASEPATH/$SUBPATH
+		return 0
+	fi
+	echo $BASEPATH/$SUBPATH
+}
+compdef "_directories -/ -W $csStuff" cs_stuff
+alias cs-stuff='cs_stuff'

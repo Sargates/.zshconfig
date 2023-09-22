@@ -1,11 +1,15 @@
 
-alias addssh='ssh-add ~/.ssh/id_rsa'
 
-# ssh-agent configuration
-if [ -z "$(pgrep ssh-agent)" ]; then
-    eval $(ssh-agent -s) > /dev/null
-	ssh-add ~/.ssh/id_rsa
-else
-    export SSH_AGENT_PID=$(pgrep ssh-agent)
-    export SSH_AUTH_SOCK=$(find /tmp/ssh-* -name "agent.*")
-fi
+# List fingerprints of already added keys
+added_keys=$(ssh-add -l | awk '{print $2}')
+
+# Add keys in ~/.ssh that aren't already added to the agent
+for keyfile in ~/.ssh/id_*; do
+	# Exclude public keys and known hosts
+	if [[ $keyfile != *.pub ]] && [[ $keyfile != *known_hosts* ]]; then
+		fingerprint=$(ssh-keygen -lf $keyfile | awk '{print $2}')
+		if ! echo "$added_keys" | grep -q "$fingerprint"; then
+			ssh-add "$keyfile"
+		fi
+	fi
+done

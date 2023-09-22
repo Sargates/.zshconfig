@@ -74,10 +74,11 @@ ZSH_CUSTOM=~/.zshconfig/custom
 plugins=(
 	git
 	virtualenv
+	ssh-agent
 	# virtualenvwrapper
 )
-sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/virtualenvwrapper/virtualenvwrapper.plugin.zsh
-sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/git/git.plugin.zsh
+# sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/virtualenvwrapper/virtualenvwrapper.plugin.zsh
+# sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/git/git.plugin.zsh
 
 HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv)
 
