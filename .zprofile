@@ -7,6 +7,9 @@ alias python='python3'
 # alias debug='source ./test.zsh'
 
 alias haconnect='ssh hassio@homeassistant.local'
+alias listapt='apt list --installed'
+alias searchapt='apt search'
+alias listjava='apt search openjdk-.+-'
 
 
 rename() {
