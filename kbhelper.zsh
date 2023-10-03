@@ -57,16 +57,13 @@ export ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(
 	key-right
 )
 
-# #* Added by Sargates to add dynamic WSL/linux copying
-if [[ -a "/etc/wsl.conf" ]]; then
-	function zle-clipboard-paste {
-		if ((REGION_ACTIVE)); then
-			zle kill-region
-		fi
-		LBUFFER+=`xsel --output --clipboard`
-	}
-	zle -N zle-clipboard-paste
-fi
+function zle-clipboard-paste {
+	if ((REGION_ACTIVE)); then
+		zle kill-region
+	fi
+	LBUFFER+=`xsel --output --clipboard`
+}
+zle -N zle-clipboard-paste
 
 # ctrl+x,c,v https://unix.stackexchange.com/a/634916/424080
 function zle-clipboard-cut {
