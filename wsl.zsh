@@ -10,6 +10,7 @@ if [[ -a "/etc/wsl.conf" ]]; then
 	alias obs='/mnt/c/Users/Nick/Desktop/Obsidian'
 	
 	alias ld='~/Desktop'
+	alias ldl='~/Downloads'
 	alias ldesktop='ld'
 	alias ldesk='ld'
 
@@ -22,6 +23,8 @@ if [[ -a "/etc/wsl.conf" ]]; then
 	alias psx="powershell.exe"
 	alias open="PowershellOpen"
 
+	hash -d w=/mnt/c/Users/Nick
+	
 	# alias open="powershell.exe start '`wslpath -w $1`'"
 	# alias start="powershell.exe `wslpath -w $1`"
 	
@@ -47,7 +50,7 @@ else
 
 	mkdir -p ~/Desktop/Production
 	mkdir -p ~/Desktop/Production/CS_Stuff
-	csStuff='~/Desktop/Production/CS_Stuff'
+	csStuff="$HOME/Desktop/Production/CS_Stuff"
 
 
 
