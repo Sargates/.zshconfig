@@ -1,10 +1,9 @@
 
 autoload -Uz compinit
 compinit
-ISWSL="0"
 
 if [[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
-	ISWSL="1"
+	export ISWSL="1"
 	alias root='/mnt/c/'
 	alias home='/mnt/c/Users/Nick'
 	alias desktop='/mnt/c/Users/Nick/Desktop'
@@ -45,6 +44,7 @@ if [[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
 	# export DISPLAY=192.168.176.1:0.0 # garbage for xserver
 	# export LIBGL_ALWAYS_INDIRECT=1
 else
+	export ISWSL="0"
 	alias home='~'
 	alias desktop='~/Desktop'
 	alias desk='desktop'
@@ -56,9 +56,6 @@ else
 	csStuff="$HOME/Desktop/Production/CS_Stuff"
 
 
-
-	# export DISPLAY=192.168.176.1:0.0 # garbage for xserver
-	# export LIBGL_ALWAYS_INDIRECT=1
 fi
 cs_stuff() {
 	BASEPATH="$csStuff"
@@ -71,5 +68,3 @@ cs_stuff() {
 }
 compdef "_directories -/ -W $csStuff" cs_stuff
 alias cs-stuff='cs_stuff'
-
-export ISWSL
