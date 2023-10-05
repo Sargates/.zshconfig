@@ -1,7 +1,10 @@
 
 autoload -Uz compinit
 compinit
-if [[ -a "/etc/wsl.conf" ]]; then
+ISWSL="0"
+
+if [[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
+	ISWSL="1"
 	alias root='/mnt/c/'
 	alias home='/mnt/c/Users/Nick'
 	alias desktop='/mnt/c/Users/Nick/Desktop'
@@ -25,7 +28,7 @@ if [[ -a "/etc/wsl.conf" ]]; then
 
 	hash -d w=/mnt/c/Users/Nick
 	
-	# alias open="powershell.exe start '`wslpath -w $1`'"
+	# alias open="powershell.exe start '`wslpath -w "$PWD/$1"`'"
 	# alias start="powershell.exe `wslpath -w $1`"
 	
 	alias winpy='psx python'
@@ -68,3 +71,5 @@ cs_stuff() {
 }
 compdef "_directories -/ -W $csStuff" cs_stuff
 alias cs-stuff='cs_stuff'
+
+export ISWSL
