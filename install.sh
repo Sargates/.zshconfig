@@ -4,7 +4,7 @@ set -e
 if ! command -v omz >/dev/null 2>&1; then
 	echo "Installing oh-my-zsh"
 	# Background OMZ install and wait for completion. This prevents OMZ from overwriting work done in the lines after
-	pid=`sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" &`
+	sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" &
 	echo $!
 	wait $!
 fi
@@ -45,7 +45,7 @@ if ! command -v git >/dev/null 2>&1; then
 	sudo apt install git -y
 fi
 # If is not WSL instance, install xsel (needed for cutting and copying from native ZSH selection buffer)
-if [[ ! -a "/etc/wsl.conf" ]]; then
+if [[ ! -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
 	echo "Installing Xsel"
 	sudo apt install xsel -y
 fi
@@ -54,14 +54,14 @@ fi
 if ! command -v python3 >/dev/null 2>&1; then
 	echo "Input python version 3.X to install (n to skip install)"
 	while true; do
-		read pv
+		read -r pv
 		if [ "$pv" = "" ]; then
 			echo "Installing latest Python"
 			sudo apt install python3 -y
 			break
 		elif contains "11 10 9 8 7 6 5 4 3 2 1 0" "$pv"; then
 			echo "Installing Python 3.$pv"
-			sudo apt install python3.$pv -y
+			sudo apt install python3."$pv" -y
 			break
 		elif [ "$pv" = "n" ]; then
 			echo "Python install skipped"
