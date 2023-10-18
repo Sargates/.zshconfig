@@ -1,3 +1,7 @@
+#* Copied from StackOverflow
+#* Ref: https://stackoverflow.com/a/71453634
+
+
 # for my own convenience I explicitly set the signals
 #   that my terminal sends to the shell as variables.
 #   you might have different signals. you can see what
