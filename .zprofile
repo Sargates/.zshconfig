@@ -1,11 +1,11 @@
 
 alias pip='python -m pip'
 alias cd..='cd ..'
-alias listapt="comm -23 <(apt-mark showmanual | sort -u) <(gzip -dc /var/log/installer/initial-status.gz | sed -n 's/^Package: //p' | sort -u)"
 alias zshrc='source ~/.zshrc'
 alias python='python3'
 # alias debug='source ./test.zsh'
 
+# alias listapt="comm -23 <(apt-mark showmanual | sort -u) <(gzip -dc /var/log/installer/initial-status.gz | sed -n 's/^Package: //p' | sort -u)"
 alias haconnect='ssh hassio@homeassistant.local'
 alias listapt='apt list --installed'
 alias searchapt='apt search'
@@ -41,7 +41,6 @@ rename() {
 
 
 alias zshcfg="code -n ~/.zshconfig"
-
 alias mcd='() { md $1 && cd $_ }'
 alias killssh='kill `pgrep ssh-agent`'
 
