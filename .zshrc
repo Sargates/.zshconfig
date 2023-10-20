@@ -92,7 +92,11 @@ source ~/.zshconfig/git.zsh
 source ~/.zshconfig/kbhelper.zsh
 source ~/.zshconfig/path.zsh
 source ~/.zshconfig/ssh.zsh
-source ~/.zshconfig/wsl.zsh
+if [[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
+	source ~/.zshconfig/wsl.zsh
+else
+	source ~/.zshconfig/linux.zsh
+fi
 # source ~/.zshconfig/test.zsh
 
 # contains() {
