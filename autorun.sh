@@ -1,3 +1,5 @@
+#! /bin/bash
+
 if ! command -v curl >/dev/null 2>&1; then
 	echo "curl must be installed"
 	exit 1

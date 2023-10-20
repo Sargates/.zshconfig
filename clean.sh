@@ -21,6 +21,6 @@ rm -f ~/.zprofile
 rm -f ~/.zshrc
 rm -f ~/.zshrc.pre-oh-my-zsh*
 rm -f ~/.zshrc.omz-uninstalled*
+uninstall_oh_my_zsh
 rm -rf ~/.oh-my-zsh
 rm -rf ~/.zshconfig
-uninstall_oh_my_zsh

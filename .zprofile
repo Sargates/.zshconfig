@@ -1,8 +1,11 @@
+setopt extended_glob
+setopt globdots
+
 
 alias pip='python -m pip'
 alias cd..='cd ..'
 alias zshrc='source ~/.zshrc'
-alias python='python3'
+# alias python='python3'
 # alias debug='source ./test.zsh'
 
 # alias listapt="comm -23 <(apt-mark showmanual | sort -u) <(gzip -dc /var/log/installer/initial-status.gz | sed -n 's/^Package: //p' | sort -u)"
@@ -10,6 +13,8 @@ alias haconnect='ssh hassio@homeassistant.local'
 alias listapt='apt list --installed'
 alias searchapt='apt search'
 alias listjava='apt search openjdk-.+-'
+alias clip="cut -c 1-`tput cols`"
+alias cgrep="clip|grep"
 
 
 rename() {
@@ -43,5 +48,3 @@ rename() {
 alias zshcfg="code -n ~/.zshconfig"
 alias mcd='() { md $1 && cd $_ }'
 alias killssh='kill `pgrep ssh-agent`'
-
-setopt globdots
