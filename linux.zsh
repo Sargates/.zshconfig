@@ -16,7 +16,7 @@ alias dev='~/Desktop/Production'
 mkdir -p ~/Desktop/Production
 mkdir -p ~/Desktop/Production/CS_Stuff
 
-hash -d cs=$HOME/Desktop/Production/CS_Stuff
+hash -d cs=~/Desktop/Production/CS_Stuff
 
 # cs_stuff() {
 # 	BASEPATH="$csStuff"
