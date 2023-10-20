@@ -3,3 +3,5 @@
 - Git
 - Python
 - Oh-my-zsh
+- Xsel
+- Included .gitconfig

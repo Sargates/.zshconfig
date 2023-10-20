@@ -1,10 +1,12 @@
 alias glgrep="getGitCommitBySubstring"
 alias glg="glgrep"
 alias grget='git remote get-url'
-alias gl="git log"
+alias gl="git lg"
+
+# git config --global user.email "$USER@$HOST"
 
 getGitCommitBySubstring() {
-	git log --pretty=oneline | cat | grep -B 1 -A 1 --color=always -i '.*'$1'.*' | cut -c 1-`tput cols`
+	git log --pretty=oneline | cat | grep -B 1 -A 1 --color=always -i '.*'$1'.*'
 }
 
 github() {
