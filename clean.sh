@@ -21,6 +21,6 @@ rm -f ~/.zprofile
 rm -f ~/.zshrc
 rm -f ~/.zshrc.pre-oh-my-zsh*
 rm -f ~/.zshrc.omz-uninstalled*
-uninstall_oh_my_zsh
+# uninstall_oh_my_zsh #! no idea why this binary isnt appearing anymore
 rm -rf ~/.oh-my-zsh
 rm -rf ~/.zshconfig
