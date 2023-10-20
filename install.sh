@@ -43,6 +43,10 @@ fi
 if ! command -v git >/dev/null 2>&1; then
 	echo "Installing Git"
 	sudo apt install git -y
+
+	cat ~/.gitconfig >> ~/.gitconfig-old
+	rm -f ~/.gitconfig
+	ln -s ~/.zshconfig/.gitconfig ~/.gitconfig
 fi
 # If is not WSL instance, install xsel (needed for cutting and copying from native ZSH selection buffer)
 if [[ ! -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
