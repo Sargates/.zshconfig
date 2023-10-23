@@ -18,17 +18,16 @@ mkdir -p ~/Desktop/Production/CS_Stuff
 
 hash -d cs=~/Desktop/Production/CS_Stuff
 
-# cs_stuff() {
-# 	BASEPATH="$csStuff"
-# 	SUBPATH=$1
-# 	if [ -d "$BASEPATH/$SUBPATH" ]; then
-# 		$BASEPATH/$SUBPATH
-# 		return 0
-# 	fi
-# 	echo $BASEPATH/$SUBPATH
-# }
-# compdef "_directories -/ -W $csStuff" cs_stuff
-# alias cs-stuff='cs_stuff'
-	
 
-
+csStuff=`echo ~cs`
+cs_stuff() {
+	BASEPATH=$csStuff
+	SUBPATH=$1
+	if [ -d "$BASEPATH/$SUBPATH" ]; then
+		$BASEPATH/$SUBPATH
+		return 0
+	fi
+	echo $BASEPATH/$SUBPATH
+}
+compdef "_directories -/ -W $csStuff" cs_stuff
+alias cs-stuff='cs_stuff'

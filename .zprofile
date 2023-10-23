@@ -1,4 +1,4 @@
-setopt extended_glob
+# setopt extended_glob
 setopt globdots
 
 
