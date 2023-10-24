@@ -21,7 +21,7 @@ export ZSHCFG="$HOME/.zshconfig"
 
 
 # Used for mouse functionality in less pagers (git log, nano, etc.) neovim works by default (no idea why)
-[[ "${LESS}" != *--mouse* ]] && export LESS="${LESS} --mouse"
+[[ "${LESS}" != *--mouse* ]] && export LESS="${LESS} --mouse --wheel-lines=2"
 # Apparently the above line breaks native windows terminal selection (can't verify because I have no idea what this means, see: https://github.com/microsoft/terminal/issues/9165#issuecomment-1398208221)
 # Doesn't matter because of `kbhelper.zsh`'s selection system
 
