@@ -17,6 +17,8 @@ alias listjava='apt search openjdk-.+-'
 alias clip="cut -c 1-`tput cols`"
 alias cgrep="clip|grep"
 
+export ZSHCFG="$HOME/.zshconfig"
+
 
 # Used for mouse functionality in less pagers (git log, nano, etc.) neovim works by default (no idea why)
 [[ "${LESS}" != *--mouse* ]] && export LESS="${LESS} --mouse"
