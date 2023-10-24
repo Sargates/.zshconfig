@@ -24,6 +24,8 @@ export ZSHCFG="$HOME/.zshconfig"
 [[ "${LESS}" != *--mouse* ]] && export LESS="${LESS} --mouse"
 # Apparently the above line breaks native windows terminal selection (can't verify because I have no idea what this means, see: https://github.com/microsoft/terminal/issues/9165#issuecomment-1398208221)
 # Doesn't matter because of `kbhelper.zsh`'s selection system
+#! Figured this out: WT's double click word to select is broken with the `--mouse` flag *inside of the pager*; Holding shift down prevents this issue
+#! Note to self: Delete this later
 
 [[ "${LESS}" != *--wheel-lines=* ]] && export LESS="${LESS} --wheel-lines=2"
 
