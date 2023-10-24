@@ -5,6 +5,7 @@ setopt globdots
 alias pip='python -m pip'
 alias cd..='cd ..'
 alias zshrc='source ~/.zshrc'
+alias cdzsh='cd ~/.zshconfig'
 # alias python='python3'
 # alias debug='source ./test.zsh'
 
@@ -15,6 +16,12 @@ alias searchapt='apt search'
 alias listjava='apt search openjdk-.+-'
 alias clip="cut -c 1-`tput cols`"
 alias cgrep="clip|grep"
+
+
+# Used for mouse functionality in less pagers (git log, nano, etc.) neovim works by default (no idea why)
+[[ "${LESS}" != *--mouse* ]] && export LESS="${LESS} --mouse"
+# Apparently the above line breaks native windows terminal selection (can't verify because I have no idea what this means, see: https://github.com/microsoft/terminal/issues/9165#issuecomment-1398208221)
+# Doesn't matter because of `kbhelper.zsh`'s selection system
 
 
 rename() {
