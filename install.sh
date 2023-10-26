@@ -44,15 +44,28 @@ if ! command -v git >/dev/null 2>&1; then
 	echo "Installing Git"
 	sudo apt install git -y
 
-	cat ~/.gitconfig >> ~/.gitconfig-old
+	cat ~/.gitconfig >> ~/.gitconfig-old				# Append to old file to prevent data loss
 	rm -f ~/.gitconfig
 	ln -s ~/.zshconfig/.gitconfig ~/.gitconfig
 fi
-# Xsel (needed for cutting and copying from native ZSH selection buffer)
+## Xsel (needed for cutting and copying from native ZSH selection buffer)
 if ! command -v xsel >/dev/null 2>&1; then
 	echo "Installing Xsel"
 	sudo apt install xsel -y
 fi
+## Tmux
+if ! command -v xsel >/dev/null 2>&1; then
+	echo "Installing tmux"
+	sudo apt install tmux -y
+
+	cat ~/.tmux.conf >> ~/.tmux-old.conf				# Append to old file to prevent data loss
+	rm -f ~/.tmux.conf
+	ln -s ~/.zshconfig/.tmux.conf ~/.tmux.conf
+	cat ~/.tmux.conf.local >> ~/.tmux-old.conf.local	# Append to old file to prevent data loss
+	rm -f ~/.tmux.conf.local
+	ln -s ~/.zshconfig/.tmux.conf.local ~/.tmux.conf.local
+fi
+
 
 ## Python3.X
 if ! command -v python3 >/dev/null 2>&1; then

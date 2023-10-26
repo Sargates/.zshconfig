@@ -87,37 +87,42 @@ HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv)
 
 source $ZSH/oh-my-zsh.sh
 
-source ~/.zshconfig/.zprofile
-source ~/.zshconfig/git.zsh
-source ~/.zshconfig/kbhelper.zsh
-source ~/.zshconfig/path.zsh
-source ~/.zshconfig/ssh.zsh
-if [[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
-	source ~/.zshconfig/wsl.zsh
-else
-	source ~/.zshconfig/linux.zsh
-fi
+# source ~/.zshconfig/.zprofile
+# source ~/.zshconfig/git.zsh
+# source ~/.zshconfig/kbhelper.zsh
+# source ~/.zshconfig/path.zsh
+# source ~/.zshconfig/ssh.zsh
+# if [[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
+# 	source ~/.zshconfig/wsl.zsh
+# else
+# 	source ~/.zshconfig/linux.zsh
+# fi
 # source ~/.zshconfig/test.zsh
 
-# contains() {
-#     if [[ "$1" == *"$2"* ]]; then
-# 		return 0
-# 	else
-# 		return 1
-# 	fi
-# }
-# for f in $HOME/.zshconfig/*; do
-# 	file=`basename $f`
-	
-# 	if ! contains ".zshrc install.sh readme.md .git" $file; then
-# 		echo "fortniting $file"
-# 		source "$f"
-# 	else
-# 		echo "Skipped $file"
-# 	fi;
+[[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=1 || ISWSL=0
+export ISWSL
 
-# 	# source $f
-# done
+contains() {
+    if [[ "$1" == *"$2"* ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+for f in $HOME/.zshconfig/*; do
+	file=`basename $f`
+	
+	if ! contains ".zshrc autorun.sh clean.sh install.sh readme.md test.zsh .git license.md" $file; then
+		if [[ $ISWSL -eq 1 && $file == "linux.zsh" ]]; then continue; fi
+		if [[ $ISWSL -eq 0 && $file == "wsl.zsh" ]]; then continue; fi
+		echo "Sourcing: $file"
+		source "$f"
+	else
+		echo " Skipped: $file"
+	fi;
+
+	# source $f
+done
 
 
 
@@ -146,3 +151,7 @@ fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
