@@ -1,15 +1,7 @@
 #!/bin/bash
 set -e
 
-if ! command -v omz >/dev/null 2>&1; then
-	echo "Installing oh-my-zsh"
-	# Background OMZ install and wait for completion. This prevents OMZ from overwriting work done in the lines after
-	sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" &
-	echo $!
-	wait $!
-fi
 
-rm -f ~/.zshrc.pre-oh-my-zsh
 rm -f ~/.zshrc
 ln -s ~/.zshconfig/.zshrc ~
 
@@ -37,33 +29,51 @@ contains() {
 if ! command -v zsh >/dev/null 2>&1; then
 	echo "Installing Zsh"
 	sudo apt install zsh -y
-	touch ~/.zshrc # To get zsh to shut up on next restart just in case
+else
+	echo "ZSH is already installed"
+fi
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+	rm -f ~/.zshrc.pre-oh-my-zsh
+	echo "Installing oh-my-zsh"
+	# Background OMZ install and wait for completion. This prevents OMZ from overwriting work done in the lines after
+	sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" &
+	echo $!
+	wait $!
+else
+	echo "OMZ is already installed"
 fi
 ## Git
 if ! command -v git >/dev/null 2>&1; then
 	echo "Installing Git"
 	sudo apt install git -y
 
-	cat ~/.gitconfig >> ~/.gitconfig-old				# Append to old file to prevent data loss
+	cat ~/.gitconfig >> ~/.gitconfig-old			# Append to old file to prevent data loss
 	rm -f ~/.gitconfig
 	ln -s ~/.zshconfig/.gitconfig ~/.gitconfig
+else
+	echo "Git is already installed"
 fi
 ## Xsel (needed for cutting and copying from native ZSH selection buffer)
 if ! command -v xsel >/dev/null 2>&1; then
 	echo "Installing Xsel"
 	sudo apt install xsel -y
+else
+	echo "Xsel is already installed"
 fi
 ## Tmux
 if ! command -v tmux >/dev/null 2>&1; then
-	echo "Installing tmux"
-	sudo apt install tmux -y
 
-	cat ~/.tmux.conf >> ~/.tmux-old.conf				# Append to old file to prevent data loss
+	[ -f ~/.tmux.conf ] && cat ~/.tmux.conf >> ~/.tmux-old.conf						# Append to old file to prevent data loss
 	rm -f ~/.tmux.conf
 	ln -s ~/.zshconfig/.tmux.conf ~/.tmux.conf
-	cat ~/.tmux.conf.local >> ~/.tmux-old.conf.local	# Append to old file to prevent data loss
+	[ -f ~/.tmux.conf.local ] && cat ~/.tmux.conf.local >> ~/.tmux-old.conf.local	# Append to old file to prevent data loss
 	rm -f ~/.tmux.conf.local
 	ln -s ~/.zshconfig/.tmux.conf.local ~/.tmux.conf.local
+
+	echo "Installing tmux"
+	sudo apt install tmux -y
+else
+	echo "Tmux is already installed"
 fi
 
 
@@ -87,4 +97,6 @@ if ! command -v python3 >/dev/null 2>&1; then
 			echo "Invalid version Python 3.$pv, try again"
 		fi
 	done
+else
+	echo "Python is already installed" #! Note, add python version
 fi
