@@ -54,7 +54,7 @@ if ! command -v xsel >/dev/null 2>&1; then
 	sudo apt install xsel -y
 fi
 ## Tmux
-if ! command -v xsel >/dev/null 2>&1; then
+if ! command -v tmux >/dev/null 2>&1; then
 	echo "Installing tmux"
 	sudo apt install tmux -y
 
