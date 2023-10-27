@@ -7,7 +7,10 @@ if ! command -v apt >/dev/null 2>&1; then
 	exit 1
 fi
 
-echo Starting install.sh
+
+sudo echo Starting install.sh
+
+sudo apt update -y >/dev/null 2>&1 && sudo apt upgrade -y >/dev/null 2>&1
 
 
 # returns true if first string contains second string
@@ -24,7 +27,7 @@ ZSHCFG="$HOME/.zshconfig"
 saveAndLink() {
 	if [ -f "$HOME/$1" ]; then
 		cat "$HOME/$1" >> "$HOME/$1.old"
-		rm "$HOME/$1"
+		rm -f "$HOME/$1"
 	fi
 
 	ln -s "$ZSHCFG/$1" "$HOME/$1"	
@@ -92,38 +95,56 @@ cd "$HOME"
 #* Cache Any unstaged/uncommited changes to prevent data loss (this actually happened to me because I ran this fucking script)
 #! Note, add functionality to cache "further along" branches. Caching .git directly? Current behaviour would lose unpushed commits
 # Export the stashes
-mkdir -p "$ZSHCFG"-patches
-
-git -C "$ZSHCFG" stash -q
-
-for ((i = 0; i < `git -C "$ZSHCFG" stash list | wc -l`; i++)); do
-	git -C "$ZSHCFG" stash show -p "stash@{$i}" > "$ZSHCFG"-patches/stash$i.patch
-done
 
 
+hadPatches=0
+if [ -d "$ZSHCFG" ]; then
+	rm -rf "$ZSHCFG-patches"
+	mkdir -p "$ZSHCFG-patches"
+	hadPatches=1
+
+	git -C "$ZSHCFG" stash -q
+
+	[ "`git -C "$ZSHCFG" stash list | wc -l`" -eq 1 ] && echo "Stashes found in repository"
+	for ((i=0; i < "`git -C "$ZSHCFG" stash list | wc -l`"; i++))
+	do
+		git -C "$ZSHCFG" stash show -p "stash@{$i}" > "$ZSHCFG-patches/stash$i.patch"
+	done
+
+	if [ "`ls -1 "$ZSHCFG-patches" | wc -l`" -eq 0 ]; then
+		rm -rf "$ZSHCFG-patches"
+		hadPatches=0
+	fi
+
+fi
+
+echo $ZSHCFG
 rm -rf "$ZSHCFG"
 git clone https://Sargates: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@github.com/Sargates/.zshconfig.git
 
+if [ $hadPatches -eq 1 ]; then
 
-# Import the stashes
-for stashToApply in "$ZSHCFG"-patches/*; do
-	git -C "$ZSHCFG" apply "$stashToApply"
-	git -C "$ZSHCFG" stash
-done
+	# Import the stashes
+	for stashToApply in "$ZSHCFG-patches"/*; do
+		git -C "$ZSHCFG" apply "$stashToApply" > /dev/null 2>&1
+		git -C "$ZSHCFG" stash -q
+	done
 
+	# This block iterates over all remote branches and fetches each of them to the local repo
+	for branch in `git -C "$ZSHCFG" branch -r | cat | grep "origin/" | tail -n +2 | sed 's/origin\///'`; do
+		if [ "$branch" = "master" ]; then continue; fi
+		git -C "$ZSHCFG" fetch origin "$branch":"$branch"
+	done
+	echo "Finished pulling branches"
+	# All this does is gets the name of the branch that the most recent commit belongs to and calls `git checkout` on it
+	git -C "$ZSHCFG" checkout "$(git -C "$ZSHCFG" log -1 --remotes --format="%D" | tr ", " "\n" | grep "origin" | sed 's/origin\///')"
 
+	rm -rf "$ZSHCFG-patches"
 
-# This block iterates over all remote branches and fetches each of them to the local repo
-for branch in `git -C "$ZSHCFG" branch -r | cat | grep "origin/" | tail -n +2 | sed 's/origin\///'`; do
-	if [ "$branch" = "master" ]; then continue; fi
-	git -C "$ZSHCFG" fetch origin "$branch":"$branch"
-done
-# All this does is gets the name of the branch that the most recent commit belongs to and calls `git checkout` on it
-git -C "$ZSHCFG" checkout "`git -C "$ZSHCFG" log -1 --all --format="%D" | tr ", " "\n" | grep "origin" | sed 's/origin\///'`"
+fi
 
 # All this part is meant to automatically get the most recent version for testing purposes
 
-sudo apt update -y && sudo apt upgrade -y
 
 
 rm -f "$HOME/.zshrc"
@@ -161,4 +182,9 @@ if ! command -v python3 >/dev/null 2>&1; then
 	done
 else
 	echo "Python is already installed" #! Note, add python version
+fi
+
+
+if [ $hadPatches -eq 1 ]; then
+	echo "You had uncommited changes in .zshconfig before installation. They were automatically cached and applied to the new installed"
 fi
