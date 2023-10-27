@@ -7,7 +7,6 @@ autoload -Uz compinit
 compinit
 
 
-export ISWSL="0"
 alias desktop='~/Desktop'
 alias desk='desktop'
 alias dl='~/Downloads'

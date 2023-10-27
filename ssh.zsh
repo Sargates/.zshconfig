@@ -1,4 +1,5 @@
 
+#* This just adds keys that aren't already added to the ssh-agent
 
 # List fingerprints of already added keys
 added_keys=$(ssh-add -l | awk '{print $2}')

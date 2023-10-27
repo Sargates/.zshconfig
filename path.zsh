@@ -1,10 +1,12 @@
-PATH=$HOME/.local/bin:$PATH
-PATH="$PATH:/usr/local/bin"
-PATH="$PATH:/usr/share/dotnet"
-PATH="$PATH:/opt/scriptcs/scriptcs-scriptcs-ceb8443"
-PATH="$PATH:$JAVA_HOME/bin"
-PATH="$PATH:$M2_HOME/bin"
-export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
-export M2_HOME='/opt/apache-maven-3.6.3'
+# To prevent duplicate entries
+addToPath() {
+	[[ "${PATH}" != *$1* ]] && PATH="$PATH:$1"
+}
+
+addToPath $HOME/.local/bin
+addToPath usr/local/bin
+addToPath /usr/share/dotnet
+export JAVA_HOME="/usr/lib/jvm/java-19-openjdk-amd64"
+addToPath $JAVA_HOME
 
 export PATH

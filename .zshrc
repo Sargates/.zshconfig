@@ -102,23 +102,15 @@ source $ZSH/oh-my-zsh.sh
 [[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=1 || ISWSL=0
 export ISWSL
 
-contains() {
-    if [[ "$1" == *"$2"* ]]; then
-		return 0
-	else
-		return 1
-	fi
-}
-for f in $HOME/.zshconfig/*; do
-	file=`basename $f`
-	
-	if ! contains ".zshrc autorun.sh clean.sh install.sh readme.md test.zsh .git license.md" $file; then
+for f in $HOME/.zshconfig/*(D); do
+	if [ -d $f ]; then continue; fi
+	file=$f:t
+	ext=$f:t:e
+
+	if [[ $ext == "zsh" ]]; then
 		if [[ $ISWSL -eq 1 && $file == "linux.zsh" ]]; then continue; fi
 		if [[ $ISWSL -eq 0 && $file == "wsl.zsh" ]]; then continue; fi
-		echo "Sourcing: $file"
 		source "$f"
-	else
-		echo " Skipped: $file"
 	fi;
 
 	# source $f

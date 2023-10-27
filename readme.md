@@ -3,5 +3,5 @@
 - Git
 - Python
 - Oh-my-zsh
-- Xsel
+- Xsel && BC package (used for in-terminal selection)
 - Included .gitconfig

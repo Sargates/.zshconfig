@@ -5,4 +5,4 @@ if ! command -v curl >/dev/null 2>&1; then
 	exit 1
 fi
 
-sh -c "$(curl  -X GET -H "Authorization: token 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" https://raw.githubusercontent.com/Sargates/.zshconfig/master/install.sh)"
+curl  -X GET -H "Authorization: token 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" https://raw.githubusercontent.com/Sargates/.zshconfig/testing/install.sh > install.sh

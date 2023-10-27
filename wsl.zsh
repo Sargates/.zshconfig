@@ -6,7 +6,6 @@ fi
 autoload -Uz compinit
 compinit
 
-export ISWSL="1"
 alias root='/mnt/c/'
 alias desktop='/mnt/c/Users/Nick/Desktop'
 alias desk='desktop'
