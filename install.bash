@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+# set -e
 
 # Check if APT is installed
 if ! command -v apt >/dev/null 2>&1; then
@@ -8,9 +8,10 @@ if ! command -v apt >/dev/null 2>&1; then
 fi
 
 
-sudo echo Starting install.sh
+sudo echo Starting install.bash
 
-sudo apt update -y >/dev/null 2>&1 && sudo apt upgrade -y >/dev/null 2>&1
+#* Note to self: Don't try to redirect this to null. It's fine here
+sudo apt update -y && sudo apt upgrade -y
 
 
 # returns true if first string contains second string
@@ -92,20 +93,20 @@ fi
 
 cd "$HOME"
 
-#* Cache Any unstaged/uncommited changes to prevent data loss (this actually happened to me because I ran this fucking script)
+#* This Caches any unstaged/uncommited changes to prevent data loss (this actually happened to me because I ran this fucking script)
 #! Note, add functionality to cache "further along" branches. Caching .git directly? Current behaviour would lose unpushed commits
-# Export the stashes
-
 
 hadPatches=0
 if [ -d "$ZSHCFG" ]; then
+	# Export the stashes
+
 	rm -rf "$ZSHCFG-patches"
 	mkdir -p "$ZSHCFG-patches"
 	hadPatches=1
 
 	git -C "$ZSHCFG" stash -q
 
-	[ "`git -C "$ZSHCFG" stash list | wc -l`" -eq 1 ] && echo "Stashes found in repository"
+	[ "`git -C "$ZSHCFG" stash list | wc -l`" -gt 0 ] && echo "Stash(es) found in repository"
 	for ((i=0; i < "`git -C "$ZSHCFG" stash list | wc -l`"; i++))
 	do
 		git -C "$ZSHCFG" stash show -p "stash@{$i}" > "$ZSHCFG-patches/stash$i.patch"
@@ -118,7 +119,6 @@ if [ -d "$ZSHCFG" ]; then
 
 fi
 
-echo $ZSHCFG
 rm -rf "$ZSHCFG"
 git clone https://Sargates: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@github.com/Sargates/.zshconfig.git
 
@@ -137,13 +137,13 @@ if [ $hadPatches -eq 1 ]; then
 	done
 	echo "Finished pulling branches"
 	# All this does is gets the name of the branch that the most recent commit belongs to and calls `git checkout` on it
-	git -C "$ZSHCFG" checkout "$(git -C "$ZSHCFG" log -1 --remotes --format="%D" | tr ", " "\n" | grep "origin" | sed 's/origin\///')"
 
 	rm -rf "$ZSHCFG-patches"
 
 fi
 
-# All this part is meant to automatically get the most recent version for testing purposes
+# All this part is meant to do is automatically get the most recent commit for testing purposes
+git -C "$ZSHCFG" checkout "$(git -C "$ZSHCFG" log -1 --remotes --format="%D" | tr ", " "\n" | grep "origin" | sed 's/origin\///')"
 
 
 
