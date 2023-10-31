@@ -2,6 +2,8 @@
 setopt globdots
 
 
+export EDITOR="code"
+
 #! Set aliases
 alias pip='python -m pip'
 alias zshrc='source ~/.zshrc'
@@ -14,7 +16,7 @@ alias listjava='apt search openjdk-.+-'					# Search installable JDK's because I
 alias clip="cut -c 1-`tput cols`"						# Use with pipe to clip output to terminal size to prevent line wrapping
 alias cgrep="clip|grep"									# Use with pipe to have clipped grep output. Buggy; Doesn't match patterns to what was clipped
 
-alias zshcfg="code -n ~/.zshconfig"						# Open zsh config in VSCode
+alias zshcfg="$EDITOR ~/.zshconfig"						# Open zsh config in VSCode
 alias mcd='() { md $1 && cd $_ }'						# Used to create and cd to a new directory
 alias killssh='kill `pgrep ssh-agent`' 					# Used to reset ssh-agent
 

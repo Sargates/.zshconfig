@@ -75,6 +75,8 @@ plugins=(
 	git
 	virtualenv
 	ssh-agent
+	tmux
+	aliases
 	# virtualenvwrapper
 )
 # sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/virtualenvwrapper/virtualenvwrapper.plugin.zsh
