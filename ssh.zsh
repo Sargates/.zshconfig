@@ -4,7 +4,6 @@
 if [[ $SSH_CLIENT != "" ]]; then
 	return
 fi
-echo Passed
 
 # List fingerprints of already added keys
 added_keys=$(ssh-add -l | awk '{print $2}')
