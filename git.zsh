@@ -2,6 +2,7 @@ alias glgrep="getGitCommitBySubstring"
 alias glg="glgrep"
 alias grget='git remote get-url'
 alias gl="git lg"
+alias gla="git lg --all"
 alias gmnff="git merge --no-ff"
 
 # git config --global user.email "$USER@$HOST"
