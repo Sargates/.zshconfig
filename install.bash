@@ -173,7 +173,7 @@ if ! command -v python3 >/dev/null 2>&1; then
 		elif contains "11 10 9 8 7 6 5 4 3 2 1 0" "$pv"; then
 			echo "Installing Python 3.$pv"
 			sudo apt install python3."$pv" -y
-			sudo apt install python3."$pv"-pip
+			sudo apt install python3-pip
 			break
 		elif [ "$pv" = "n" ]; then
 			echo "Python install skipped"
