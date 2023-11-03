@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -e
+set -e
 
 # Check if APT is installed
 if ! command -v apt >/dev/null 2>&1; then

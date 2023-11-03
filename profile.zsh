@@ -14,7 +14,9 @@ alias haconnect='ssh hassio@homeassistant.local' 		# Connect to local home assis
 alias listapt='apt list --installed'					# List installed apt packages (optionally use with grep)
 alias listjava='apt search openjdk-.+-'					# Search installable JDK's because I can never remember the formatting
 alias clip="cut -c 1-`tput cols`"						# Use with pipe to clip output to terminal size to prevent line wrapping
-alias cgrep="clip|grep"									# Use with pipe to have clipped grep output. Buggy; Doesn't match patterns to what was clipped
+alias clgrep="clip|grep"								# Use with pipe to have clipped grep output. Buggy; Doesn't match patterns to what was clipped
+alias ncgrep="grep --color=never"						# Use with pipe to have clipped grep output. Buggy; Doesn't match patterns to what was clipped
+alias l="ls -lah --color=always"						# Preserves coloring when piping to grep with --color=never flag i.e. `l | grep --color=never {PATTERN}`
 
 alias zshcfg="$EDITOR ~/.zshconfig"						# Open zsh config in VSCode
 alias mcd='() { md $1 && cd $_ }'						# Used to create and cd to a new directory
