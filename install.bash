@@ -143,7 +143,7 @@ if [ $hadPatches -eq 1 ]; then
 fi
 
 # All this part is meant to do is automatically get the most recent commit for testing purposes
-git -C "$ZSHCFG" checkout "$(git -C "$ZSHCFG" log -1 --remotes --format="%D" | tr ", " "\n" | grep "origin" | sed 's/origin\///')"
+git -C "$ZSHCFG" checkout "$(git -C "$ZSHCFG" log -1 --remotes --format="%D" | tr ", " "\n" | grep "origin" | grep -v "HEAD" | sed 's/origin\///' | head -n 1)"
 
 
 
