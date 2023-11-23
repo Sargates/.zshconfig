@@ -34,7 +34,7 @@ alias winpy='psx python'
 alias winpython='winpy'
 
 alias fixmono='sudo update-binfmts --disable cli' # required for Mono on WSL instance
-alias gaming='python `cs-stuff Python/+utils/gigachad.py`'
+alias gaming='python `cs-stuff Python/utils/gigachad.py`'
 alias dnr="psx dotnet run"
 export LIBGL_ALWAYS_SOFTWARE=1 # This being unset causes a segmentation fault in some cases, `glxinfo, glxgears` See: https://github.com/microsoft/wslg/issues/715#issuecomment-1419138688 for full thread
 alias dnb="psx dotnet build"
@@ -55,10 +55,15 @@ cs_stuff() {
 	BASEPATH=$csStuff
 	SUBPATH=$1
 	if [ -d "$BASEPATH/$SUBPATH" ]; then
-		$BASEPATH/$SUBPATH
+		cd $BASEPATH/$SUBPATH
 		return 0
 	fi
-	echo $BASEPATH/$SUBPATH
+	if [ -e "$BASEPATH/$SUBPATH" ]; then
+		echo $BASEPATH/$SUBPATH
+		return 0
+	fi
+	echo "Could not find file \"~cs/$SUBPATH\""
+	return 1
 }
 compdef "_directories -/ -W $csStuff" cs_stuff
 alias cs-stuff='cs_stuff'

@@ -30,15 +30,16 @@ winpwd() {
 
 copy() {
 	if [[ $# -ne 1 ]]; then
-		echo "Usage: copy <eval_string>"
+		echo "Usage: copy [string|file_name]"
 		return 1
 	fi
 	if [[ -a $1 ]]; then
 		cat $1 | clipcopy
+		echo "Copied contents of $1 to clipboard"
 		return 0
 	fi
-
 	echo $1 | clipcopy
+	echo "Copied \"$1\" to clipboard"
 }
 
 #* Set configuration
@@ -76,7 +77,7 @@ rename() {
 
 export ZSHCFG="$HOME/.zshconfig"
 
-# # Syntax highlighting // Commented for committing non broken changes
-# source "$ZSHCFG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+# Syntax highlighting
+source "$ZSHCFG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 

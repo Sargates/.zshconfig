@@ -1,5 +1,6 @@
 
 Copyright 2023- Nicholas Glenn
+Copyright (c) 2010-2020 zsh-syntax-highlighting contributors -- All rights reserved.
 Copyright 2012— [Gregory Pakosz](https://github.com/gpakosz/.tmux) for tmux.conf and tmux.conf.local -- All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
