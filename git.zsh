@@ -5,26 +5,25 @@ alias gl="git lg"
 alias gla="git lg --all"
 alias gmnff="git merge --no-ff"
 
-# git config --global user.email "$USER@$HOST"
+# git config --global user.email "$USER@$HOST" // Was testing this, do not remove unless you want your git signature to be changed
 
 getGitCommitBySubstring() {
 	git log --pretty=oneline | cat | grep -B 1 -A 1 --color=always -i '.*'$1'.*'
 }
 
 github() {
-  	local REPONAME=$1
-	local GHUBUSER=$2
-	if [[ "$GHUBUSER" == "" ]]; then
-		GHUBUSER="Sargates"
+	if [[ $# -ne 2 && $# -ne 1 ]]; then
+		echo 'Usage: github [github-user=Sargates] [repo-name]'
+		return 1
+	fi
+	local REPONAME=""
+	local GHUBUSER="Sargates"
+	if [[ $# -eq 2 ]]; then
+		GHUBUSER=$1
+		REPONAME=$2
+	fi
+	if [[ $# -eq 1 ]]; then
+		REPONAME=$1
 	fi
 	echo git@github.com:$GHUBUSER/$REPONAME.git
-}
-
-ghpull() {
-	local REPONAME=$1
-	local GHUBUSER=$2
-	if [[ "$GHUBUSER" == "" ]]; then
-		GHUBUSER="Sargates"
-	fi
-	git pull git@github.com:$GHUBUSER/$REPONAME.git
 }

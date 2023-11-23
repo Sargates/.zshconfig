@@ -24,17 +24,28 @@ alias ncgrep="grep --color=never"						# Use with pipe to have clipped grep outp
 alias l="ls -lah --color=always"						# Preserves coloring when piping to grep with --color=never flag i.e. `l | grep --color=never {PATTERN}`
 alias listports="sudo lsof -i -P -n | grep LISTEN"		# Used to list open ports
 
+winpwd() {
+	echo $(wslpath -m .)
+}
 
+copy() {
+	if [[ $# -ne 1 ]]; then
+		echo "Usage: copy <eval_string>"
+		return 1
+	fi
+	if [[ -a $1 ]]; then
+		cat $1 | clipcopy
+		return 0
+	fi
 
-#! Set configuration
+	echo $1 | clipcopy
+}
 
-[[ ISWSL -eq 1 ]] && [[ "${LESS}" != *--mouse* ]] && export LESS="${LESS} --mouse" # Used for mouse functionality in less pagers (git log, man, etc.)
-#! Above line breaks Windows Terminal selection inside of pagers (git log, man, etc.). See: https://github.com/microsoft/terminal/issues/9165#issuecomment-1398208221
-#! Holding shift down prevents this issue, but interaction still works the same (i.e. it might not have the expected behavior)
-[[ ISWSL -eq 1 ]] && [[ "${LESS}" != *--wheel-lines=* ]] && export LESS="${LESS} --wheel-lines=2" # Change number of lines per scroll
+#* Set configuration
+alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"				# Trim leading and trailing whitespace
+# alias nth_line="$(sed -n ${n}p)"
 
 export LANG="C.UTF-8"									# Change LANG (mainly for sort order when calling ls -l)
-
 
 rename() {
     if [ $# -ne 2 ]; then
@@ -63,7 +74,9 @@ rename() {
     fi
 }
 
-
-
-
 export ZSHCFG="$HOME/.zshconfig"
+
+# # Syntax highlighting // Commented for committing non broken changes
+# source "$ZSHCFG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+

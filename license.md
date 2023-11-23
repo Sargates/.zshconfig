@@ -1,7 +1,6 @@
 
 Copyright 2023- Nicholas Glenn
-
-Copyright 2012— [Gregory Pakosz](https://github.com/gpakosz/.tmux) for tmux.conf and tmux.conf.local
+Copyright 2012— [Gregory Pakosz](https://github.com/gpakosz/.tmux) for tmux.conf and tmux.conf.local -- All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
