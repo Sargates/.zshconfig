@@ -27,8 +27,8 @@ PowershellOpen() {
 alias psx="powershell.exe" # Syntax: `psx start .` (opens current dir)
 alias open="PowershellOpen"
 
-hash -d w=/mnt/c/Users/Nick
-hash -d cs=/mnt/c/Users/Nick/Desktop/Production/CS_Stuff
+builtin hash -d w=/mnt/c/Users/Nick
+builtin hash -d cs=/mnt/c/Users/Nick/Desktop/Production/CS_Stuff
 
 alias winpy='psx python'
 alias winpython='winpy'
@@ -39,11 +39,10 @@ alias dnr="psx dotnet run"
 export LIBGL_ALWAYS_SOFTWARE=1 # This being unset causes a segmentation fault in some cases, `glxinfo, glxgears` See: https://github.com/microsoft/wslg/issues/715#issuecomment-1419138688 for full thread
 alias dnb="psx dotnet build"
 
-
-[[ "${LESS}" != *--mouse* ]] && export LESS="${LESS} --mouse" # Used for mouse functionality in less pagers (git log, man, etc.)
+[[ "$LESS" != *--mouse* ]] && export LESS="$LESS --mouse" # Used for mouse functionality in less pagers (git log, man, etc.)
 #! Above line breaks Windows Terminal selection inside of pagers (git log, man, etc.). See: https://github.com/microsoft/terminal/issues/9165#issuecomment-1398208221
 #! Holding shift down prevents this issue, but interaction still works the same (i.e. holding shift and clicking around with assume that you are selecting instead of deselecting)
-[[ "${LESS}" != *--wheel-lines=* ]] && export LESS="${LESS} --wheel-lines=2" # Change number of lines per scroll
+[[ "$LESS" != *--wheel-lines=* ]] && export LESS="$LESS --wheel-lines=2" # Change number of lines per scroll
 
 
 # export DISPLAY=192.168.176.1:0.0 # garbage for xserver

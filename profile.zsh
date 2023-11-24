@@ -29,22 +29,40 @@ winpwd() {
 }
 
 copy() {
-	if [[ $# -ne 1 ]]; then
+	local inp
+	if [[ $# -eq 1 ]]; then
+		inp=$1
+	elif [[ $# -eq 0 ]]; then
+		read inp
+	else
 		echo "Usage: copy [string|file_name]"
 		return 1
 	fi
-	if [[ -a $1 ]]; then
-		cat $1 | clipcopy
-		echo "Copied contents of $1 to clipboard"
+	if [[ -d `pwd`/$inp ]]; then
+		echo "Cannot copy. $inp is a directory to clipboard"
+		return 1
+	fi
+	if [[ -a `pwd`/$inp ]]; then
+		cat $inp | clipcopy
+		echo "Copied contents of $inp to clipboard"
 		return 0
 	fi
-	echo $1 | clipcopy
-	echo "Copied \"$1\" to clipboard"
+	echo $inp | clipcopy
+	echo "Copied \"$inp\" to clipboard"
 }
 
 #* Set configuration
 alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"				# Trim leading and trailing whitespace
 # alias nth_line="$(sed -n ${n}p)"
+hash() {
+	if [[ $# -ne 2 ]]; then
+		echo "Usage: hash [algorithm] [string]"
+		return 1
+	fi
+	local unparsed=`echo -n $2 | openssl $1`
+	local out=${unparsed#*= }
+	echo $out
+}
 
 export LANG="C.UTF-8"									# Change LANG (mainly for sort order when calling ls -l)
 

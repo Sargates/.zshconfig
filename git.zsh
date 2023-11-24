@@ -3,6 +3,7 @@ alias glg="glgrep"
 alias grget='git remote get-url'
 alias gl="git lg"
 alias gla="git lg --all"
+alias gmff="git merge --ff-only"
 alias gmnff="git merge --no-ff"
 
 # git config --global user.email "$USER@$HOST" // Was testing this, do not remove unless you want your git signature to be changed
