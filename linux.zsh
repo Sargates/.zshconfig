@@ -15,7 +15,7 @@ alias dev='~/Desktop/Production'
 mkdir -p ~/Desktop/Production
 mkdir -p ~/Desktop/Production/CS_Stuff
 
-hash -d cs=~/Desktop/Production/CS_Stuff
+builtin hash -d cs=~/Desktop/Production/CS_Stuff
 
 
 csStuff=`echo ~cs`

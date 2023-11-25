@@ -21,11 +21,19 @@ alias ldesk='ld'
 alias cmd="cmd.exe"
 alias cmdx="cmd /C"
 
-PowershellOpen() {
-	explorer.exe "`wslpath -w $PWD/$1`"
+open() {
+	# Might still have issue when absolute path is passed, seems to work
+	if [[ -d $1 ]]; then
+		explorer.exe "`wslpath -w $1`"
+		return 0
+	elif [[ -d $PWD/$1 ]]; then
+		explorer.exe "`wslpath -w $PWD/$1`"
+		return 0
+	fi
+	echo "No such file or directory: $1"
+	return 1
 }
 alias psx="powershell.exe" # Syntax: `psx start .` (opens current dir)
-alias open="PowershellOpen"
 
 builtin hash -d w=/mnt/c/Users/Nick
 builtin hash -d cs=/mnt/c/Users/Nick/Desktop/Production/CS_Stuff
@@ -47,6 +55,11 @@ alias dnb="psx dotnet build"
 
 # export DISPLAY=192.168.176.1:0.0 # garbage for xserver
 # export LIBGL_ALWAYS_INDIRECT=1
+
+
+winpwd() {
+	echo $(wslpath -m .)
+}
 
 
 csStuff=`echo ~cs`

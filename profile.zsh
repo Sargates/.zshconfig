@@ -24,74 +24,12 @@ alias ncgrep="grep --color=never"						# Use with pipe to have clipped grep outp
 alias l="ls -lah --color=always"						# Preserves coloring when piping to grep with --color=never flag i.e. `l | grep --color=never {PATTERN}`
 alias listports="sudo lsof -i -P -n | grep LISTEN"		# Used to list open ports
 
-winpwd() {
-	echo $(wslpath -m .)
-}
-
-copy() {
-	local inp
-	if [[ $# -eq 1 ]]; then
-		inp=$1
-	elif [[ $# -eq 0 ]]; then
-		read inp
-	else
-		echo "Usage: copy [string|file_name]"
-		return 1
-	fi
-	if [[ -d `pwd`/$inp ]]; then
-		echo "Cannot copy. $inp is a directory to clipboard"
-		return 1
-	fi
-	if [[ -a `pwd`/$inp ]]; then
-		cat $inp | clipcopy
-		echo "Copied contents of $inp to clipboard"
-		return 0
-	fi
-	echo $inp | clipcopy
-	echo "Copied \"$inp\" to clipboard"
-}
 
 #* Set configuration
 alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"				# Trim leading and trailing whitespace
-# alias nth_line="$(sed -n ${n}p)"
-hash() {
-	if [[ $# -ne 2 ]]; then
-		echo "Usage: hash [algorithm] [string]"
-		return 1
-	fi
-	local unparsed=`echo -n $2 | openssl $1`
-	local out=${unparsed#*= }
-	echo $out
-}
+
 
 export LANG="C.UTF-8"									# Change LANG (mainly for sort order when calling ls -l)
-
-rename() {
-    if [ $# -ne 2 ]; then
-        echo "Usage: rename <old_name> <new_name>"
-        return 1
-    fi
-
-    local old_name="$1"
-    local new_name="$2"
-
-    if [ ! -e "$old_name" ]; then
-        echo "Error: '$old_name' does not exist."
-        return 1
-    fi
-
-    if [ -e "$new_name" ]; then
-        echo "Error: '$new_name' already exists."
-        return 1
-    fi
-
-    mv "$old_name" "$new_name"
-    if [ $? -eq 0 ]; then
-        echo "Successfully renamed '$old_name' to '$new_name'."
-    else
-        echo "Failed to rename '$old_name'."
-    fi
-}
 
 export ZSHCFG="$HOME/.zshconfig"
 

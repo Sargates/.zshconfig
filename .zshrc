@@ -89,18 +89,6 @@ HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv)
 
 source $ZSH/oh-my-zsh.sh
 
-# source ~/.zshconfig/.zprofile
-# source ~/.zshconfig/git.zsh
-# source ~/.zshconfig/kbhelper.zsh
-# source ~/.zshconfig/path.zsh
-# source ~/.zshconfig/ssh.zsh
-# if [[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
-# 	source ~/.zshconfig/wsl.zsh
-# else
-# 	source ~/.zshconfig/linux.zsh
-# fi
-# source ~/.zshconfig/test.zsh
-
 [[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=1 || ISWSL=0
 export ISWSL
 
@@ -109,13 +97,13 @@ for f in $HOME/.zshconfig/*(D); do
 	file=$f:t
 	ext=$f:t:e
 
+
 	if [[ $ext == "zsh" ]]; then
+		if [[ $file == "update.zsh" ]]; then continue; fi # Ignore sourcing `update.zsh`
 		if [[ $ISWSL -eq 1 && $file == "linux.zsh" ]]; then continue; fi
 		if [[ $ISWSL -eq 0 && $file == "wsl.zsh" ]]; then continue; fi
 		source "$f"
 	fi;
-
-	# source $f
 done
 
 
@@ -146,6 +134,8 @@ done
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+
+#! Sourcing `nvm.sh` directly causes a conflict with the `hash` function defined in `utils.zsh`. I put in a github issue to have that fixed
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
