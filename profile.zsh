@@ -28,6 +28,14 @@ alias listports="sudo lsof -i -P -n | grep LISTEN"		# Used to list open ports
 #* Set configuration
 alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"				# Trim leading and trailing whitespace
 
+firefox() {
+	if [[ ${+commands[firefox]} ]]; then
+		command firefox >/dev/null 2>&1 & # Background and silence the debug output
+		return
+	fi
+	command firefox # If firefox is not a recognized command, run command to receive standard error message
+}
+
 
 export LANG="C.UTF-8"									# Change LANG (mainly for sort order when calling ls -l)
 
