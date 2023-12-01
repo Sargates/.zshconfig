@@ -120,7 +120,7 @@ if [ -d "$ZSHCFG" ]; then
 fi
 
 rm -rf "$ZSHCFG"
-git clone https://Sargates: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@github.com/Sargates/.zshconfig.git
+git clone https://Sargates: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@github.com/Sargates/.zshconfig.git
 
 if [ $hadPatches -eq 1 ]; then
 
