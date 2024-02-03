@@ -153,11 +153,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
-#! This adds autocomplete to vcpkg commands
-autoload bashcompinit
-bashcompinit
-source $HOME/vcpkg/scripts/vcpkg_completion.zsh
-export VCPKG="$HOME/vcpkg/packages"
+# #! This adds autocomplete to vcpkg commands
+# autoload bashcompinit
+# bashcompinit
+# source $HOME/vcpkg/scripts/vcpkg_completion.zsh
+# export VCPKG="$HOME/vcpkg/packages"
 
 # # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

@@ -9,6 +9,7 @@ compinit
 
 alias desktop='~/Desktop'
 alias desk='desktop'
+alias ds='desktop'
 alias dl='~/Downloads'
 alias dev='~/dev'
 

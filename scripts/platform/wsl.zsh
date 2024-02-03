@@ -9,6 +9,7 @@ compinit
 alias root='/mnt/c/'
 alias desktop='~w/Desktop'
 alias desk='desktop'
+alias ds='desktop'
 alias dl='~w/Downloads'
 alias dev='/mnt/c/dev'
 alias obs='~w/Desktop/Obsidian'
