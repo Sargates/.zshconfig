@@ -1,6 +1,6 @@
 [user]
 	name = Sargates
-	email = nick@TERRA-NG
+	email = nicholas.g.glenn@gmail.com
 [init]
 	defaultBranch = master
 [alias]
@@ -9,12 +9,11 @@
 	lg = lg1
 	root = rev-parse --show-toplevel
 [core]
-	editor = "/bin/nano"
+	editor = "code --wait"
 	pager = delta
 
-[interactive]
-	diffFilter = delta --color-only
-
+# [interactive]
+# 	diffFilter = delta --color-only
 [delta]
 	navigate = true    # use n and N to move between diff sections
 	light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
@@ -25,3 +24,7 @@
 
 [diff]
 	colorMoved = default
+	pager=delta
+
+[color]
+	status = always

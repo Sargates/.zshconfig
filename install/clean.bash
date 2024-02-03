@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "clean.bash does not work yet"
+return 1
 confirm() {
     # call with a prompt string or use a default
     read -r -p "${1:-Are you sure you want to clean your zsh setup? [y/n]} " response

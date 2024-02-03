@@ -1,14 +1,18 @@
 #!/bin/bash
 set -e
 
+echo "install.bash does not work yet"
+return 1
+# mapfile -t dependencies < dependencies.txt
+
 # Check if APT is installed
-if ! command -v apt >/dev/null 2>&1; then
-	echo "Apt not installed"
+if "${+commands[apt]}"; then
+	echo "Apt not installed. Apt is required to run this script"
 	exit 1
 fi
-
-
 sudo echo Starting install.bash
+
+
 
 #* Note to self: Don't try to redirect this to null. It's fine here
 sudo apt update -y && sudo apt upgrade -y
@@ -24,21 +28,11 @@ contains() {
 
 ZSHCFG="$HOME/.zshconfig"
 
-# appends file contents to .old and makes replaces with a link to file in zshconfig
-saveAndLink() {
-	if [ -f "$HOME/$1" ]; then
-		cat "$HOME/$1" >> "$HOME/$1.old"
-		rm -f "$HOME/$1"
-	fi
-
-	ln -s "$ZSHCFG/$1" "$HOME/$1"	
-}
-
 
 # Dependencies
 
 ## Git
-if ! command -v git >/dev/null 2>&1; then
+if "${+commands[git]}"; then
 	echo "Installing Git"
 	sudo apt install git -y
 else
@@ -46,7 +40,7 @@ else
 fi
 
 ## Zsh
-if ! command -v zsh >/dev/null 2>&1; then
+if "${+commands[zsh]}"; then
 	echo "Installing Zsh"
 	sudo apt install zsh -y
 else
@@ -66,7 +60,7 @@ else
 fi
 
 ## BC (Basic Calculator)
-if ! command -v bc >/dev/null 2>&1; then
+if "${+commands[bc]}"; then
 	echo "Installing Basic Calculator"
 	sudo apt install bc -y
 else
@@ -74,7 +68,7 @@ else
 fi
 
 ## Xsel (needed for cutting and copying from native ZSH selection buffer)
-if ! command -v xsel >/dev/null 2>&1; then
+if "${+commands[xsel]}"; then
 	echo "Installing Xsel"
 	sudo apt install xsel -y
 else
@@ -82,12 +76,50 @@ else
 fi
 
 ## Tmux
-if ! command -v tmux >/dev/null 2>&1; then
+if "${+commands[tmux]}"; then
 	echo "Installing tmux"
 	sudo apt install tmux -y
 else
 	echo "Tmux is already installed"
 fi
+## Bat
+if "${+commands[batcat]}"; then
+	echo "Installing bat"
+	sudo apt install bat -y
+	sudo ln -s /bin/batcat /bin/bat
+else
+	echo "Bat is already installed"
+fi
+
+
+## Python3.X
+if "${+commands[python3]}"; then
+	echo "Input python version 3.X to install (n to skip install)"
+	while true; do
+		read -r pv
+		if [ "$pv" = "" ]; then
+			echo "Installing latest Python"
+			sudo apt install python3 -y
+			sudo apt install python3-pip
+			sudo ln -s /bin/python3 /bin/python # Create symlink for `python` interpretation
+			break
+		elif contains "11 10 9 8 7 6 5 4 3 2 1 0" "$pv"; then
+			echo "Installing Python 3.$pv"
+			sudo apt install python3."$pv" -y
+			sudo apt install python3-pip
+			sudo ln -s /bin/python3 /bin/python # Create symlink for `python` interpretation
+			break
+		elif [ "$pv" = "n" ]; then
+			echo "Python install skipped"
+			break
+		else
+			echo "Invalid version Python 3.$pv, try again"
+		fi
+	done
+else
+	echo "Python is already installed" #! Note, add python version
+fi
+
 
 
 
@@ -142,51 +174,18 @@ if [ $hadPatches -eq 1 ]; then
 
 fi
 
-# All this part is meant to do is automatically get the most recent commit for testing purposes
+# All this part does is automatically retrieve and checkout the most recent commit for testing purposes
 git -C "$ZSHCFG" checkout "$(git -C "$ZSHCFG" log -1 --remotes --format="%D" | tr ", " "\n" | grep "origin" | grep -v "HEAD" | sed 's/origin\///' | head -n 1)"
 
 
 
-rm -f "$HOME/.zshrc"
-ln -s "$ZSHCFG/.zshrc" "$HOME/.zshrc"
 
-
-# Creates symlinks to the corresponding files in .zshconfig, also caches old to a file
-saveAndLink ".gitconfig"
-saveAndLink ".tmux.conf"
-saveAndLink ".tmux.conf.local"
-
-
-
-# Niceties
-
-## Python3.X
-if ! command -v python3 >/dev/null 2>&1; then
-	echo "Input python version 3.X to install (n to skip install)"
-	while true; do
-		read -r pv
-		if [ "$pv" = "" ]; then
-			echo "Installing latest Python"
-			sudo apt install python3 -y
-			sudo apt install python3-pip
-			break
-		elif contains "11 10 9 8 7 6 5 4 3 2 1 0" "$pv"; then
-			echo "Installing Python 3.$pv"
-			sudo apt install python3."$pv" -y
-			sudo apt install python3-pip
-			break
-		elif [ "$pv" = "n" ]; then
-			echo "Python install skipped"
-			break
-		else
-			echo "Invalid version Python 3.$pv, try again"
-		fi
-	done
-else
-	echo "Python is already installed" #! Note, add python version
-fi
 
 
 if [ $hadPatches -eq 1 ]; then
 	echo "You had uncommited changes in .zshconfig before installation. They were automatically cached and applied to the new installed"
 fi
+
+
+# Exec `update.zsh` to ensure everything is installed correctly
+zsh "$ZSHCFG/update.zsh"

@@ -1,3 +1,11 @@
+#! Only uncomment the following when using Powerlevel10k
+# # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# # Initialization code that may require console input (password prompts, [y/n]
+# # confirmations, etc.) must go above this block; everything else may go below.
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 # Path to your oh-my-zsh installation.
@@ -8,6 +16,8 @@ export ZSH="$HOME/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="headline"
+# ZSH_THEME="robbyrussell"
+# ZSH_THEME="powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -62,7 +72,7 @@ ZSH_THEME="headline"
 HIST_STAMPS="%a %b %e %H:%M:%S %y"
 
 # Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=~/.zshconfig/custom
+ZSH_CUSTOM=~/.zshconfig
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
@@ -77,34 +87,36 @@ plugins=(
 	ssh-agent
 	tmux
 	aliases
+	# docker
 	# virtualenvwrapper
 )
-# sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/virtualenvwrapper/virtualenvwrapper.plugin.zsh
-# sed -i "s/\/usr\/local/\$HOME\/.local/g" $ZSH/plugins/git/git.plugin.zsh
 
-HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv)
+# HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv) # TODO: remove virtualenv here
+HEADLINE_RIGHT_PROMPT_ELEMENTS=(status)
 
-
-
-
-source $ZSH/oh-my-zsh.sh
+#! This line changes `headline` to reset the clock in realtime -- causes issues in history traversal with arrow keys
+# TMOUT=1; TRAPALRM () { zle reset-prompt }
 
 [[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=1 || ISWSL=0
 export ISWSL
 
-for f in $HOME/.zshconfig/*(D); do
-	if [ -d $f ]; then continue; fi
-	file=$f:t
-	ext=$f:t:e
+
+source $ZSH/oh-my-zsh.sh # This line is what ends up sourcing 
 
 
-	if [[ $ext == "zsh" ]]; then
-		if [[ $file == "update.zsh" ]]; then continue; fi # Ignore sourcing `update.zsh`
-		if [[ $ISWSL -eq 1 && $file == "linux.zsh" ]]; then continue; fi
-		if [[ $ISWSL -eq 0 && $file == "wsl.zsh" ]]; then continue; fi
-		source "$f"
-	fi;
-done
+# for f in $HOME/.zshconfig/*(D); do
+# 	if [ -d $f ]; then continue; fi
+# 	file=$f:t
+# 	ext=$f:t:e
+
+
+# 	if [[ $ext == "zsh" ]]; then
+# 		if [[ $file == "update.zsh" ]]; then continue; fi # Ignore sourcing `update.zsh`
+# 		if [[ $ISWSL -eq 1 && $file == "linux.zsh" ]]; then continue; fi
+# 		if [[ $ISWSL -eq 0 && $file == "wsl.zsh" ]]; then continue; fi
+# 		source "$f"
+# 	fi;
+# done
 
 
 
@@ -139,3 +151,13 @@ done
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+#! This adds autocomplete to vcpkg commands
+autoload bashcompinit
+bashcompinit
+source $HOME/vcpkg/scripts/vcpkg_completion.zsh
+export VCPKG="$HOME/vcpkg/packages"
+
+# # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

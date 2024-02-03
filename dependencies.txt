@@ -1,0 +1,10 @@
+//'s are commented (not required)
+
+git
+zsh
+bc
+xsel
+tmux
+bat
+python3
+// expect

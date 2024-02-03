@@ -189,6 +189,7 @@ HEADLINE_DO_GIT_STATUS_OMIT_ONE=false # set "true" to omit the status number whe
 
 # Prompt
 HEADLINE_PROMPT='%(#.#.%(!.!.╰─)) ' # consider "%#"
+# HEADLINE_RPROMPT='%(?..%B(%?%)%b)'
 HEADLINE_RPROMPT=''
 
 # Clock (prepends to RPROMPT)
@@ -197,7 +198,7 @@ HEADLINE_STYLE_CLOCK=$faint
 HEADLINE_CLOCK_FORMAT='%l:%M:%S %p' # consider "%+" for full date (see man strftime)
 
 # Exit code
-HEADLINE_DO_ERR=false # whether to show non-zero exit codes above prompt
+HEADLINE_DO_ERR=true # whether to show non-zero exit codes above prompt
 HEADLINE_DO_ERR_INFO=true # whether to show exit code meaning as well
 HEADLINE_ERR_PREFIX='→ '
 HEADLINE_STYLE_ERR=$italic$faint
@@ -207,7 +208,7 @@ HEADLINE_STYLE_ERR=$italic$faint
 
 
 # Options for zsh
-setopt PROMPT_SP # always start prompt on new line
+# setopt PROMPT_SP # always start prompt on new line
 setopt PROMPT_SUBST # substitutions
 autoload -U add-zsh-hook
 PROMPT_EOL_MARK='' # remove weird % symbol
@@ -307,14 +308,20 @@ headline_git_status() {
 		totals+=($key 0)
 	done
 
+
 	# Retrieve status
 	# REF: https://git-scm.com/docs/git-status
 	local raw lines
-	raw="$(headline_git status --porcelain -b 2> /dev/null)"
-	if [[ $? == 128 ]]; then
-		return 1 # catastrophic failure, abort
+	#! These lines cause immense lag between terminal prompts due to `git status` being extremely slow on large repos
+	local max="30M" # 30 megabytes
+	# Checks if `.git` exists and get's size if it does. Doesn't call `git status` if the size exceeds a maximum; Prevents calling git status automatically on large repos
+	if [ -d ".git" ] && [ $(echo "$(du -sh .git | awk '{print $1}')\n$max" | sort -h | head -1) != "$max" ]; then
+		raw="$(headline_git status --porcelain -b 2> /dev/null)"
+		if [[ $? == 128 ]]; then
+			return 1 # catastrophic failure, abort
+		fi
+		lines=(${(@f)raw})
 	fi
-	lines=(${(@f)raw})
 
 	# Process tracking line
 	if [[ ${lines[1]} =~ '^## [^ ]+ \[(.*)\]' ]]; then
@@ -488,8 +495,8 @@ headline_precmd() {
 	if [[ $HEADLINE_DO_ERR == 'true' ]] && (( $err )); then
 		local meaning msg
 		if [[ $HEADLINE_DO_ERR_INFO == 'true' ]]; then
-		meaning=$(headline_exit_meaning $err)
-		(( ${#meaning} )) && msg=" ($meaning)"
+			meaning=$(headline_exit_meaning $err)
+			(( ${#meaning} )) && msg=" ($meaning)"
 		fi
 		print -rP "$HEADLINE_STYLE_ERR$HEADLINE_ERR_PREFIX$err$msg"
 	fi
@@ -507,7 +514,13 @@ headline_precmd() {
 	# Prompt
 	if [[ $HEADLINE_INFO_MODE == 'precmd' ]]; then
 		print -rP $_HEADLINE_INFO_OUTPUT
-		PROMPT=$HEADLINE_PROMPT
+		if [ $? -ne 0 ]; then
+			PROMPT='%{$red%}$HEADLINE_PROMPT%{$reset%}'
+			eval PROMPT=\$red\$HEADLINE_PROMPT\$reset
+			
+		else
+			PROMPT=$HEADLINE_PROMPT
+		fi
 	else
 		PROMPT='$(print -rP $_HEADLINE_INFO_OUTPUT; print -rP $HEADLINE_PROMPT)'
 	fi

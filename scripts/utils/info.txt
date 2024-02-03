@@ -1,0 +1,2 @@
+These scripts are utility scripts to be sourced when one needs access to the function(s) defined within.
+All of these are something I wrote myself or got from somewhere else; do not expect them to be robust
