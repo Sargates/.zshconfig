@@ -31,7 +31,7 @@ function clip() { cut -c 1-`tput cols` }						# Use with pipe to clip output to 
 alias clgrep="clip|grep"										# Use with pipe to have clipped grep output. Buggy; Doesn't match patterns to what was clipped
 alias ncgrep="grep --color=never"								# Grep with no color
 alias listports="sudo lsof -i -P -n | grep LISTEN"				# Used to list open ports -- useful for being paranoid :)
-alias repromptssh="source $ZSHCFG/scripts/ssh.zsh"				# Re-source `ssh.zsh` to reprompt the adding of keys
+alias repromptssh="source $ZSHCFG/scripts/utils/ssh.zsh"		# Re-source `ssh.zsh` to reprompt the adding of keys
 
 alias mv="command mv -n"										# Prevent file overwriting, this shit happens too often
 
