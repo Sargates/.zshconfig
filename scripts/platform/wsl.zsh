@@ -24,10 +24,10 @@ alias cmdx="cmd /C"
 
 open() {
 	# Might still have issue when absolute path is passed, seems to work
-	if [[ -d $1 ]]; then 				# check absolute path
+	if [[ -e $1 ]]; then 				# check absolute path
 		explorer.exe "`wslpath -w $1`"
 		return 0
-	elif [[ -d $PWD/$1 ]]; then 		# check relative path
+	elif [[ -e $PWD/$1 ]]; then 		# check relative path
 		explorer.exe "`wslpath -w $PWD/$1`"
 		return 0
 	fi

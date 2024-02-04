@@ -1,3 +1,5 @@
+# Also check out `rename` command from `rename` apt package
+
 # Renames a file or directory. Used to have some issues inside WSL but haven't had them recently and restarting WSL one or more times always fixed them.
 rename() {
 	if [ $# -ne 2 ]; then

@@ -8,3 +8,4 @@ tmux
 bat
 python3
 // expect
+// rename
