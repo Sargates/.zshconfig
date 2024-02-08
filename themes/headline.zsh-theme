@@ -315,7 +315,8 @@ headline_git_status() {
 	#! These lines cause immense lag between terminal prompts due to `git status` being extremely slow on large repos
 	local max="30M" # 30 megabytes
 	# Checks if `.git` exists and get's size if it does. Doesn't call `git status` if the size exceeds a maximum; Prevents calling git status automatically on large repos
-	if [ -d ".git" ] && [ $(echo "$(du -sh .git | awk '{print $1}')\n$max" | sort -h | head -1) != "$max" ]; then
+	git rev-parse --show-toplevel &> /dev/null # wont error if within a git repo
+	if [ $? -ne 128 ] && [ $(echo "$(du -sh $(git rev-parse --show-toplevel)/.git | awk '{print $1}')\n$max" | sort -h | head -1) != "$max" ]; then
 		raw="$(headline_git status --porcelain -b 2> /dev/null)"
 		if [[ $? == 128 ]]; then
 			return 1 # catastrophic failure, abort
