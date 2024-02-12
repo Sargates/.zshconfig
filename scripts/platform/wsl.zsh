@@ -1,4 +1,4 @@
-if [[ ! -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
+if [[ ! $ISWSL ]]; then
 	echo "Should not load wsl.zsh on non-wsl instance"
 	return
 fi
@@ -39,6 +39,8 @@ alias psx="powershell.exe" # Syntax: `psx start .` (opens current dir)
 mkdir -p ~/dev/CS-Stuff
 builtin hash -d w=/mnt/c/Users/Nick
 builtin hash -d cs=~/dev/CS-Stuff
+builtin hash -d d=~w/Desktop
+builtin hash -d dl=~w/Downloads
 
 alias winpy='psx python'
 alias winpython='winpy'

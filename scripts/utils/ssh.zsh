@@ -18,3 +18,7 @@ for keyfile in ~/.ssh/id_*; do
 		fi
 	fi
 done
+
+
+alias sshlogs="journalctl -u ssh | less +G" # Might be another way to open logs than `journalctl -u ssh` but it's the one I'm familiar with. Pipe to `less` with `+G` to open at bottom of log file
+alias sshlog="sshlogs"						# complementary alias

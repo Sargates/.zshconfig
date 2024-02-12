@@ -1,11 +1,11 @@
-//'s are commented (not required)
+//'s are comments -- commented packages are not required -- they're usually for testing purposes
 
-git
-zsh
-bc
-xsel
-tmux
-bat
-python3
+git			// Great utility
+zsh			// pretty self explanatory
+bc			// needed for headline theme
+xsel		// needed for `clipcopy`
+tmux		// Great utility
+bat			// Great utility
+python3	
 // expect
 // rename

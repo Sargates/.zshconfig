@@ -1,4 +1,4 @@
-if [[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
+if [[ $ISWSL ]]; then
 	echo "Should not load linux.zsh on wsl instance"
 	return
 fi
@@ -16,6 +16,9 @@ alias dev='~/dev'
 mkdir -p ~/dev/CS-Stuff
 
 builtin hash -d cs=~/dev/CS-Stuff
+builtin hash -d d=~/Desktop
+builtin hash -d dl=~/Downloads
+
 
 
 function cs-stuff() { # function seems required here or terminal yells at you

@@ -1,5 +1,6 @@
 # Copy a string or a file's contents to clipboard. Supports piping
-alias copy="clipcopy" # clipcopy is defined by OMZ, trying this out
+alias copy="clipcopy" 	# clipcopy is defined by OMZ, trying this out
+alias paste="clippaste" # complement to copy alias
 
 #! This is WIP -- stuff i got elsewhere/stuff im not confident in
 # copy() {
