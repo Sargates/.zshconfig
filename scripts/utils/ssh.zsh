@@ -1,4 +1,9 @@
 
+# Might be another way to open logs than `journalctl -u ssh` but it's the one I'm familiar with. Pipe to `les>
+alias sshlogs="journalctl -u ssh | ccze -m ansi | less +G" #! Requires ccze. See: https://github.com/cornet/c>
+alias sshlog="sshlogs"                                          # complementary alias
+
+
 #* This just adds keys that aren't already added to the ssh-agent
 
 if [[ $SSH_CLIENT != "" ]]; then
@@ -18,7 +23,3 @@ for keyfile in ~/.ssh/id_*; do
 		fi
 	fi
 done
-
-
-alias sshlogs="journalctl -u ssh | less +G" # Might be another way to open logs than `journalctl -u ssh` but it's the one I'm familiar with. Pipe to `less` with `+G` to open at bottom of log file
-alias sshlog="sshlogs"						# complementary alias

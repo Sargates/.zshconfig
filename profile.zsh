@@ -27,7 +27,7 @@ export EDITOR="code"											# Use VSCode as primary EDITOR
 alias zshcfg="$EDITOR ~/.zshconfig"								# Open zsh config in editor
 alias mcd='() { md $1 && cd $_ }'								# Used to create and cd to a new directory in one command
 alias killssh='kill `pgrep ssh-agent`'							# Used to reset ssh-agent
-function clip() { cut -c 1-`tput cols` }						# Use with pipe to clip output to terminal size to prevent line wrapping
+alias clip='cut -c 1-`tput cols`'								# Use with pipe to clip output to terminal size to prevent line wrapping
 alias clgrep="clip|grep"										# Use with pipe to have clipped grep output. Buggy; Doesn't match patterns to what was clipped
 alias ncgrep="grep --color=never"								# Grep with no color
 alias listports="sudo lsof -i -P -n | grep LISTEN"				# Used to list open ports -- useful for being paranoid :)
@@ -37,6 +37,8 @@ alias mv="command mv -n"										# Prevent file overwriting, this shit happens 
 
 alias lrt="$baseLS -t -r"										# Used to list items in directory and sort by time-last-modified. `-r` causes most recent file to be at bottom of output
 alias ltr="lrt"													# autocorrect for lrt
+
+alias gr='git -C `git root`'									# OMZ defines `gr` as `git remote`. Here, `gr` is short for `git root` which will execute the following command in the git project's root dir, i.e. `gr add --all`, will add all files without needing to cd to root or do path traversal
 
 
 alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"						# Trim leading and trailing whitespace
