@@ -87,6 +87,7 @@ plugins=(
 	ssh-agent
 	tmux
 	aliases
+	# globalias
 	# docker
 	# virtualenvwrapper
 )

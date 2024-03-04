@@ -27,7 +27,7 @@ export EDITOR="code"											# Use VSCode as primary EDITOR
 alias zshcfg="$EDITOR ~/.zshconfig"								# Open zsh config in editor
 alias mcd='() { md $1 && cd $_ }'								# Used to create and cd to a new directory in one command
 alias killssh='kill `pgrep ssh-agent`'							# Used to reset ssh-agent
-alias clip='cut -c 1-`tput cols`'								# Use with pipe to clip output to terminal size to prevent line wrapping
+alias clip='perl -pe "s/^((?:(?>(?:\e\[.*?m)*).){`tput cols`}).*/$1\e[m/"'								# Use with pipe to clip output to terminal size to prevent line wrapping
 alias clgrep="clip|grep"										# Use with pipe to have clipped grep output. Buggy; Doesn't match patterns to what was clipped
 alias ncgrep="grep --color=never"								# Grep with no color
 alias listports="sudo lsof -i -P -n | grep LISTEN"				# Used to list open ports -- useful for being paranoid :)

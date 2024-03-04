@@ -54,11 +54,12 @@ export LIBGL_ALWAYS_SOFTWARE=1 # This being unset causes a segmentation fault in
 alias dnr="psx dotnet run"
 alias dnb="psx dotnet build"
 
-[[ "$LESS" != *--mouse* ]] && export LESS="$LESS --mouse" # Used for mouse functionality in less pagers (git log, man, etc.)
-#! Above line breaks Windows Terminal selection inside of pagers (git log, man, etc.). See: https://github.com/microsoft/terminal/issues/9165#issuecomment-1398208221
+#! `--mouse` flag breaks Windows Terminal selection inside of pagers (git log, man, etc.). See: https://github.com/microsoft/terminal/issues/9165#issuecomment-1398208221
 #! Holding shift down prevents this issue, but interaction still works the same (i.e. it will assume that you are selecting instead of deselecting because you are holding shift)
-[[ "$LESS" != *--wheel-lines=* ]] && export LESS="$LESS --wheel-lines=2" # Change number of lines per scroll
-
+[[ "$LESS" != *--mouse* ]] && export LESS="$LESS --mouse" 					# Used for mouse functionality in less pagers (git log, man, etc.)
+[[ "$LESS" != *--wheel-lines=* ]] && export LESS="$LESS --wheel-lines=2" 	# Change number of lines per scroll
+# [[ "$LESS" != *-N* ]] 	&& export LESS="$LESS -N" 							# Show line numbers in less by default
+#! disabled above because this messes with too many tools that use less
 
 # export DISPLAY=192.168.176.1:0.0 # garbage for xserver
 # export LIBGL_ALWAYS_INDIRECT=1
