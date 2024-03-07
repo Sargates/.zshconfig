@@ -59,8 +59,8 @@ for f in $HOME/.zshconfig/scripts/**/*.zsh(D); do # Recursively source all `.zsh
 
 	if [[ $ext == "zsh" ]]; then
 		if [[ $file == "update.zsh" ]]; then continue; fi 					# Ignore sourcing `update.zsh`
-		if [[ $ISWSL -eq 1 && $file == "linux.zsh" ]]; then continue; fi	# Avoid sourcing `linux.zsh` on WSL
-		if [[ $ISWSL -eq 0 && $file == "wsl.zsh" ]]; then continue; fi		# Avoid sourcing `wsl.zsh` on Linux
+		if [[ $file == "linux.zsh" && $ISWSL ]]; then continue; fi	# Avoid sourcing `linux.zsh` on WSL
+		if [[ $file == "wsl.zsh" && ! $ISWSL ]]; then continue; fi		# Avoid sourcing `wsl.zsh` on Linux
 		source "$f"
 	fi;
 done

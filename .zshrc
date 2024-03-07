@@ -98,8 +98,8 @@ HEADLINE_RIGHT_PROMPT_ELEMENTS=(status)
 #! This line changes `headline` to reset the clock in realtime -- causes issues in history traversal with arrow keys
 # TMOUT=1; TRAPALRM () { zle reset-prompt }
 
-[[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=1 || ISWSL=0
-export ISWSL
+[[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=true
+export ISWSL;
 
 
 source $ZSH/oh-my-zsh.sh # This line is what ends up sourcing 

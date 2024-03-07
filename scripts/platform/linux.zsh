@@ -1,4 +1,4 @@
-if [[ $ISWSL -eq 1 ]]; then
+if [[ $ISWSL ]]; then
 	echo "Should not load linux.zsh on wsl instance"
 	return
 fi
