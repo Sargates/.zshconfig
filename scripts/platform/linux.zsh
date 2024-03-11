@@ -21,7 +21,7 @@ builtin hash -d dl=~/Downloads
 
 
 
-function cs-stuff() { # function seems required here or terminal yells at you
+function cs-stuff() { # "function" keyword seems required here or terminal yells at you
 	BASEPATH=~cs
 	SUBPATH=$1
 	if [ -d "$BASEPATH/$SUBPATH" ]; then

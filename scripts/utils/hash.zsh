@@ -1,4 +1,4 @@
-# Hashes a string. Supports piping -- overwrites builtin hash
+# Hashes a string. Supports piping -- overwrites builtin hash command
 hash() {
 	local unparsed
 	if [ $# -lt 1 ]; then

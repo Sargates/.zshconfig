@@ -1,4 +1,5 @@
-#* ////////// REF: https://stackoverflow.com/a/75102422
+#* Copied from StackOverflow
+#* Ref: https://stackoverflow.com/a/75102422
 
 # zsh-shift-select https://stackoverflow.com/a/30899296
 r-delregion() {

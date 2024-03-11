@@ -1,3 +1,5 @@
+#* Custom aliases for git-related commands - Mainly ones that aren't provided by OMZ
+
 unalias grset
 grset() {
 	if [[ $(git rev-parse --is-inside-work-tree) != "true" ]]; then
