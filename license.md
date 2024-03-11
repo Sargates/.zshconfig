@@ -1,8 +1,10 @@
 
-Copyright 2023- Nicholas Glenn -- All rights reserved. \
-Copyright 2010- zsh-syntax-highlighting contributors -- All rights reserved. \
-Copyright 2012- [Gregory Pakosz](https://github.com/gpakosz/.tmux) for `tmux.conf` and `tmux.conf.local` -- All rights reserved. \
-Copyright 2021- [Luca Salvarani](https://github.com/LukeSavefrogs/column_ansi) for `column_ansi`: an ansi color escape compatible tabulator -- All rights reserved
+Copyright 2023-Present Nicholas Glenn -- All rights reserved. \
+Copyright 2009-Present Robby Russell and contributors (https://github.com/ohmyzsh/ohmyzsh/contributors) \
+Copyright 2022-Present Moarram -- All rights reserved. \
+Copyright 2010-Present zsh-syntax-highlighting contributors -- All rights reserved. \
+Copyright 2012-Present [Gregory Pakosz](https://github.com/gpakosz/.tmux) for `tmux.conf` and `tmux.conf.local` -- All rights reserved. \
+Copyright 2021-Present [Luca Salvarani](https://github.com/LukeSavefrogs/column_ansi) for `column_ansi`: an ansi color escape compatible tabulator -- All rights reserved
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
