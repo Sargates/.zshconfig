@@ -23,6 +23,7 @@ local baseLS="ls -lah --color=always"							# Preserves coloring when piping to 
 alias l="$baseLS --group-directories-first"						# Primary "ls" command, groups dirs first, top->bottom: .dirs, dirs, .files, files
 export LANG="C.UTF-8"											# Change LANG (mainly for sort order when calling ls -l)
 export EDITOR="code"											# Use VSCode as primary EDITOR
+alias nano="/usr/bin/nano --nonewlines"							# Override nano command with passed argument `--nonewline` to prevent dumb newline at EOF
 
 alias zshcfg="$EDITOR ~/.zshconfig"								# Open zsh config in editor
 alias mcd='() { md $1 && cd $_ }'								# Used to create and cd to a new directory in one command
