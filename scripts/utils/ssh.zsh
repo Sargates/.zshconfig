@@ -1,6 +1,6 @@
 
 # Might be another way to open logs than `journalctl -u ssh` but it's the one I'm familiar with. Pipe to `les>
-alias sshlogs="journalctl -u ssh | ccze -m ansi | less +G" #! Requires ccze. See: https://github.com/cornet/ccze
+alias sshlogs="journalctl -u ssh -n 400 | ccze -m ansi | less +G" #! Requires ccze. See: https://github.com/cornet/ccze
 alias sshlog="sshlogs"                                     # auto correct
 
 
