@@ -318,7 +318,7 @@ headline_git_status() {
 	local max="50M" # 50 megabytes
 	# Checks if `.git` exists and get's size if it does. Doesn't call `git status` if the size exceeds a maximum; Prevents calling git status automatically on large repos
 	git rev-parse --show-toplevel &> /dev/null # wont error if within a git repo
-	if [ $? -ne 128 ] && [ $(echo "$(du -sh $(git rev-parse --show-toplevel)/.git | awk '{print $1}')\n$max" | sort -h | head -1) != "$max" ]; then
+	if [ $? -ne 128 ] && [ $(echo "$(du -sh "$(git rev-parse --show-toplevel)/.git" | awk '{print $1}')\n$max" | sort -h | head -1) != "$max" ]; then
 		raw="$(headline_git status --porcelain -b 2> /dev/null)"
 		if [[ $? == 128 ]]; then
 			return 1 # catastrophic failure, abort

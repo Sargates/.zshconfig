@@ -11,8 +11,21 @@ alias desktop='~w/Desktop'
 alias desk='desktop'
 alias ds='desktop'
 alias dl='~w/Downloads'
-alias dev='/mnt/c/dev'
+# alias dev='/mnt/c/dev'
+alias dev='~/dev'
 alias obs='~w/Desktop/Obsidian'
+
+# This MinGW cmake toolchain file can be found here: https://github.com/glfw/glfw/blob/master/CMake/x86_64-w64-mingw32.cmake
+function wincmake() {
+	if [ ! -e ~/dev/mingw-toolchain.cmake ]; then
+		echo "MinGW CMake Toolchain file does not exist."
+		echo "Get one from https://github.com/glfw/glfw/blob/master/CMake/x86_64-w64-mingw32.cmake"
+		echo "and put it in the ~/dev directory"
+		return 1
+	fi
+	cmake $@ -DCMAKE_TOOLCHAIN_FILE=~/dev/mingw-toolchain.cmake
+}
+alias mingwcmake='wincmake'
 
 alias ld='~/Desktop'		# overrides GNU linker, I don't care
 alias ldl='~/Downloads'
