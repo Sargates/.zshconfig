@@ -47,6 +47,49 @@ alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"						# Trim leading and trailing whit
 
 ZSH_COMPDUMP="$HOME/.zcompdump_archive/.zcompdump-WSL00-NG-5.8.1"
 
+aptsearch() {
+	local PACKAGE_SERVER="jammy" # 22.04 -> jammy; 24.04 -> noble
+	local PREFIX=""
+	if [[ ${+commands[unbuffer]} -ne 0 ]]; then
+		PREFIX="unbuffer"
+	fi
+
+	# local SEPARATOR=$'\033[F' # control char to move up a line, fixes double newline between grep matches
+	#! This value doesn't work currently. awk will break if `-A1 --group-separator=$SEPARATOR` is passed because output of grep will be weird
+	# local GREP_ARGS='--color=none -A1 --group-separator=$SEPARATOR'
+
+	local GREP_ARGS='--color=none'
+	
+	# // This command pipes output twice to grep, first to include lines only with the package server (to only include package names), second is to narrow down packages that include first arg verbatim
+	# // First one includes $GREP_ARGS to prevent highlighting of 
+	# // local OUTPUT="$($PREFIX apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | GREP_COLORS="ms=41" grep $1 --color=always)"
+	local OUTPUT="$($PREFIX apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | grep $1 $GREP_ARGS)"
+
+
+	# regex pattern for matching semantic versioning, official semver maintainers give a better matching pattern but I could get it to work, see https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+	#! Pattern needs double escape here
+	local PATTERN='[0-9]*\\.[0-9]*\\.[0-9]*'
+
+	
+	echo $OUTPUT | awk -F'[ /]' -v PATTERN="$PATTERN" -e '$3 ~ PATTERN {match($3, PATTERN); print $1"@"substr($3, RSTART, RLENGTH)"/"$2" "$5 }'
+	
+	[ ! $PREFIX ] && echo 'This command uses unbuffer by default, install it using `apt install expect` or modify $ZSHCFG/profile.zsh to remove this notification'
+}
+
+#! Doesn't work if using `sudo apt` for obvious reasons
+apt() { # https://unix.stackexchange.com/a/670978
+    if [ "$1" = "search" ]; then
+        shift # eat the "shift" argument
+		echo $#
+		if [ $# -eq 0 ]; then
+			command apt search
+			return $?
+		fi
+        aptsearch "$@"
+    else 
+        command apt "$@"
+    fi
+}
 
 
 
