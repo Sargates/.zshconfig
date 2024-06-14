@@ -1,3 +1,6 @@
+export HISTSIZE=1000000000
+export SAVEHIST=$HISTSIZE
+setopt EXTENDED_HISTORY
 #! Only uncomment the following when using Powerlevel10k
 # # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # # Initialization code that may require console input (password prompts, [y/n]
@@ -10,6 +13,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -98,10 +102,14 @@ HEADLINE_RIGHT_PROMPT_ELEMENTS=(status)
 #! This line changes `headline` to reset the clock in realtime -- causes issues in history traversal with arrow keys
 # TMOUT=1; TRAPALRM () { zle reset-prompt }
 
-[[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=true
-export ISWSL;
+#* Ex: [ $ISWSL -ne 0 ] && echo "This is WSL" || echo "This is not WSL"
+[[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && export ISWSL=1 || export ISWSL=0
 
 
+# Change ZSH_COMPDUMP location to prevent cluttering user folder
+export dirstack_file="$HOME"
+export ZDOTDIR="$HOME/.zshconfig"
+export ZSH_COMPDUMP="$HOME/.zshconfig/.cache/.zcompdump-${HOST}-${ZSH_VERSION}"
 source $ZSH/oh-my-zsh.sh # This line is what ends up sourcing 
 
 

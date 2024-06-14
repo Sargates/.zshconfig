@@ -3,8 +3,8 @@ if [[ ! $ISWSL ]]; then
 	return
 fi
 
-autoload -Uz compinit
-compinit
+# autoload -Uz compinit
+# compinit
 
 alias root='/mnt/c/'
 alias desktop='~w/Desktop'

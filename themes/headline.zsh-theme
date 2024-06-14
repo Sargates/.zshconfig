@@ -255,7 +255,7 @@ headline_repeat_char() { # (char, num)
 headline_exit_meaning() { # (num)
 	# REF: https://tldp.org/LDP/abs/html/exitcodes.html
 	# REF: https://man7.org/linux/man-pages/man7/signal.7.html
-	# NOTE: these meanings are not standardized
+	#! NOTE: these meanings are not standardized
 	case $1 in
 		 53) echo 'Potentially Windows dll not found';; # `dll not found` on Windows throws error code: `0xC0000135`, I think error codes are 8 bit so `35` gets read and `35` in decimal is 53
 		126) echo 'Command cannot execute';;

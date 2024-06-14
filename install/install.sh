@@ -1,10 +1,22 @@
-#!/bin/bash
-set -e
+#!/bin/sh
+#* Command to fetch and run install script
+#* sh -c "$(curl -fsSL https://raw.githubusercontent.com/Sargates/.zshconfig/master/install/install.sh)"
+#* sh -c "$(wget https://raw.githubusercontent.com/Sargates/.zshconfig/master/install/install.sh -O -)"
 
 echo "install.bash does not work yet"
-return 1
-# mapfile -t dependencies < dependencies.txt
 
+: <<'END'
+// Check if git is already installed
+if [ ${+commands[git]} -ne 0 ]; then
+	echo '`git` is not installed'
+	return 1
+fi
+
+// Check if omz is already installed
+
+END
+
+: <<'END'
 # Check if APT is installed
 if "${+commands[apt]}"; then
 	echo "Apt not installed. Apt is required to run this script"
@@ -189,3 +201,4 @@ fi
 
 # Exec `update.zsh` to ensure everything is installed correctly
 zsh "$ZSHCFG/update.zsh"
+END

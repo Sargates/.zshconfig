@@ -1,4 +1,5 @@
 #!/bin/zsh
+
 # File to ensure that .zshconfig is at the latest version
 
 echo "update.zsh does not work yet"

@@ -1,22 +1,22 @@
 #!/bin/zsh
 
-#! This script should be loaded automatically by OMZ because it is stored in $ZSHCUSTOM. In this script, hand
+#! This script should be loaded automatically by OMZ because it is stored in $ZSHCUSTOM. In this script, handle all things relating to customization of the config; aliases, command defaults, etc
 
-# setopt extended_glob
+# // setopt extended_glob
 setopt globdots
 
 export ZSHCFG="$HOME/.zshconfig"
 
 
 #! Set aliases
-alias pip='python -m pip'
+alias pip='python3 -m pip'
 alias zshrc='source ~/.zshrc'
-alias cdzsh='cd ~/.zshconfig'
+alias cdzsh='cd $ZDOTDIR'
 
 # alias listapt="comm -23 <(apt-mark showmanual | sort -u) <(gzip -dc /var/log/installer/initial-status.gz | sed -n 's/^Package: //p' | sort -u)"
 alias haconnect='ssh hassio@homeassistant.local' 				# Connect to local home assisstant server (if exists)
 alias listapt='apt list --installed'							# List installed apt packages (optionally use with grep)
-alias listjava='apt search openjdk-.+-'							# Search installable JDK's because I can never remember the title format
+# // alias listjava='apt search openjdk-.+-'							# Search installable JDK's because I can never remember the title format
 
 #* Set configuration
 local baseLS="ls -lah --color=always"							# Preserves coloring when piping to grep with --color=never flag i.e. `l | grep --color=never {PATTERN}`
@@ -34,6 +34,10 @@ alias ncgrep="grep --color=never"								# Grep with no color
 alias listports="sudo lsof -i -P -n | grep LISTEN"				# Used to list open ports -- useful for being paranoid :)
 alias repromptssh="source $ZSHCFG/scripts/utils/ssh.zsh"		# Re-source `ssh.zsh` to reprompt the adding of keys
 
+#* This is meant to be a replacement for `rm` to prevent removing sensitive directories, but this doesn't prompt for confirmation from zsh's `rm_star` option
+#* Aliasing like this, does not work. I haven't tried directly replacing the `rm` binary by renaming `safe-rm` to `rm` in `/usr/bin`, that may work because I doubt ZSH's option is embedded into the binary itself, likely just checks the command against all aliases
+# // [ ${+commands[safe-rm]} -ne 0 ] && alias rm="safe-rm --preserve-root"
+
 alias mv="command mv -n"										# Prevent file overwriting, this shit happens too often
 
 alias lrt="$baseLS -t -r"										# Used to list items in directory and sort by time-last-modified. `-r` causes most recent file to be at bottom of output
@@ -45,25 +49,22 @@ alias gr='git -C `git root`'									# OMZ defines `gr` as `git remote`. Here, `
 alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"						# Trim leading and trailing whitespace
 
 
-ZSH_COMPDUMP="$HOME/.zcompdump_archive/.zcompdump-WSL00-NG-5.8.1"
-
 aptsearch() {
 	local PACKAGE_SERVER="jammy" # 22.04 -> jammy; 24.04 -> noble
-	local PREFIX=""
-	if [[ ${+commands[unbuffer]} -ne 0 ]]; then
-		PREFIX="unbuffer"
-	fi
+	[ ${+commands[unbuffer]} -ne 0 ] && local PREFIX="unbuffer"
 
-	# local SEPARATOR=$'\033[F' # control char to move up a line, fixes double newline between grep matches
 	#! This value doesn't work currently. awk will break if `-A1 --group-separator=$SEPARATOR` is passed because output of grep will be weird
-	# local GREP_ARGS='--color=none -A1 --group-separator=$SEPARATOR'
+	# // local SEPARATOR=$'\033[F' # control char to move up a line, fixes double newline between grep matches
+	# // local GREP_ARGS='--color=none -A1 --group-separator=$SEPARATOR'
 
-	local GREP_ARGS='--color=none'
+	[ ! $GREP_COLORS ] && local GREP_COLORS="48;5;239" # define $GREP_COLORS if its not defined already, (used for testing different colors without having to re-source .zshrc)
+
+	[ ! $GREP_ARGS ] && local GREP_ARGS='--color=none'
 	
-	# // This command pipes output twice to grep, first to include lines only with the package server (to only include package names), second is to narrow down packages that include first arg verbatim
-	# // First one includes $GREP_ARGS to prevent highlighting of 
-	# // local OUTPUT="$($PREFIX apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | GREP_COLORS="ms=41" grep $1 --color=always)"
-	local OUTPUT="$($PREFIX apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | grep $1 $GREP_ARGS)"
+	#* local OUTPUT="$($PREFIX apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | grep $1 $GREP_ARGS)"
+	# This command pipes output twice to grep, first to include lines only with the package server (to only include package names), second is to narrow down packages that include first arg verbatim, `sed` call is to replace the ANSI reset code with a background reset code
+	# First one includes $GREP_ARGS to prevent highlighting the package server name
+	local OUTPUT="$($PREFIX apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | GREP_COLORS="ms=$GREP_COLORS" grep $1 --color=always | sed -e $'s/\033[[]m/\033[40m/')"
 
 
 	# regex pattern for matching semantic versioning, official semver maintainers give a better matching pattern but I could get it to work, see https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
@@ -73,22 +74,23 @@ aptsearch() {
 	
 	echo $OUTPUT | awk -F'[ /]' -v PATTERN="$PATTERN" -e '$3 ~ PATTERN {match($3, PATTERN); print $1"@"substr($3, RSTART, RLENGTH)"/"$2" "$5 }'
 	
-	[ ! $PREFIX ] && echo 'This command uses unbuffer by default, install it using `apt install expect` or modify $ZSHCFG/profile.zsh to remove this notification'
+	[ ! $PREFIX ] && echo $'\e[4mThis command uses unbuffer by default, install it using `apt install expect` or modify $ZSHCFG/profile.zsh to remove this notification\e[0m'
+	return 0
 }
 
 #! Doesn't work if using `sudo apt` for obvious reasons
 apt() { # https://unix.stackexchange.com/a/670978
-    if [ "$1" = "search" ]; then
-        shift # eat the "shift" argument
-		echo $#
+	if [ "$1" = "search" ]; then
+		shift # eat the "shift" argument
+		# echo $#
 		if [ $# -eq 0 ]; then
 			command apt search
 			return $?
 		fi
-        aptsearch "$@"
-    else 
-        command apt "$@"
-    fi
+		aptsearch "$@"
+		return $?
+	fi
+	command apt "$@"
 }
 
 
