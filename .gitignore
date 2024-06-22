@@ -5,4 +5,5 @@ devnotes.md
 *[tT][oO][dD][oO]*
 *.patch
 
-.cache
+.cache/*
+!.cache/.gitkeep
