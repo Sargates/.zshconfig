@@ -20,11 +20,13 @@ if [ ! ${+commands[ssh-add]} ]; then # no ssh-add command, if the above didn't r
 	return 1
 fi
 
+local SSH_KEYS=($(ls -A1 $HOME/.ssh/id_*[^.pub]))
+
 # List fingerprints of already added keys
 added_keys=$(ssh-add -l | awk '{print $2}')
 
 # Add keys in ~/.ssh/ that aren't already added to the agent
-for keyfile in ~/.ssh/id_*; do
+for keyfile in $SSH_KEYS; do
 	# Exclude public keys and known hosts
 	if [[ $keyfile != *.pub ]] && [[ $keyfile != *known_hosts* ]]; then
 		fingerprint=$(ssh-keygen -lf $keyfile | awk '{print $2}')
