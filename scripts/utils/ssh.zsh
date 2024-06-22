@@ -9,7 +9,15 @@ alias sshlog="sshlogs"                                     # auto correct
 if [[ $SSH_CLIENT != "" ]]; then
 	export DISPLAY=":0" #* `clipcopy` doesn't get defined by OMZ if `$DISPLAY` is empty (ex.: a ssh session), this forces OMZ
 	#* via `kbhelper.zsh` to work over ssh. Copying only works in the current SSH session, doesn't copy to host clipboard
-	return
+	return 0
+fi
+
+if [ ! -d "$HOME/.ssh" ]; then # no ssh dir, probably not install
+	return 0
+fi
+
+if [ ! ${+commands[ssh-add]} ]; then # no ssh-add command, if the above didn't return (~/.ssh exists), then something is wrong so return 1
+	return 1
 fi
 
 # List fingerprints of already added keys
