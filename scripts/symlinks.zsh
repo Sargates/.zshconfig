@@ -1,7 +1,5 @@
 # This file ensures symlinks in `~` exist and point to the files in `configs`
 
-# source "$ZSHCFG/scripts/utils/saveAndLink.zsh" # This script uses functions defined in `utils.zsh`
-
 # Not needed to re-link .zshrc because this script wont get 
 for file in .zshrc .tmux.conf .tmux.conf.local .gitconfig; do
 	[ $needsUpdate ] && break # exit to update symlinks
@@ -16,8 +14,8 @@ if [ $needsUpdate ]; then
 	
 	# List all files in config directory, run ln on all results
 	# Wrapping command in () opens subshell, cd into directory 
-	(cd $ZSHCFG/config && ls -A1) | xargs -l zsh -c 'ln -sf $ZSHCFG/config/$0 ~/$0'
-	ln -sf $ZSHCFG/.zshrc ~/.zshrc
+	(cd $ZDOTDIR/config && ls -A1) | xargs -l zsh -c 'ln -sf $ZDOTDIR/config/$0 ~/$0'
+	ln -sf $ZDOTDIR/.zshrc ~/.zshrc
 fi
 
 
