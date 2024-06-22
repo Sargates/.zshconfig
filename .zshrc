@@ -109,6 +109,7 @@ HEADLINE_RIGHT_PROMPT_ELEMENTS=(status)
 # Change ZSH_COMPDUMP location to prevent cluttering user folder
 export dirstack_file="$HOME"
 export ZDOTDIR="$HOME/.zshconfig"
+export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_COMPDUMP="$HOME/.zshconfig/.cache/.zcompdump-${HOST}-${ZSH_VERSION}"
 source $ZSH/oh-my-zsh.sh # This line is what ends up sourcing 
 
@@ -156,10 +157,11 @@ source $ZSH/oh-my-zsh.sh # This line is what ends up sourcing
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 
-#! Sourcing `nvm.sh` directly causes a conflict with the `hash` function defined in `utils.zsh`. I put in a github issue to have that fixed
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#? nvm is a "slow plugin" apparently, commenting this out for testing as I don't use it
+# #! Sourcing `nvm.sh` directly causes a conflict with the `hash` function defined in `utils.zsh`. I put in a github issue to have that fixed
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
 # #! This adds autocomplete to vcpkg commands
