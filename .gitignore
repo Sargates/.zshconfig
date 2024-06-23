@@ -7,3 +7,4 @@ devnotes.md
 
 .cache/*
 !.cache/.gitkeep
+*.zcompdump*
