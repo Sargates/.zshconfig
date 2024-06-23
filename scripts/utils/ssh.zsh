@@ -19,8 +19,7 @@ fi
 if [ ! ${+commands[ssh-add]} ]; then # no ssh-add command, if the above didn't return (~/.ssh exists), then something is wrong so return 1
 	return 1
 fi
-
-local SSH_KEYS=($(ls -A1 $HOME/.ssh/id_* | grep -Fv ".pub"))
+local SSH_KEYS=($(find $HOME/.ssh -regex ".*id_.*" | grep -Fv ".pub"))
 
 # List fingerprints of already added keys
 added_keys=$(ssh-add -l | awk '{print $2}')

@@ -50,7 +50,8 @@ alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"						# Trim leading and trailing whit
 
 
 aptsearch() {
-	local PACKAGE_SERVER="jammy" # 22.04 -> jammy; 24.04 -> noble
+	# Get package server codename programatically, 22.04 -> jammy; 24.04 -> noble
+	local PACKAGE_SERVER="$(grep VERSION_CODENAME /etc/os-release | cut -d= -f2)"
 	[ ${+commands[unbuffer]} -ne 0 ] && local PREFIX="unbuffer"
 
 	#! This value doesn't work currently. awk will break if `-A1 --group-separator=$SEPARATOR` is passed because output of grep will be weird

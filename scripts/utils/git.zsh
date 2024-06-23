@@ -1,6 +1,6 @@
 #* Custom aliases for git-related commands - Mainly ones that aren't provided by OMZ
 
-unalias grset
+unalias grset 2> /dev/null
 grset() {
 	if [[ $(git rev-parse --is-inside-work-tree) != "true" ]]; then
 		return 128

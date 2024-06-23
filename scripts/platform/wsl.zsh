@@ -23,7 +23,7 @@ function wincmake() {
 		echo "and put it in the ~/dev directory"
 		return 1
 	fi
-	cmake $@ -DCMAKE_TOOLCHAIN_FILE=~/dev/mingw-toolchain.cmake
+	cmake $@ -DCMAKE_TOOLCHAIN_FILE=$HOME/dev/mingw-toolchain.cmake
 }
 alias mingwcmake='wincmake'
 
@@ -36,6 +36,8 @@ alias cmd="cmd.exe"
 alias cmdx="cmd /C"
 
 open() {
+	#? Potential change: Use the `:A` expansion selector. evaluates relative path traversals 
+	#? like `.` and `..` and expands them to an absolute path. Use this instead of the double check
 	# Might still have issue when absolute path is passed, seems to work
 	if [[ -e $1 ]]; then 				# check absolute path
 		explorer.exe "`wslpath -w $1`"
