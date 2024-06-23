@@ -115,9 +115,12 @@ for key		kcap	seq			widget					arg (
 
 
 
+
 # ctrl+a https://stackoverflow.com/a/68987551/13658418
-function widget::select-all() {
-	local buflen=$(echo -n "$BUFFER" | wc -m | bc)
+function widget::select-all() { 
+	# Use `printf` instead of `echo -n`. See: https://unix.stackexchange.com/a/653026/613660
+	local buflen=$(printf '%s' "$BUFFER" | wc -m | bc)
+	# Fixes bug where `wc` doesnt count escaped characters: '\e', '\x', '\0'
 	CURSOR=$buflen  
 	zle set-mark-command
 	while [[ $CURSOR > 0 ]]; do
@@ -134,7 +137,7 @@ bindkey "^Z" undo
 
 
 bindkey '^H' backward-kill-word
-bindkey '5~' kill-word
+# bindkey '5~' kill-word
 
 # bindkey
 bindkey "^U"    backward-kill-line
