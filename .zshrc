@@ -110,7 +110,7 @@ HEADLINE_RIGHT_PROMPT_ELEMENTS=(status)
 export dirstack_file="$HOME"
 export ZDOTDIR="$HOME/.zshconfig"
 export ZSH="$ZDOTDIR/ohmyzsh"
-export ZSH_COMPDUMP="$HOME/.zshconfig/.cache/.zcompdump-${HOST}-${ZSH_VERSION}"
+export ZSH_COMPDUMP="$ZDOTDIR/.cache/.zcompdump-${HOST}-${ZSH_VERSION}"
 source $ZSH/oh-my-zsh.sh # This line is what ends up sourcing 
 
 
