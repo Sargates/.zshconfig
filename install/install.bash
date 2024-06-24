@@ -194,7 +194,7 @@ install-deps() {
 
 	echo "Installing packages: $PACKAGES_TO_INSTALL"
 	# shellcheck disable=SC2086
-	sudo apt install $PACKAGES_TO_INSTALL
+	sudo apt install $PACKAGES_TO_INSTALL -y
 	while IFS=" " read -ra entry; do
 		package="${entry[0]}"; command="${entry[1]}"; alias="${entry[2]}"
 
