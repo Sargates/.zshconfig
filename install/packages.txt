@@ -1,22 +1,13 @@
+//'s are comments -- commented packages are not required -- they're usually for testing purposes
+
 // These are packages that get read from by `install.bash`, they're in the format:
 // `package-name  binary-name  alias-name` where `binary-name` and `alias-name` are for creating a symlink to `binary-name`, like `python` -> `python3`
 git      git       _       // 
 zsh      zsh       _       // 
-bc       bc        _       // 
+// bc       bc        _       // 
 xsel     xsel      _       // 
 tmux     tmux      _       // 
 bat      batcat    bat     // 
 expect   unbuffer  _       // 
 python3  python3   python  // 
 
-//'s are comments -- commented packages are not required -- they're usually for testing purposes
-
-// git			// Great utility
-// zsh			// Might not be necessary
-// bc			// Needed for headline theme
-// xsel			// Needed for `clipcopy`
-// tmux			// Great utility
-// bat			// Great utility
-// python3	
-// expect	        // Recommended for unbuffer
-// rename

@@ -119,9 +119,9 @@ for key		kcap	seq			widget					arg (
 # ctrl+a https://stackoverflow.com/a/68987551/13658418
 function widget::select-all() { 
 	# Use `printf` instead of `echo -n`. See: https://unix.stackexchange.com/a/653026/613660
-	local buflen=$(printf '%s' "$BUFFER" | wc -m | bc)
 	# Fixes bug where `wc` doesnt count escaped characters: '\e', '\x', '\0'
-	CURSOR=$buflen  
+	local buflen=$(printf '%s' "$BUFFER" | wc -m)
+	CURSOR=$buflen
 	zle set-mark-command
 	while [[ $CURSOR > 0 ]]; do
 		zle beginning-of-line
@@ -136,6 +136,7 @@ bindkey "^Z" undo
 #* ////////// END REF https://stackoverflow.com/a/75102422
 
 
+# https://unix.stackexchange.com/a/583783/613660, I don't know what key `5~` is supposed to represent, it just caused delay when typing the number `5`
 bindkey '^H' backward-kill-word
 # bindkey '5~' kill-word
 
