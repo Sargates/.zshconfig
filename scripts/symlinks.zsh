@@ -1,28 +1,54 @@
-# This file ensures symlinks in `~` exist and point to the files in `configs`
+#!/bin/zsh
 
-# Not needed to re-link .zshrc because this script wont get 
-for file in .zshrc .tmux.conf .tmux.conf.local .gitconfig; do
-	[ $needsUpdate ] && break # exit to update symlinks
+#* This file ensures symlinks in `~` exist and point to the files in `configs`, also makes dated backups to prevent dataloss
 
-	local filepath=$HOME/$file
-	[ ! -h $filepath ] && needsUpdate=1 												# if file is not a symlink, overwrite with symlink
-	[ -z $needsUpdate ] && [[ $(readlink $filepath) != "$ZDOTDIR/"* ]] && needsUpdate=1	# if file is symlink and symlink does not point somewhere in $ZDOTDIR, overwrite with proper symlink
-done
+if [ -z $ZDOTDIR ]; then exit 1; fi
 
-# TODO: Do this properly
-if [ $needsUpdate ] || [ $# -gt 0 ]; then # $# > 0 assumes that the `--force` flag was passed
-	echo "Updating Symlinks. Saving old files to $ZDOTDIR/.cache"
-	# TODO: Date the old files so that it isn't just one really large .old file.
-	# TODO TODO: After completing auto-update script, delete .old files when the total size of all of them gets passed a certain threshold
+if [ -z $ZSH_CONFIG]; then source "$ZDOTDIR/scripts/config.zsh"; fi # this will proc even if all the options in the config are "no". shouldn't matter, just wasteful
+
+mkdir -p $ZDOTDIR/.cache/.old
+
+needsUpdate() { # $1 is abs filepath and must be a symlink to work correctly
+	[ ! -h "$1" ] && return 0 							# if file is not a symlink, overwrite with symlink
+	[[ $(readlink "$1") != "$ZDOTDIR/"* ]] && return 0	# if file is symlink and symlink does not point somewhere in $ZDOTDIR, overwrite with proper symlink
+	return 1
+}
+
+makeBackup() { # $1 is abs filepath, save to $ZDOTDIR/.cache with date
+	[ ! -e "$1" ] && return 0 	# if file doesn't exist, don't make backup
+	[ -h "$1" ] && return 0 	# if file is already a symlink, no need to backup. return
+	mv "$1" "$ZDOTDIR/.cache/.old/$(date +"%m-%d-%Y-%H-%M-%S")${1:t}"
+	# echo "$ZDOTDIR/.cache/.old/$(date +"%m-%d-%Y-%H-%M-%S")${1:t}"
+}
+
+makeLink() {
+	ln -sf "$1" "$HOME/${1:t}"
+}
+
+checkAndUpdate() {
 	
-	# List all files in config directory, pass to xargs to run command on each result
-	# Wrapping command in () opens subshell, cd into directory
-	(cd $ZDOTDIR/config && ls -A1) | xargs -l zsh -c 'cat $ZDOTDIR/config/$0 >> $ZDOTDIR/.cache/$0.old'	# Make backup of old file
-	(cd $ZDOTDIR/config && ls -A1) | xargs -l zsh -c 'ln -sf $ZDOTDIR/config/$0 ~/$0'					# Make symlink in $HOME
+	if needsUpdate "$HOME/.zshrc"; then
+		makeBackup "$HOME/.zshrc"
+		makeLink "$ZDOTDIR/.zshrc"
+	fi
 	
-	# Do same with .zshrc, not in `config` so needs to be done separately
-	cat $ZDOTDIR/.zshrc >> $ZDOTDIR/.cache/.zshrc.old
-	ln -sf $ZDOTDIR/.zshrc ~/.zshrc
-fi
+	typeset -a files=(
+		$ZDOTDIR/config/.gitconfig
+		$ZDOTDIR/config/.tmux.conf.local
+		$ZDOTDIR/config/.tmux.conf
+	)
+	for file in $files; do
+		[[ ${file:t} == ".gitconfig"* ]] && (( ! ${+ZSH_CONFIG[link_gitconf]} )) && continue	# If current file is .gitconfig and linking .gitconfig is disabled, skip
+		[[ ${file:t} == ".tmux"* ]] && (( ! ${+ZSH_CONFIG[link_tmuxconf]} )) && continue		# If current file is .tmux.conf and linking .tmux.conf is disabled, skip
+		# echo Gaming
+		if [ $# -eq 0 ] && ! needsUpdate "$HOME/${file:t}"; then continue; fi									# If file doesn't need update, skip
 
+		echo "Backing up and linking ${file:t}"
+		makeBackup "$HOME/${file:t}"
+		makeLink "$file"
+		
+	done
 
+}
+
+checkAndUpdate $@

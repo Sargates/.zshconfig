@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2006
+# shellcheck disable=SC2006 disable=SC2098 disable=SC2097
 #* Command to fetch and run install script
 #* bash -c "$(curl -fsSL https://raw.githubusercontent.com/Sargates/.zshconfig/master/install/install.bash)"
 #* bash -c "$(wget https://raw.githubusercontent.com/Sargates/.zshconfig/master/install/install.bash -O -)"
@@ -230,8 +230,8 @@ main() {
 		ZDOTDIR="$ZDOTDIR" sh "${ZDOTDIR:-$HOME}/omz-install.sh" --keep-zshrc --unattended
 		rm "${ZDOTDIR:-$HOME}/omz-install.sh"
 
-		# shellcheck disable=SC2098 disable=SC2097
-		ZDOTDIR="$ZDOTDIR" zsh "$ZDOTDIR/scripts/symlinks.zsh" --force # Execute symlinks script
+		# ZDOTDIR="$ZDOTDIR" zsh "$ZDOTDIR/scripts/config.zsh"			# Doesnt even work to execute config like this because the env is separate
+		ZDOTDIR="$ZDOTDIR" zsh "$ZDOTDIR/scripts/symlinks.zsh" --force 	# Execute symlinks script
 	else
 		fmt_warning "$ZDOTDIR already exists. Delete it or run \`git -C $ZDOTDIR pull\` if it's out of date."
 	fi
