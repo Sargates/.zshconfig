@@ -71,7 +71,7 @@ zle -N zle-clipboard-paste
 function zle-clipboard-cut {
 	if ((REGION_ACTIVE)); then
 		zle copy-region-as-kill
-		print -rn -- $CUTBUFFER | clipcopy # `clipcopy` is defined by OMZ and better than anything I could write. If not using OMZ pipe to `xsel --clipboard`
+		print -rn -- $CUTBUFFER | clipcopy 2&>/dev/null # `clipcopy` is defined by OMZ and better than anything I could write. If not using OMZ pipe to `xsel --clipboard`
 		zle kill-region
 	fi
 }
@@ -79,7 +79,7 @@ zle -N zle-clipboard-cut
 function zle-clipboard-copy {
 	if ((REGION_ACTIVE)); then
 		zle copy-region-as-kill
-		print -rn -- $CUTBUFFER | clipcopy # `clipcopy` is defined by OMZ and better than anything I could write. If not using OMZ pipe to `xsel --clipboard`
+		print -rn -- $CUTBUFFER | clipcopy 2&>/dev/null # `clipcopy` is defined by OMZ and better than anything I could write. If not using OMZ pipe to `xsel --clipboard`
 	else
 		zle send-break
 	fi

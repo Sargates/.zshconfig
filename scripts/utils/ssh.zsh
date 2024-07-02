@@ -6,19 +6,18 @@ alias sshlog="sshlogs"                                     # auto correct
 
 #* This just adds keys that aren't already added to the ssh-agent
 
-if [[ $SSH_CLIENT != "" ]]; then
-	export DISPLAY=":0" #* `clipcopy` doesn't get defined by OMZ if `$DISPLAY` is empty (ex.: a ssh session), this forces OMZ
-	#* via `kbhelper.zsh` to work over ssh. Copying only works in the current SSH session, doesn't copy to host clipboard
-	return 0
-fi
+# if [[ $SSH_CLIENT != "" ]]; then
+# 	export DISPLAY=":0" #* `clipcopy` doesn't get defined by OMZ if `$DISPLAY` is empty (ex.: a ssh session), this forces OMZ
+# 	#* via `kbhelper.zsh` to work over ssh. Copying only works in the current SSH session, doesn't copy to host clipboard
+# 	return 0
+# fi
 
-if [ ! -d "$HOME/.ssh" ]; then # no ssh dir, probably not install
-	return 0
-fi
+# no ssh dir, probably not installed
+if [ ! -d "$HOME/.ssh" ]; then return 0; fi
 
-if [ ! ${+commands[ssh-add]} ]; then # no ssh-add command, if the above didn't return (~/.ssh exists), then something is wrong so return 1
-	return 1
-fi
+# no ssh-add command, if the above didn't return (~/.ssh exists), then something is wrong so return 1
+if [ ! ${+commands[ssh-add]} ]; then return 1; fi
+
 local SSH_KEYS=($(find $HOME/.ssh -regex ".*id_.*" | grep -Fv ".pub" | grep -v '\.ssh/ignore/'))
 
 # List fingerprints of already added keys
