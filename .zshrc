@@ -21,7 +21,7 @@ setopt EXTENDED_HISTORY
 ZSH_THEME="headline"
 # ZSH_THEME="agnoster"
 # ZSH_THEME="robbyrussell"
-# ZSH_THEME="powerlevel10k"
+# ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -73,7 +73,6 @@ ZSH_THEME="headline"
 # "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
-HIST_STAMPS="%a %b %e %H:%M:%S %y"
 
 # Would you like to use another custom folder than $ZSH/custom?
 ZSH_CUSTOM=~/.zshconfig
@@ -91,6 +90,7 @@ plugins=(
 	ssh-agent
 	tmux
 	aliases
+	# dirpersist
 	# globalias
 	# docker
 	# virtualenvwrapper
@@ -102,31 +102,26 @@ HEADLINE_RIGHT_PROMPT_ELEMENTS=(status)
 #! This line changes `headline` to reset the clock in realtime -- causes issues in history traversal with arrow keys
 # TMOUT=1; TRAPALRM () { zle reset-prompt }
 
-#* Ex: [ $ISWSL -ne 0 ] && echo "This is WSL" || echo "This is not WSL"
-[[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && export ISWSL=1 || export ISWSL=0
+#* Ex: (( $ISWSL )) && echo "This is WSL" || echo "This is not WSL"
+typeset -ix ISWSL # -i defines as integer, -x auto-exports variable. See http://devlib.symbian.slions.net/s3/GUID-D87C96CE-3F23-552D-927C-B6A1D61691BF.html
+[[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=1 || ISWSL=0
 
 
 # Change ZSH_COMPDUMP location to prevent cluttering user folder
-export dirstack_file="$HOME"
 export ZDOTDIR="$HOME/.zshconfig"
 export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_COMPDUMP="$ZDOTDIR/.cache/.zcompdump-${HOST}-${ZSH_VERSION}"
-source $ZSH/oh-my-zsh.sh # This line is what ends up sourcing 
 
+export dirstack_file="$ZDOTDIR/.cache/.dirpersist" #? Only needed for `dirpersist` plugin
 
-# for f in $HOME/.zshconfig/*(D); do
-# 	if [ -d $f ]; then continue; fi
-# 	file=$f:t
-# 	ext=$f:t:e
+#* https://zsh.sourceforge.io/Doc/Release/Shell-Builtin-Commands.html
+# > `-t fmt` prints time and date stamps in the given format; fmt is formatted with the strftime function with the zsh extensions described for the %D{string} prompt format in Prompt Expansion. The resulting formatted string must be no more than 256 characters or will not be printed
+#* strftime formatting: https://pubs.opengroup.org/onlinepubs/007908799/xsh/strftime.html
+HIST_STAMPS="%a %b %e %H:%M:%S %y"
+#* omz defines `history` as `"omz_history -t $HIST_STAMPS"`. Must be set before sourcing OMZ
 
+source $ZSH/oh-my-zsh.sh # This line is what ends up sourcing OMZ
 
-# 	if [[ $ext == "zsh" ]]; then
-# 		if [[ $file == "update.zsh" ]]; then continue; fi # Ignore sourcing `update.zsh`
-# 		if [[ $ISWSL -eq 1 && $file == "linux.zsh" ]]; then continue; fi
-# 		if [[ $ISWSL -eq 0 && $file == "wsl.zsh" ]]; then continue; fi
-# 		source "$f"
-# 	fi;
-# done
 
 
 

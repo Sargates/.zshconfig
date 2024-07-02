@@ -2,7 +2,6 @@
 
 #! This script should be loaded automatically by OMZ because it is stored in $ZSHCUSTOM. In this script, handle all things relating to customization of the config; aliases, command defaults, etc
 
-# // setopt extended_glob
 setopt globdots
 
 export ZSHCFG="$HOME/.zshconfig"
@@ -13,10 +12,6 @@ alias pip='python3 -m pip'
 alias zshrc='source ~/.zshrc'
 alias cdzsh='cd $ZDOTDIR'
 
-# alias listapt="comm -23 <(apt-mark showmanual | sort -u) <(gzip -dc /var/log/installer/initial-status.gz | sed -n 's/^Package: //p' | sort -u)"
-alias haconnect='ssh hassio@homeassistant.local' 				# Connect to local home assisstant server (if exists)
-alias listapt='apt list --installed'							# List installed apt packages (optionally use with grep)
-# // alias listjava='apt search openjdk-.+-'							# Search installable JDK's because I can never remember the title format
 
 #* Set configuration
 local baseLS="ls -lah --color=always"							# Preserves coloring when piping to grep with --color=never flag i.e. `l | grep --color=never {PATTERN}`
@@ -32,7 +27,7 @@ alias clip='perl -pe "s/^((?:(?>(?:\e\[.*?m)*).){`tput cols`}).*/$1\e[m/"'						
 alias clgrep="clip|grep"										# Use with pipe to have clipped grep output. Buggy; Doesn't match patterns to what was clipped
 alias ncgrep="grep --color=never"								# Grep with no color
 alias listports="sudo lsof -i -P -n | grep LISTEN"				# Used to list open ports -- useful for being paranoid :)
-alias repromptssh="source $ZSHCFG/scripts/utils/ssh.zsh"		# Re-source `ssh.zsh` to reprompt the adding of keys
+alias repromptssh="source $ZDOTDIR/scripts/utils/ssh.zsh"		# Re-source `ssh.zsh` to reprompt the adding of keys
 
 #* This is meant to be a replacement for `rm` to prevent removing sensitive directories, but this doesn't prompt for confirmation from zsh's `rm_star` option
 #* Aliasing like this, does not work. I haven't tried directly replacing the `rm` binary by renaming `safe-rm` to `rm` in `/usr/bin`, that may work because I doubt ZSH's option is embedded into the binary itself, likely just checks the command against all aliases
@@ -75,7 +70,7 @@ aptsearch() {
 	
 	echo $OUTPUT | awk -F'[ /]' -v PATTERN="$PATTERN" -e '$3 ~ PATTERN {match($3, PATTERN); print $1"@"substr($3, RSTART, RLENGTH)"/"$2" "$5 }'
 	
-	[ ! $PREFIX ] && echo $'\e[4mThis command uses unbuffer by default, install it using `apt install expect` or modify $ZSHCFG/profile.zsh to remove this notification\e[0m'
+	[ ! $PREFIX ] && echo $'\e[4mThis command uses unbuffer by default, install it using `apt install expect` or modify $ZDOTDIR/profile.zsh to remove this notification\e[0m'
 	return 0
 }
 
@@ -95,24 +90,27 @@ apt() { # https://unix.stackexchange.com/a/670978
 }
 
 
+source_scripts() {
+	# Recursive Sourcing
+	for f in $HOME/.zshconfig/scripts/**/*.zsh(D); do # Recursively source all `.zsh` files inside the `scripts` folder
+		if [ -d $f ]; then continue; fi
+		# if [[ ${f:h:t} == "utils" ]] && [[ ! ${f:t} == "utils.zsh" ]]; then continue; fi #! testing command
+		file=$f:t
+		ext=$f:t:e
 
-# Recursive Sourcing
-for f in $HOME/.zshconfig/scripts/**/*.zsh(D); do # Recursively source all `.zsh` files inside the `scripts` folder
-	if [ -d $f ]; then continue; fi
-	# if [[ ${f:h:t} == "utils" ]] && [[ ! ${f:t} == "utils.zsh" ]]; then continue; fi #! testing command
-	file=$f:t
-	ext=$f:t:e
 
+		if [[ $ext == "zsh" ]]; then
+			if [[ $file == "update.zsh" ]]; then continue; fi 					# Ignore sourcing `update.zsh`, for now
+			if [[ $file == "linux.zsh" ]] && (( $ISWSL )); then continue; fi	# Avoid sourcing `linux.zsh` on WSL
+			if [[ $file == "wsl.zsh" ]] && (( ! $ISWSL )); then continue; fi	# Avoid sourcing `wsl.zsh` on Linux
+			source "$f"
+		fi;
+	done
+}
 
-	if [[ $ext == "zsh" ]]; then
-		if [[ $file == "update.zsh" ]]; then continue; fi 					# Ignore sourcing `update.zsh`
-		if [[ $file == "linux.zsh" && $ISWSL ]]; then continue; fi	# Avoid sourcing `linux.zsh` on WSL
-		if [[ $file == "wsl.zsh" && ! $ISWSL ]]; then continue; fi		# Avoid sourcing `wsl.zsh` on Linux
-		source "$f"
-	fi;
-done
+source_scripts
 
 # Syntax highlighting
-source "$ZSHCFG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+source "$ZDOTDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 
