@@ -180,7 +180,7 @@ warning() {
 	
 install-deps() {
 
-	local PACKAGES_TO_INSTALL=""
+	local PACKAGES_TO_INSTALL="" failed="no"
 
 	#! Change this to iterate once to install packages, and a second time to create aliases, prevents repeated calls to `apt install` and is more streamlined
 	while IFS=" " read -ra entry; do
@@ -194,18 +194,21 @@ install-deps() {
 
 	echo "Installing packages: $PACKAGES_TO_INSTALL"
 	# shellcheck disable=SC2086
-	sudo apt install $PACKAGES_TO_INSTALL -y
-	while IFS=" " read -ra entry; do
-		package="${entry[0]}"; command="${entry[1]}"; alias="${entry[2]}"
+	sudo apt install $PACKAGES_TO_INSTALL -y || failed="yes"
+	if [ $failed == "no" ]; then
+		while IFS=" " read -ra entry; do
+			package="${entry[0]}"; command="${entry[1]}"; alias="${entry[2]}"
 
-		[ -z "$package" ] && continue 			# ignore empty lines
-		[[ "$package" = "//"* ]] && continue 	# ignore commented lines
-		[ "$package" == "$alias" ] && continue	# redundant alias, skip
+			[ -z "$package" ] && continue 			# ignore empty lines
+			[[ "$package" = "//"* ]] && continue 	# ignore commented lines
+			[ "$package" == "$alias" ] && continue	# redundant alias, skip
 
-		[ "$alias" != '_' ] && sudo ln -sf "$(which "$command")" "/usr/local/bin/$alias"
-		# [ "$alias" != '_' ] && echo 'Alias is not "_", adding alias'
+			[ "$alias" != '_' ] && sudo ln -sf "$(which "$command")" "/usr/local/bin/$alias"
+			# [ "$alias" != '_' ] && echo 'Alias is not "_", adding alias'
 
-	done < "$ZDOTDIR/install/packages.txt"
+		done < "$ZDOTDIR/install/packages.txt"
+	fi
+	
 }
 
 main() {
