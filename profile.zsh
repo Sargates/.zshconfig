@@ -92,19 +92,17 @@ apt() { # https://unix.stackexchange.com/a/670978
 
 source_scripts() {
 	# Recursive Sourcing
-	for f in $HOME/.zshconfig/scripts/**/*.zsh(D); do # Recursively source all `.zsh` files inside the `scripts` folder
-		if [ -d $f ]; then continue; fi
-		# if [[ ${f:h:t} == "utils" ]] && [[ ! ${f:t} == "utils.zsh" ]]; then continue; fi #! testing command
-		file=$f:t
-		ext=$f:t:e
+	local scripts=( $ZDOTDIR/scripts/**/*.zsh )
+	source $ZDOTDIR/scripts/config.zsh
+	for file in $scripts; do
+		if [[ ${file:t} == "config.zsh" ]]; then continue; fi					# source `config.zsh` manually
 
+		if [[ ${file:t} == "update.zsh" ]]; then continue; fi 					# Ignore sourcing `update.zsh`, for now
+		if [[ ${file:t} == "linux.zsh" ]] && (( $ISWSL )); then continue; fi	# Avoid sourcing `linux.zsh` on WSL
+		if [[ ${file:t} == "wsl.zsh" ]] && (( ! $ISWSL )); then continue; fi	# Avoid sourcing `wsl.zsh` on Linux
 
-		if [[ $ext == "zsh" ]]; then
-			if [[ $file == "update.zsh" ]]; then continue; fi 					# Ignore sourcing `update.zsh`, for now
-			if [[ $file == "linux.zsh" ]] && (( $ISWSL )); then continue; fi	# Avoid sourcing `linux.zsh` on WSL
-			if [[ $file == "wsl.zsh" ]] && (( ! $ISWSL )); then continue; fi	# Avoid sourcing `wsl.zsh` on Linux
-			source "$f"
-		fi;
+		# echo ${file}
+		source "$file"
 	done
 }
 
