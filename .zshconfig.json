@@ -1,5 +1,0 @@
-{
-	"create_cs": "no",			// Ensure `$HOME/dev` folder exists
-	"link_tmuxconf": "yes",		// Link ohmytmux files in `$ZDOTDIR/config`
-	"link_gitconf": "yes"		// Link `$HOME/.gitconfig` to `$ZDOTDIR/config/.gitconfig`
-}
