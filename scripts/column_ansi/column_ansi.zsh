@@ -159,7 +159,7 @@ if ! (return 0 2>/dev/null); then
 
 	# shellcheck disable=SC2155,SC2164
 	if [[ -z "${COLUMN_ANSI_PLSCRIPT_PATH:-}" ]]; then
-		COLUMN_ANSI_PLSCRIPT_PATH="$ZSHCFG/scripts/column_ansi";
+		COLUMN_ANSI_PLSCRIPT_PATH="$ZDOTDIR/scripts/column_ansi";
 	fi
 
 	# Make sure to export the `COLUMN_ANSI_PLSCRIPT_PATH` env variable even if it was not set already
@@ -172,7 +172,7 @@ else
 
 	# shellcheck disable=SC2155,SC2164
 	if [[ -z "${COLUMN_ANSI_PLSCRIPT_PATH:-}" ]]; then
-		COLUMN_ANSI_PLSCRIPT_PATH="$ZSHCFG/scripts/column_ansi";
+		COLUMN_ANSI_PLSCRIPT_PATH="$ZDOTDIR/scripts/column_ansi";
 	fi
 	
 	# Make sure to export the `COLUMN_ANSI_PLSCRIPT_PATH` env variable even if it was not set already
