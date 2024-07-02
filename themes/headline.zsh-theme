@@ -257,7 +257,7 @@ headline_exit_meaning() { # (num)
 	# REF: https://man7.org/linux/man-pages/man7/signal.7.html
 	#! NOTE: these meanings are not standardized
 	case $1 in
-		 53) echo 'Potentially Windows dll not found';; # `dll not found` on Windows throws error code: `0xC0000135`, I think error codes are 8 bit so `35` gets read and `35` in decimal is 53
+		 53) echo 'Possibly Windows dll not found';; # `dll not found` on Windows throws error code: `0xC0000135`, I think error codes are 8 bit so `35` gets read and `35` in decimal is 53
 		126) echo 'Command cannot execute';;
 		127) echo 'Command not found';;
 		129) echo 'Hangup';;
@@ -313,9 +313,9 @@ headline_git_status() {
 	# Retrieve status
 	# REF: https://git-scm.com/docs/git-status
 	local raw lines
-	#! These lines cause immense lag between terminal prompts due to `git status` being extremely slow on large repos
-	#! Calling `du` from WSL on a folder in the Windows file system is extremely slow in comparison
-	local max="50M" # 50 megabytes
+	#! If using WSL, these calls to `du` (and I think `headline_git status` also) are very slow if $PWD is on the windows filesystem (/mnt/c/**/). 
+	#! Set `max` to ~30M if you are experiencing long downtimes between prompts.
+	local max="500M" # 500 megabytes
 	# Checks if `.git` exists and get's size if it does. Doesn't call `git status` if the size exceeds a maximum; Prevents calling git status automatically on large repos
 	git rev-parse --show-toplevel &> /dev/null # wont error if within a git repo
 	if [ $? -ne 128 ] && [ $(echo "$(du -sh "$(git rev-parse --show-toplevel)/.git" | awk '{print $1}')\n$max" | sort -h | head -1) != "$max" ]; then
