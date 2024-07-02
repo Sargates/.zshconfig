@@ -4,7 +4,7 @@
 
 if [ -z $ZDOTDIR ]; then exit 1; fi
 
-if [ -z $ZSH_CONFIG]; then source "$ZDOTDIR/scripts/config.zsh"; fi # this will proc even if all the options in the config are "no". shouldn't matter, just wasteful
+if [ -z "$ZSH_CONFIG" ]; then source "$ZDOTDIR/scripts/config.zsh"; fi # this will proc even if all the options in the config are "no". shouldn't matter, just wasteful
 
 mkdir -p $ZDOTDIR/.cache/.old
 
