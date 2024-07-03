@@ -63,7 +63,7 @@ function zle-clipboard-paste {
 		zle kill-region
 		wait $!
 	fi
-	LBUFFER+=`clippaste`
+	LBUFFER+=`clippaste 2&>/dev/null`
 }
 zle -N zle-clipboard-paste
 
