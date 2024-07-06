@@ -24,18 +24,12 @@ ZSH_THEME="headline"
 # ZSH_THEME="robbyrussell"
 # ZSH_THEME="powerlevel10k/powerlevel10k"
 
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
 # Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+CASE_SENSITIVE="true"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+HYPHEN_INSENSITIVE="true"
 
 # Uncomment one of the following lines to change the auto-update behavior
 # zstyle ':omz:update' mode disabled  # disable automatic updates
@@ -48,9 +42,6 @@ ZSH_THEME="headline"
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
 # Uncomment the following line to disable auto-setting terminal title.
 # DISABLE_AUTO_TITLE="true"
 
@@ -61,28 +52,23 @@ ZSH_THEME="headline"
 # You can also set it to another string to have that shown instead of the default red dots.
 # e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
 # Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true" #? testing this
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
+# HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv) # TODO: remove virtualenv here
+HEADLINE_RIGHT_PROMPT_ELEMENTS=(status)
 
-# Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=~/.zshconfig
+#! This line changes `headline` to reset the clock in realtime -- causes issues in history traversal with arrow keys
+# TMOUT=1; TRAPALRM () { zle reset-prompt }
 
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
+#* Ex: (( $ISWSL )) && echo "This is WSL" || echo "This is not WSL"
+typeset -ix ISWSL # -i defines as integer, -x auto-exports variable. See http://devlib.symbian.slions.net/s3/GUID-D87C96CE-3F23-552D-927C-B6A1D61691BF.html
+[[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=1 || ISWSL=0
+
 
 
 plugins=(
@@ -97,24 +83,14 @@ plugins=(
 	# virtualenvwrapper
 )
 
-# HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv) # TODO: remove virtualenv here
-HEADLINE_RIGHT_PROMPT_ELEMENTS=(status)
-
-#! This line changes `headline` to reset the clock in realtime -- causes issues in history traversal with arrow keys
-# TMOUT=1; TRAPALRM () { zle reset-prompt }
-
-#* Ex: (( $ISWSL )) && echo "This is WSL" || echo "This is not WSL"
-typeset -ix ISWSL # -i defines as integer, -x auto-exports variable. See http://devlib.symbian.slions.net/s3/GUID-D87C96CE-3F23-552D-927C-B6A1D61691BF.html
-[[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=1 || ISWSL=0
-
-
 # Change ZSH_COMPDUMP location to prevent cluttering user folder
+ZSH_CUSTOM=~/.zshconfig
 export ZDOTDIR="$HOME/.zshconfig"
 export HISTFILE="$HOME/.zsh_history" # OMZ defines HISTFILE using nullish coalescing, some environments (VSCode) set $HISTFILE before sourcing .zshrc, causing for the incorrect value to be used in those environments.
 export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_COMPDUMP="$ZDOTDIR/.cache/.zcompdump-${HOST}-${ZSH_VERSION}"
 
-export dirstack_file="$ZDOTDIR/.cache/.dirpersist" #? Only needed for `dirpersist` plugin
+# export dirstack_file="$ZDOTDIR/.cache/.dirpersist" #? Only needed for `dirpersist` plugin
 
 #* https://zsh.sourceforge.io/Doc/Release/Shell-Builtin-Commands.html
 # > `-t fmt` prints time and date stamps in the given format; fmt is formatted with the strftime function with the zsh extensions described for the %D{string} prompt format in Prompt Expansion. The resulting formatted string must be no more than 256 characters or will not be printed
@@ -124,48 +100,11 @@ HIST_STAMPS="%a %b %e %H:%M:%S %y"
 
 source $ZSH/oh-my-zsh.sh # This line is what ends up sourcing OMZ
 
-
-
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-# [[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-
 #? nvm is a "slow plugin" apparently, commenting this out for testing as I don't use it
-# #! Sourcing `nvm.sh` directly causes a conflict with the `hash` function defined in `utils.zsh`. I put in a github issue to have that fixed
 # export NVM_DIR="$HOME/.nvm"
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-
-# #! This adds autocomplete to vcpkg commands
-# autoload bashcompinit
-# bashcompinit
-# source $HOME/vcpkg/scripts/vcpkg_completion.zsh
-# export VCPKG="$HOME/vcpkg/packages"
 
 # # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
