@@ -99,6 +99,9 @@ HIST_STAMPS="%a %b %e %H:%M:%S %y"
 #* omz defines `history` as `"omz_history -t $HIST_STAMPS"`. Must be set before sourcing OMZ
 
 source $ZSH/oh-my-zsh.sh # This line is what ends up sourcing OMZ
+# Unset opts set by ohmyzsh/lib/history.zsh. I don't know if this actually works as I think, but I hope so
+unsetopt hist_expire_dups_first
+unsetopt hist_ignore_dups
 
 #? nvm is a "slow plugin" apparently, commenting this out for testing as I don't use it
 # export NVM_DIR="$HOME/.nvm"
