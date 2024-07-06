@@ -2,6 +2,7 @@ export HISTSIZE=1000000000
 export SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
 #! Only uncomment the following when using Powerlevel10k
+# TODO: look into creating instant prompt for headline
 # # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # # Initialization code that may require console input (password prompts, [y/n]
 # # confirmations, etc.) must go above this block; everything else may go below.
@@ -109,6 +110,7 @@ typeset -ix ISWSL # -i defines as integer, -x auto-exports variable. See http://
 
 # Change ZSH_COMPDUMP location to prevent cluttering user folder
 export ZDOTDIR="$HOME/.zshconfig"
+export HISTFILE="$HOME/.zsh_history" # OMZ defines HISTFILE using nullish coalescing, some environments (VSCode) set $HISTFILE before sourcing .zshrc, causing for the incorrect value to be used in those environments.
 export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_COMPDUMP="$ZDOTDIR/.cache/.zcompdump-${HOST}-${ZSH_VERSION}"
 
