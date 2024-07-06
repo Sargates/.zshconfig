@@ -32,10 +32,10 @@ checkAndUpdate() {
 		makeLink "$ZDOTDIR/.zshrc"
 	fi
 	
-	typeset -a files=(
-		$ZDOTDIR/config/.gitconfig
-		$ZDOTDIR/config/.tmux.conf.local
-		$ZDOTDIR/config/.tmux.conf
+	typeset -a files=( # Files to link, will make symlinks in $HOME
+		$ZDOTDIR/configs/.gitconfig
+		$ZDOTDIR/configs/.tmux.conf.local
+		$ZDOTDIR/configs/.tmux.conf
 	)
 	for file in $files; do
 		[[ ${file:t} == ".gitconfig"* ]] && (( ! ${+ZSH_CONFIG[link_gitconf]} )) && continue	# If current file is .gitconfig and linking .gitconfig is disabled, skip
