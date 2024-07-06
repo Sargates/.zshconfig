@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-if (( ${+commands[tailscale]} )); then # Return of tailscale is not installed
+if (( ! ${+commands[tailscale]} )); then # Return of tailscale is not installed
 	return
 fi
 
