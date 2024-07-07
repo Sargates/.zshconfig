@@ -14,7 +14,6 @@ needsUpdate() { # $1 is abs filepath and must be a symlink to work correctly
 	[ ! -h "$1" ] && return 0 							# if file is not a symlink, overwrite with symlink
 	[[ $(readlink "$1") != "$ZDOTDIR/"* ]] && return 0	# if file is symlink and symlink does not point somewhere in $ZDOTDIR, overwrite with proper symlink
 	[ ! -e $(readlink "$1") ] && return 0				# if file is symlink and points somewhere in $ZDOTDIR, but linked file does not exist, then overwrite with proper symlink
-	neededUpdate="yes"
 	return 1 # returning `1` will not update the symlink. Has to do with how shell script and error codes work.
 }
 
@@ -47,6 +46,7 @@ checkAndUpdate() {
 		# echo Gaming
 		if [ $# -eq 0 ] && ! needsUpdate "$HOME/${file:t}"; then continue; fi									# If file doesn't need update, skip
 
+		neededUpdate="yes"
 		echo "Backing up and linking $HOME/${file:t}"
 		makeBackup "$HOME/${file:t}"
 		makeLink "$file"

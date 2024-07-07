@@ -15,6 +15,11 @@ setopt EXTENDED_HISTORY
 # Path to your oh-my-zsh installation.
 
 
+# TODO: Call install/update.zsh here
+# Call `git pull` on zsh-syntax-highlighting
+# Call `omz update` and make sure omz changelog is accounted for
+
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
