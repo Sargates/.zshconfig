@@ -1,6 +1,6 @@
 
 Copyright 2023-Present Nicholas Glenn -- All rights reserved. \
-Copyright 2009-Present [Robby Russell and contributors](https://github.com/ohmyzsh/ohmyzsh/contributors) \
+Copyright 2009-Present [Robby Russell and contributors](https://github.com/ohmyzsh/ohmyzsh/contributors) -- All rights reserved. \
 Copyright 2022-Present [Moarram](https://github.com/Moarram/headline) -- All rights reserved. \
 Copyright 2010-Present [zsh-syntax-highlighting contributors](https://github.com/zsh-users/zsh-syntax-highlighting) -- All rights reserved. \
 Copyright 2012-Present [Gregory Pakosz](https://github.com/gpakosz/.tmux) for `tmux.conf` and `tmux.conf.local` -- All rights reserved. \
