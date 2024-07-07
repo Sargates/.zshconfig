@@ -1,6 +1,6 @@
 # To prevent duplicate entries
 addToPath() {
-	[[ "${PATH}" != *$1* ]] && PATH="$PATH:$1"
+	[[ "${PATH}" != *$1* ]] && PATH="$1:$PATH"
 }
 
 # addToPath $HOME/.local/bin # Seems to only be used by python
@@ -11,5 +11,6 @@ if [ -z "$JAVA_HOME" ] && (( ${+commands[java]} )); then
 	export JAVA_HOME
 	addToPath $JAVA_HOME/bin
 fi
+addToPath $BUN_INSTALL # defined in `.zshrc` for bunjs runtime
 
 export PATH

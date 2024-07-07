@@ -52,15 +52,16 @@ HYPHEN_INSENSITIVE="true"
 # You can also set it to another string to have that shown instead of the default red dots.
 # e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
 # Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-COMPLETION_WAITING_DOTS="true"
+# COMPLETION_WAITING_DOTS="true" #* This is adds an ellipsis to the prompt when waiting on tab-completion, tend to be distracting when it doesn't wait long
+
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true" #? testing this
 
-# HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv) # TODO: remove virtualenv here
-HEADLINE_RIGHT_PROMPT_ELEMENTS=(status)
+# # HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv) # TODO: remove virtualenv here
+# HEADLINE_RIGHT_PROMPT_ELEMENTS=(status)
 
 #! This line changes `headline` to reset the clock in realtime -- causes issues in history traversal with arrow keys
 # TMOUT=1; TRAPALRM () { zle reset-prompt }
@@ -83,6 +84,25 @@ plugins=(
 	# virtualenvwrapper
 )
 
+#! This line changes `headline` to reset the clock in realtime -- causes issues in history traversal with arrow keys
+# TMOUT=1; TRAPALRM () { zle reset-prompt }
+
+
+
+# bun completions
+[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+
+
+
+
+#* Ex: (( $ISWSL )) && echo "This is WSL" || echo "This is not WSL"
+typeset -ix ISWSL # -i defines as integer, -x auto-exports variable. See http://devlib.symbian.slions.net/s3/GUID-D87C96CE-3F23-552D-927C-B6A1D61691BF.html
+[[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=1 || ISWSL=0
+
+
 # Change ZSH_COMPDUMP location to prevent cluttering user folder
 ZSH_CUSTOM=~/.zshconfig
 export ZDOTDIR="$HOME/.zshconfig"
@@ -95,10 +115,11 @@ export ZSH_COMPDUMP="$ZDOTDIR/.cache/.zcompdump-${HOST}-${ZSH_VERSION}"
 #* https://zsh.sourceforge.io/Doc/Release/Shell-Builtin-Commands.html
 # > `-t fmt` prints time and date stamps in the given format; fmt is formatted with the strftime function with the zsh extensions described for the %D{string} prompt format in Prompt Expansion. The resulting formatted string must be no more than 256 characters or will not be printed
 #* strftime formatting: https://pubs.opengroup.org/onlinepubs/007908799/xsh/strftime.html
-HIST_STAMPS="%a %b %e %H:%M:%S %y"
+HIST_STAMPS="%a %b %e %H:%M:%S %Y"
 #* omz defines `history` as `"omz_history -t $HIST_STAMPS"`. Must be set before sourcing OMZ
 
 source $ZSH/oh-my-zsh.sh # This line is what ends up sourcing OMZ
+
 # Unset opts set by ohmyzsh/lib/history.zsh. I don't know if this actually works as I think, but I hope so
 unsetopt hist_expire_dups_first
 unsetopt hist_ignore_dups
@@ -111,10 +132,3 @@ unsetopt hist_ignore_dups
 
 # # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# bun completions
-[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
