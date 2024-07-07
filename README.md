@@ -5,7 +5,7 @@ Feel free to disect it and scrutinize.
 
 
 ## Important Info
-- I **highly** recommend using FiraCode Mono with this config. It includes all the necessary glyphs for the theme in addition to supporting font ligatures. However, your terminal must support font ligatures for those to work (GNOME terminal does not). The FireCode repository can be found [here](https://github.com/tonsky/FiraCode/) and the installation instructions [here](https://github.com/tonsky/FiraCode/wiki/Linux-instructions#manual-installation).
+- I **highly** recommend using FiraCode Mono with this config. It includes all the necessary glyphs for the theme in addition to supporting font ligatures. However, your terminal must support font ligatures for those to work (GNOME terminal does not). The FiraCode repository can be found [here](https://github.com/tonsky/FiraCode/) and the installation instructions [here](https://github.com/tonsky/FiraCode/wiki/Linux-instructions#manual-installation).
 	> With most desktop-oriented distributions, double-clicking each font file in the ttf folder and selecting “Install font” should be enough. \
 	*From the installation instructions*
 - If you use this, it **will backup**, then overwrite the `.zshrc`, `.gitconfig`, `.tmux.conf`, and `.tmux.conf.local` files in your `$HOME` directory. Dated backups can be found in `$HOME/.zshconfig/.cache/.old`.
