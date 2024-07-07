@@ -18,6 +18,7 @@ if [ ! -z $ZDOTDIR ] && [[ ${+commands[jq]} ]]; then
 		[ $value = 'no' ] && continue # continue if $value == 'no', this is for easier checking of the active configuration using ${+ZSH_CONFIG[$option]}
 		ZSH_CONFIG[$key]="$value"
 	done < <(cat $ZDOTDIR/.zshconfig.json | sed 's/\/\/.*//' | sed 's/^[ \t]*//;s/[ \t]*$//' | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]')
-	#? sed 's/\/\/.*//'					- Remove comments
-	#? sed 's/^[ \t]*//;s/[ \t]*$//'	- Trim whitespace
+	#? `sed 's/\/\/.*//'` 				- pipe to remove comments
+	#? `sed 's/^[ \t]*//;s/[ \t]*$//'` 	- pipe to trim whitespace
+	#* this creates a consistent format that `jq` doesn't throw a fit about
 fi
