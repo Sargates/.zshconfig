@@ -11,13 +11,14 @@ mkdir -p $ZDOTDIR/.cache/.old
 needsUpdate() { # $1 is abs filepath and must be a symlink to work correctly
 	[ ! -h "$1" ] && return 0 							# if file is not a symlink, overwrite with symlink
 	[[ $(readlink "$1") != "$ZDOTDIR/"* ]] && return 0	# if file is symlink and symlink does not point somewhere in $ZDOTDIR, overwrite with proper symlink
+	[ ! -e $(readlink "$1") ] && return 0				# if file is symlink and points somewhere in $ZDOTDIR, but linked file does not exist, then overwrite with proper symlink
 	return 1
 }
 
 makeBackup() { # $1 is abs filepath, save to $ZDOTDIR/.cache with date
 	[ ! -e "$1" ] && return 0 	# if file doesn't exist, don't make backup
 	[ -h "$1" ] && return 0 	# if file is already a symlink, no need to backup. return
-	mv "$1" "$ZDOTDIR/.cache/.old/$(date +"%m-%d-%Y-%H-%M-%S")${1:t}"
+	mv "$1" "$ZDOTDIR/.cache/.old/$(date +"%m-%d-%Y-%H-%M-%S")${1:t}" #* no space needed between ${1:t} and datetime because its a dotfile, thus -> $DATE.gitconfig
 	# echo "$ZDOTDIR/.cache/.old/$(date +"%m-%d-%Y-%H-%M-%S")${1:t}"
 }
 
