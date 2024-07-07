@@ -246,7 +246,8 @@ main() {
 		package_location="$ZDOTDIR/install/packages.txt" # Save path/to/packages.txt to variable
 		link_to_package=$package_location
 		if [ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]; then 
-			link_to_package=`wslpath -m "$package_location"` # If on WSL, use `wslpath` to mutate path to link to
+			# If on WSL, use `wslpath` to format windows path to file, `//wsl.localhost/Ubuntu/path/to/file`
+			link_to_package=`wslpath -m "$package_location"`
 		fi
 		fmt_warning "Apt is not installed. ${FMT_RED}Unable to install packages automatically."
 		fmt_warning "See `fmt_link "$package_location" "file://$link_to_package" --text` for the list of packages that couldn't be installed."
