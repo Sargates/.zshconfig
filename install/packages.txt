@@ -11,4 +11,4 @@ tmux     tmux      _       //
 bat      batcat    bat     // 
 expect   unbuffer  _       // 
 python3  python3   python  // 
-
+git-delta delta	   _       //
