@@ -67,7 +67,8 @@ aptsearch() { #! If you're having issues with output, it's likely that the versi
 	#! Pattern needs double escape here
 	local PATTERN='[0-9]*\\.[0-9]*'
 
-	echo $OUTPUT | awk -F'[ /]' -v PATTERN="$PATTERN" '$3 ~ PATTERN {match($3, PATTERN); print $1"@"substr($3, RSTART, RLENGTH)"/"$2" "$5 }'
+	# echo $OUTPUT | awk -F'[ /]' -v PATTERN="$PATTERN" '$3 ~ PATTERN {match($3, PATTERN); print $1"@"substr($3, RSTART, RLENGTH)"/"$2" "$5 }' #? Used for semantic versioning
+	echo $OUTPUT | awk -F'[ /]' '{ print $1"@"$3"/"$2" "$5 }'
 	
 	[ ! $PREFIX ] && echo $'\e[4mThis command uses unbuffer by default, install it using `apt install expect` or modify $ZDOTDIR/profile.zsh to remove this notification\e[0m'
 	return 0
