@@ -44,7 +44,7 @@ alias gr='git -C `git root`'									# OMZ defines `gr` as `git remote`. Here, `
 alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"						# Trim leading and trailing whitespace
 
 
-aptsearch() {
+aptsearch() { #! If you're having issues with output, it's likely that the version of the package is not a valid semantic version.
 	# Get package server codename programatically, 22.04 -> jammy; 24.04 -> noble
 	local PACKAGE_SERVER="$(grep VERSION_CODENAME /etc/os-release | cut -d= -f2)"
 	[ ${+commands[unbuffer]} -ne 0 ] && local PREFIX="unbuffer"
@@ -65,10 +65,9 @@ aptsearch() {
 
 	# regex pattern for matching semantic versioning, official semver maintainers give a better matching pattern but I could get it to work, see https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
 	#! Pattern needs double escape here
-	local PATTERN='[0-9]*\\.[0-9]*\\.[0-9]*'
+	local PATTERN='[0-9]*\\.[0-9]*'
 
-	
-	echo $OUTPUT | awk -F'[ /]' -v PATTERN="$PATTERN" -e '$3 ~ PATTERN {match($3, PATTERN); print $1"@"substr($3, RSTART, RLENGTH)"/"$2" "$5 }'
+	echo $OUTPUT | awk -F'[ /]' -v PATTERN="$PATTERN" '$3 ~ PATTERN {match($3, PATTERN); print $1"@"substr($3, RSTART, RLENGTH)"/"$2" "$5 }'
 	
 	[ ! $PREFIX ] && echo $'\e[4mThis command uses unbuffer by default, install it using `apt install expect` or modify $ZDOTDIR/profile.zsh to remove this notification\e[0m'
 	return 0
