@@ -14,34 +14,34 @@ alias cdzsh='cd $ZDOTDIR'
 
 
 #* Set configuration
-local baseLS="ls -lah --color=always"							# Preserves coloring when piping to grep with --color=never flag i.e. `l | grep --color=never {PATTERN}`
-alias l="$baseLS --group-directories-first"						# Primary "ls" command, groups dirs first, top->bottom: .dirs, dirs, .files, files
-export LANG="C.UTF-8"											# Change LANG (mainly for sort order when calling ls -l)
-export EDITOR="code"											# Use VSCode as primary EDITOR
-alias nano="/usr/bin/nano --nonewlines"							# Override nano command with passed argument `--nonewline` to prevent dumb newline at EOF
+local baseLS="ls -lah --color=always"											# Preserves coloring when piping to grep with --color=never flag i.e. `l | grep --color=never {PATTERN}`
+alias l="$baseLS --group-directories-first"										# Primary "ls" command, groups dirs first, top->bottom: .dirs, dirs, .files, files
+export LANG="C.UTF-8"															# Change LANG (mainly for sort order when calling ls -l)
+export EDITOR="code"															# Use VSCode as primary EDITOR
+alias nano="/usr/bin/nano --nonewlines"											# Override nano command with passed argument `--nonewline` to prevent dumb newline at EOF
 
-alias zshcfg="$EDITOR ~/.zshconfig"								# Open zsh config in editor
-alias mcd='() { md $1 && cd $_ }'								# Used to create and cd to a new directory in one command
-alias killssh='kill `pgrep ssh-agent`'							# Used to reset ssh-agent
-alias clip='perl -pe "s/^((?:(?>(?:\e\[.*?m)*).){`tput cols`}).*/$1\e[m/"'								# Use with pipe to clip output to terminal size to prevent line wrapping
-alias clgrep="clip|grep"										# Use with pipe to have clipped grep output. Buggy; Doesn't match patterns to what was clipped
-alias ncgrep="grep --color=never"								# Grep with no color
-alias listports="sudo lsof -i -P -n | grep LISTEN"				# Used to list open ports -- useful for being paranoid :)
-alias repromptssh="source $ZDOTDIR/scripts/utils/ssh.zsh"		# Re-source `ssh.zsh` to reprompt the adding of keys
+alias zshcfg="$EDITOR ~/.zshconfig"												# Open zsh config in editor
+alias mcd='() { md $1 && cd $_ }'												# Used to create and cd to a new directory in one command
+alias killssh='kill `pgrep ssh-agent`'											# Used to reset ssh-agent
+alias clip='perl -pe "s/^((?:(?>(?:\e\[.*?m)*).){`tput cols`}).*/$1\e[m/"'		# Use with pipe to clip output to terminal size to prevent line wrapping
+alias clgrep="clip|grep"														# Use with pipe to have clipped grep output. Buggy; Doesn't match patterns to what was clipped
+alias ncgrep="grep --color=never"												# Grep with no color
+alias listports="sudo lsof -i -P -n | grep LISTEN"								# Used to list open ports -- useful for being paranoid :)
+alias repromptssh="source $ZDOTDIR/scripts/utils/ssh.zsh"						# Re-source `ssh.zsh` to reprompt the adding of keys
 
 #* This is meant to be a replacement for `rm` to prevent removing sensitive directories, but this doesn't prompt for confirmation from zsh's `rm_star` option
 #* Aliasing like this, does not work. I haven't tried directly replacing the `rm` binary by renaming `safe-rm` to `rm` in `/usr/bin`, that may work because I doubt ZSH's option is embedded into the binary itself, likely just checks the command against all aliases
 # // [ ${+commands[safe-rm]} -ne 0 ] && alias rm="safe-rm --preserve-root"
 
-alias mv="command mv -n"										# Prevent file overwriting, this shit happens too often
+alias mv="command mv -n"														# Prevent file overwriting, this shit happens too often
 
-alias lrt="$baseLS -t -r"										# Used to list items in directory and sort by time-last-modified. `-r` causes most recent file to be at bottom of output
-alias ltr="lrt"													# autocorrect for lrt
+alias lrt="$baseLS -t -r"														# Used to list items in directory and sort by time-last-modified. `-r` causes most recent file to be at bottom of output
+alias ltr="lrt"																	# autocorrect for lrt
 
-alias gr='git -C `git root`'									# OMZ defines `gr` as `git remote`. Here, `gr` is short for `git root` which will execute the following command in the git project's root dir, i.e. `gr add --all`, will add all files without needing to cd to root or do path traversal
+alias gr='git -C `git root`'													# OMZ defines `gr` as `git remote`. Here, `gr` is short for `git root` which will execute the following command in the git project's root dir, i.e. `gr add --all`, will add all files without needing to cd to root or do path traversal
 
 
-alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"						# Trim leading and trailing whitespace
+alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"										# Trim leading and trailing whitespace
 
 
 aptsearch() { #! If you're having issues with output, it's likely that the version of the package is not a valid semantic version.

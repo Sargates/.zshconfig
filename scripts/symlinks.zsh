@@ -34,7 +34,7 @@ checkAndUpdate() {
 		makeBackup "$HOME/.zshrc"
 		makeLink "$ZDOTDIR/.zshrc"
 	fi
-	
+
 	typeset -a files=( # Files to link, will make symlinks in $HOME
 		$ZDOTDIR/configs/.gitconfig
 		$ZDOTDIR/configs/.tmux.conf.local
