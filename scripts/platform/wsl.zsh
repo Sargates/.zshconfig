@@ -25,6 +25,14 @@ fi
 
 
 open() {
+	# Check if url is valid. could use curl to do this, seems wasteful
+	content=$(curl --head --silent -g "$*" | head -n 1)
+	if [ -n "$content" ]; then
+		powershell.exe Start-Process $1
+		return 0
+	fi
+
+
 	#? Potential change: Use the `:A` expansion selector. evaluates relative path traversals 
 	#? like `.` and `..` and expands them to an absolute path. Use this instead of the double check
 	# Might still have issue when absolute path is passed, seems to work
