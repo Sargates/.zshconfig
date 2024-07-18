@@ -35,13 +35,15 @@ function glgrep() { # See: https://askubuntu.com/q/1502183/1764786 for extra inf
 alias glg="glgrep"
 
 function github() {
-	local default='Sargates'
-	if [[ $# -ne 2 && $# -ne 1 ]]; then
-		echo "Usage: github [github-user=$default] [repo-name]"
+	local REPONAME=""
+	local GHUBUSER='Sargates'		# Default name
+
+	if [[ $# -ne 2 && $# -ne 1 ]]; then # Show usage
+		echo "Usage: github [github-user=$GHUBUSER] [repo-name]"
 		return 1
 	fi
-	local REPONAME=""
-	local GHUBUSER=$default		# Default name
+
+	# Set parameters according to number of passed args
 	if [[ $# -eq 2 ]]; then
 		GHUBUSER=$1
 		REPONAME=$2
@@ -49,8 +51,30 @@ function github() {
 	if [[ $# -eq 1 ]]; then
 		REPONAME=$1
 	fi
-	echo git@github.com:$GHUBUSER/$REPONAME.git
+
+
+	#* If a repository is public, its preferable to use http, then you dont need to have any ssh identities added if you're on a new system.
+	#* If its not public, then use an `ssh` address as the easiest way to access private repos is through SSH. 
+
+
+	# If `curl` or `jq` is not installed, abort and return the ssh address. These binaries would be automatically installed by `install.bash`
+	if (( ! ${+commands[curl]}${+commands[jq]} )); then
+		echo git@github.com:$GHUBUSER/$REPONAME.git
+		return;
+	fi
+
+	#* To check if a repo is public, query github's API to see if the repo is accessible with no authentication.
+	if [ $(curl https://api.github.com/repos/$GHUBUSER/$REPONAME 2>/dev/null | jq '.["private"]') = "false" ]; then
+		# Repository is public, return https URL
+		echo https://github.com/$GHUBUSER/$REPONAME.git
+	else
+		# Repository is private or does not exist, return ssh address
+		echo git@github.com:$GHUBUSER/$REPONAME.git
+	fi
 }
+
+#* Calling `github` queries GitHub's API for whether a repo exists, this can cause unexpected behavior. 
+#* Worst case scenario, `gitlab` will return an ssh address and not an https URL
 function gitlab() { # Fork of `github` for gitlab
 	echo `github $@` | sed 's/github/gitlab/'
 }
