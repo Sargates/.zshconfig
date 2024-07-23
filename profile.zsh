@@ -93,7 +93,7 @@ apt() { # https://unix.stackexchange.com/a/670978
 source_scripts() {
 	# Recursive Sourcing
 	local scripts=( $ZDOTDIR/scripts/**/*.zsh )
-	source $ZDOTDIR/scripts/config.zsh
+	source $ZDOTDIR/scripts/config.zsh # Source `config.zsh` before every other script as a dependency
 	for file in $scripts; do
 		if [[ ${file:t} == "config.zsh" ]]; then continue; fi					# source `config.zsh` manually
 
@@ -111,4 +111,4 @@ source_scripts
 # Syntax highlighting
 source "$ZDOTDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
-
+detect-clipboard # Call this now to prevent lag from figuring out how to define `clipcopy` and `clippaste` on the fly
