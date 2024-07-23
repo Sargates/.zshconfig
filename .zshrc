@@ -120,7 +120,7 @@ export ZSH_COMPDUMP="$ZDOTDIR/.cache/.zcompdump-${HOST}-${ZSH_VERSION}"
 #* https://zsh.sourceforge.io/Doc/Release/Shell-Builtin-Commands.html
 # > `-t fmt` prints time and date stamps in the given format; fmt is formatted with the strftime function with the zsh extensions described for the %D{string} prompt format in Prompt Expansion. The resulting formatted string must be no more than 256 characters or will not be printed
 #* strftime formatting: https://pubs.opengroup.org/onlinepubs/007908799/xsh/strftime.html
-HIST_STAMPS="%a %b %e %H:%M:%S %Y"
+HIST_STAMPS="%a %b %e %Y %H:%M:%S"
 #* omz defines `history` as `"omz_history -t $HIST_STAMPS"`. Must be set before sourcing OMZ
 
 source $ZSH/oh-my-zsh.sh # This line is what ends up sourcing OMZ
