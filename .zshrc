@@ -19,6 +19,10 @@ setopt EXTENDED_HISTORY
 # Call `git pull` on zsh-syntax-highlighting
 # Call `omz update` and make sure omz changelog is accounted for
 
+# git() { #? Debug
+# 	echo "$0 $@" > $HOME/Desktop/error.log
+# 	command git $@
+# }
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
