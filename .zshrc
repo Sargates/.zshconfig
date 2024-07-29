@@ -89,7 +89,7 @@ plugins=(
 	aliases
 	# dirpersist
 	# globalias
-	# docker
+	docker
 	# virtualenvwrapper
 )
 
@@ -99,7 +99,7 @@ plugins=(
 
 
 # bun completions
-[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
@@ -141,3 +141,17 @@ unsetopt hist_ignore_dups
 
 # # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+
+[ -s "$HOME/.zshconfig/ohmyzsh/plugins/docker/completions/_docker" ] && source "$HOME/.zshconfig/ohmyzsh/plugins/docker/completions/_docker"
+
+# See ohmyzsh/plugins/docker/README.md
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
+
+autoload -Uz compinit
+compinit -d $ZSH_COMPDUMP
+# ln -sf $ZSH_COMPDUMP ~/.zcompdump
+
+# fpath=$(echo $fpath | tr " " "\n" | grep -v "$ZSH/cache/completions" | (echo "$ZSH/cache/completions" && cat))

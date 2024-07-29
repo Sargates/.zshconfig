@@ -11,6 +11,6 @@ if [ -z "$JAVA_HOME" ] && (( ${+commands[java]} )); then
 	export JAVA_HOME
 	addToPath $JAVA_HOME/bin
 fi
-addToPath $BUN_INSTALL # defined in `.zshrc` for bunjs runtime
+addToPath "$BUN_INSTALL/bin" # defined in `.zshrc` for bunjs runtime
 
 export PATH
