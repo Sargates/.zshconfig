@@ -152,6 +152,5 @@ zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
 autoload -Uz compinit
 compinit -d $ZSH_COMPDUMP
-# ln -sf $ZSH_COMPDUMP ~/.zcompdump
 
-# fpath=$(echo $fpath | tr " " "\n" | grep -v "$ZSH/cache/completions" | (echo "$ZSH/cache/completions" && cat))
+[ -s $HOME/.zprofile ] && source $HOME/.zprofile # Source .zprofile for additional, per-system aliases and setup
