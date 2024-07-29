@@ -9,7 +9,7 @@ if [ ! -e "$ZDOTDIR/.zshconfig.json" ]; then
 fi
 
 
-if [ ! -z $ZDOTDIR ] && [[ ${+commands[jq]} ]]; then
+if [ ! -z $ZDOTDIR ] && (( ${+commands[jq]} )); then
 	
 	# https://stackoverflow.com/a/26717401
 	unset ZSH_CONFIG > /dev/null

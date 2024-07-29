@@ -85,7 +85,7 @@ plugins=(
 	git
 	virtualenv
 	ssh-agent
-	tmux
+	# tmux
 	aliases
 	# dirpersist
 	# globalias
