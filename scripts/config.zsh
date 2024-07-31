@@ -21,9 +21,9 @@ if [ ! -z $ZDOTDIR ] && (( ${+commands[jq]} )); then
 	#? `sed 's/^[ \t]*//;s/[ \t]*$//'` 	- pipe to trim whitespace
 	#* this creates a consistent format that `jq` doesn't throw a fit about
 elif [ -z $ZDOTDIR ]; then
-	echo 'ZDOTDIR is not defined, unable to find config file.'
+	echo '\e[31mZDOTDIR is not defined, unable to find config file.\e[m'
 
 elif (( ! ${+commands[jq]} )); then
-	printf '`jq` not installed. Unable to parse `%s.zshconfig.json`' $ZDOTDIR
+	printf '\e[31m`jq` not installed. Unable to parse `%s.zshconfig.json`\e[m' $ZDOTDIR
 
 fi
