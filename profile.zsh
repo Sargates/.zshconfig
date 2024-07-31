@@ -46,7 +46,20 @@ alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"										# Trim leading and trailing 
 
 aptsearch() { #! If you're having issues with output, it's likely that the version of the package is not a valid semantic version.
 	# Get package server codename programatically, 22.04 -> jammy; 24.04 -> noble
-	local PACKAGE_SERVER="$(grep VERSION_CODENAME /etc/os-release | cut -d= -f2)"
+	local ID=$(grep '^ID=' /etc/os-release | cut -d= -f2)
+	local PACKAGE_SERVER
+	if [ $ID = 'ubuntu' ]; then
+		PACKAGE_SERVER="$(grep VERSION_CODENAME /etc/os-release | cut -d= -f2)"
+	elif [ $ID = 'debian' ]; then
+		PACKAGE_SERVER='stable'
+	else
+		/usr/bin/apt search $1
+		printf '\e[31mCould not determine consisted package release; OS not fully supported for `apt search` alias.
+Ran command: `/usr/bin/apt search %s`\e[m' $1
+		return 0
+	fi
+
+
 	[ ${+commands[unbuffer]} -ne 0 ] && local PREFIX="unbuffer"
 
 	#! This value doesn't work currently. awk will break if `-A1 --group-separator=$SEPARATOR` is passed because output of grep will be weird
@@ -60,7 +73,7 @@ aptsearch() { #! If you're having issues with output, it's likely that the versi
 	#* local OUTPUT="$($PREFIX apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | grep $1 $GREP_ARGS)"
 	# This command pipes output twice to grep, first to include lines only with the package server (to only include package names), second is to narrow down packages that include first arg verbatim, `sed` call is to replace the ANSI reset code with a background reset code
 	# First one includes $GREP_ARGS to prevent highlighting the package server name
-	local OUTPUT="$($PREFIX apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | GREP_COLORS="ms=$GREP_COLORS" grep $1 --color=always | sed -e $'s/\033[[]m/\033[40m/')"
+	local OUTPUT="$($PREFIX command apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | GREP_COLORS="ms=$GREP_COLORS" grep $1 --color=always | sed -e $'s/\033[[]m/\033[40m/')"
 
 
 	# regex pattern for matching semantic versioning, official semver maintainers give a better matching pattern but I could get it to work, see https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
