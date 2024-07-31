@@ -73,7 +73,7 @@ Ran command: `/usr/bin/apt search %s`\e[m' $1
 	#* local OUTPUT="$($PREFIX apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | grep $1 $GREP_ARGS)"
 	# This command pipes output twice to grep, first to include lines only with the package server (to only include package names), second is to narrow down packages that include first arg verbatim, `sed` call is to replace the ANSI reset code with a background reset code
 	# First one includes $GREP_ARGS to prevent highlighting the package server name
-	local OUTPUT="$($PREFIX command apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | GREP_COLORS="ms=$GREP_COLORS" grep $1 --color=always | sed -e $'s/\033[[]m/\033[40m/')"
+	local OUTPUT="$($PREFIX /usr/bin/apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | GREP_COLORS="ms=$GREP_COLORS" grep $1 --color=always | sed -e $'s/\033[[]m/\033[40m/')"
 
 
 	# regex pattern for matching semantic versioning, official semver maintainers give a better matching pattern but I could get it to work, see https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
