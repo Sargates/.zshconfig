@@ -10,7 +10,6 @@ fi
 
 
 if [ ! -z $ZDOTDIR ] && (( ${+commands[jq]} )); then
-	
 	# https://stackoverflow.com/a/26717401
 	unset ZSH_CONFIG > /dev/null
 	declare -Ax ZSH_CONFIG
@@ -21,4 +20,10 @@ if [ ! -z $ZDOTDIR ] && (( ${+commands[jq]} )); then
 	#? `sed 's/\/\/.*//'` 				- pipe to remove comments
 	#? `sed 's/^[ \t]*//;s/[ \t]*$//'` 	- pipe to trim whitespace
 	#* this creates a consistent format that `jq` doesn't throw a fit about
+elif [ -z $ZDOTDIR ]; then
+	echo 'ZDOTDIR is not defined, unable to find config file.'
+
+elif (( ! ${+commands[jq]} )); then
+	printf '`jq` not installed. Unable to parse `%s.zshconfig.json`' $ZDOTDIR
+
 fi
