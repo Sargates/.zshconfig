@@ -1,6 +1,9 @@
 #!/bin/zsh
 
-if [ -z $ZDOTDIR ]; then exit 1; fi
+if [ -z $ZDOTDIR ]; then 
+	printf '$ZDOTDIR not defined. Unable to source `$ZDOTDIR/scripts/config.zsh`\n'
+	exit 1
+fi
 
 #* Initializes the ZSH_CONFIG associative array to configure how this configuration will behave.
 
@@ -20,10 +23,6 @@ if [ ! -z $ZDOTDIR ] && (( ${+commands[jq]} )); then
 	#? `sed 's/\/\/.*//'` 				- pipe to remove comments
 	#? `sed 's/^[ \t]*//;s/[ \t]*$//'` 	- pipe to trim whitespace
 	#* this creates a consistent format that `jq` doesn't throw a fit about
-elif [ -z $ZDOTDIR ]; then
-	echo '\e[31mZDOTDIR is not defined, unable to find config file.\e[m'
-
 elif (( ! ${+commands[jq]} )); then
-	printf '\e[31m`jq` not installed. Unable to parse `%s.zshconfig.json`\e[m' $ZDOTDIR
-
+	printf '\e[31m`jq` not installed. Unable to parse `%s/.zshconfig.json`\e[m\n' $ZDOTDIR
 fi

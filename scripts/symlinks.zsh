@@ -5,7 +5,7 @@
 if [ -z $ZDOTDIR ]; then exit 1; fi
 
 #* This `if` will still process even if `ZSH_CONFIG` is actually set but every option is "no". shouldn't matter, just wasteful
-if [ -z "$ZSH_CONFIG" ]; then source "$ZDOTDIR/scripts/config.zsh"; fi
+if (( ${+commands[jq]} )) && [ -z "$ZSH_CONFIG" ]; then source "$ZDOTDIR/scripts/config.zsh"; fi
 
 mkdir -p $ZDOTDIR/.cache/.old
 local neededUpdate="no"
