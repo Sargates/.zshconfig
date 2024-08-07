@@ -17,7 +17,7 @@ alias cdzsh='cd $ZDOTDIR'
 local baseLS="ls -lah --color=always"											# Preserves coloring when piping to grep with --color=never flag i.e. `l | grep --color=never {PATTERN}`
 alias l="$baseLS --group-directories-first"										# Primary "ls" command, groups dirs first, top->bottom: .dirs, dirs, .files, files
 export LANG="C.UTF-8"															# Change LANG (mainly for sort order when calling ls -l)
-export EDITOR="code"															# Use VSCode as primary EDITOR
+(( ${+commands[code]} )) && EDITOR="code"											# Use VSCode as primary EDITOR
 alias nano="/usr/bin/nano --nonewlines"											# Override nano command with passed argument `--nonewline` to prevent dumb newline at EOF
 
 alias zshcfg="$EDITOR ~/.zshconfig"												# Open zsh config in editor
@@ -83,7 +83,7 @@ Ran command: `/usr/bin/apt search %s`\e[m' $1
 	# echo $OUTPUT | awk -F'[ /]' -v PATTERN="$PATTERN" '$3 ~ PATTERN {match($3, PATTERN); print $1"@"substr($3, RSTART, RLENGTH)"/"$2" "$5 }' #? Used for semantic versioning
 	echo $OUTPUT | awk -F'[ /]' '{ print $1"@"$3"/"$2" "$5 }'
 	
-	[ ! $PREFIX ] && echo $'\e[4mThis command uses unbuffer by default, install it using `apt install expect` or modify $ZDOTDIR/profile.zsh to remove this notification\e[0m'
+	[ ! $PREFIX ] && printf $'\e[33;4mThis command uses unbuffer to add coloring to this output. Install it using `apt install expect` or modify %s/profile.zsh to remove this notification\e[0m\n' $ZDOTDIR
 	return 0
 }
 
