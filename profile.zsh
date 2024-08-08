@@ -33,6 +33,8 @@ alias repromptssh="source $ZDOTDIR/scripts/utils/ssh.zsh"						# Re-source `ssh.
 #* Aliasing like this, does not work. I haven't tried directly replacing the `rm` binary by renaming `safe-rm` to `rm` in `/usr/bin`, that may work because I doubt ZSH's option is embedded into the binary itself, likely just checks the command against all aliases
 # // [ ${+commands[safe-rm]} -ne 0 ] && alias rm="safe-rm --preserve-root"
 
+alias parseetcpasswd='awk -F: "\$3 >= 1000" /etc/passwd | sort -t: -nk3 | column -t -s: -N "user,password,uid,gid,name,home dir,login shell"'
+
 alias mv="command mv -n"														# Prevent file overwriting, this shit happens too often
 
 alias lrt="$baseLS -t -r"														# Used to list items in directory and sort by time-last-modified. `-r` causes most recent file to be at bottom of output
@@ -68,17 +70,18 @@ Ran command: `/usr/bin/apt search %s`\e[m' $1
 
 	[ ! $GREP_COLORS ] && local GREP_COLORS="48;5;239" # define $GREP_COLORS if its not defined already, (used for testing different colors without having to re-source .zshrc)
 
-	[ ! $GREP_ARGS ] && local GREP_ARGS='--color=none'
-	
-	#* local OUTPUT="$($PREFIX apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | grep $1 $GREP_ARGS)"
-	# This command pipes output twice to grep, first to include lines only with the package server (to only include package names), second is to narrow down packages that include first arg verbatim, `sed` call is to replace the ANSI reset code with a background reset code
-	# First one includes $GREP_ARGS to prevent highlighting the package server name
-	local OUTPUT="$($PREFIX /usr/bin/apt search $@ | grep "$PACKAGE_SERVER" $GREP_ARGS | GREP_COLORS="ms=$GREP_COLORS" grep $1 --color=always | sed -e $'s/\033[[]m/\033[40m/')"
+	local OUTPUT=$(
+		$PREFIX /usr/bin/apt search $@ | 										# Search for package
+		grep -v -e "^  " -e "^$" | 												# Remove description and spacing lines from `apt` output
+		tail -n +3 | 															# Remove info from output
+		GREP_COLORS="ms=$GREP_COLORS" grep  --color=always -e "^" -e "$1" | 	# Highlight matches for $1 in $GREP_COLORS
+		sed -e $'s/\033[[]m/\033[40m/' 											# Fix ANSI color codes; Replace the first color reset (from previous `grep`) with background reset (because $GREP_COLORS changes background color)
+	)
 
 
 	# regex pattern for matching semantic versioning, official semver maintainers give a better matching pattern but I could get it to work, see https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
 	#! Pattern needs double escape here
-	local PATTERN='[0-9]*\\.[0-9]*'
+	# local PATTERN='[0-9]*\\.[0-9]*'
 
 	# echo $OUTPUT | awk -F'[ /]' -v PATTERN="$PATTERN" '$3 ~ PATTERN {match($3, PATTERN); print $1"@"substr($3, RSTART, RLENGTH)"/"$2" "$5 }' #? Used for semantic versioning
 	echo $OUTPUT | awk -F'[ /]' '{ print $1"@"$3"/"$2" "$5 }'
