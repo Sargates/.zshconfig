@@ -33,7 +33,8 @@ alias repromptssh="source $ZDOTDIR/scripts/utils/ssh.zsh"						# Re-source `ssh.
 #* Aliasing like this, does not work. I haven't tried directly replacing the `rm` binary by renaming `safe-rm` to `rm` in `/usr/bin`, that may work because I doubt ZSH's option is embedded into the binary itself, likely just checks the command against all aliases
 # // [ ${+commands[safe-rm]} -ne 0 ] && alias rm="safe-rm --preserve-root"
 
-alias parseetcpasswd='awk -F: "\$3 >= 1000" /etc/passwd | sort -t: -nk3 | column -t -s: -N "user,password,uid,gid,name,home dir,login shell"'
+alias parseetcpasswd='awk -F: "\$3 >= 1000" /etc/passwd | sort -t: -nk3 | column -t -s: -N "USER,PASSWORD,UID,GID,COMMENT,HOME DIR,LOGIN SHELL"'
+alias parseetcgroup='awk -F: "\$3 >= 1000" /etc/group | sort -t: -nk3 | column -t -s: -N "GROUP,PASSWORD,GID,USERS"'
 
 alias mv="command mv -n"														# Prevent file overwriting, this shit happens too often
 
