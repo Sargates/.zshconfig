@@ -26,7 +26,7 @@ fi
 
 open() {
 	# Check if url is valid. could use curl to do this, seems wasteful
-	content=$(curl --head --silent -g "$*" | head -n 1)
+	content=$(curl --head --silent -gk "$*" | head -n 1)
 	if [ -n "$content" ]; then
 		powershell.exe Start-Process $1
 		return 0
@@ -79,30 +79,15 @@ function wincmake() {
 alias mingwcmake='wincmake'
 
 
-# function cs-stuff() { # "function" keyword seems required here or terminal yells at you
-# 	BASEPATH=~cs
-# 	SUBPATH=$1
-# 	if [ -d "$BASEPATH/$SUBPATH" ]; then
-# 		cd $BASEPATH/$SUBPATH
-# 		return 0
-# 	fi
-# 	if [ -e "$BASEPATH/$SUBPATH" ]; then
-# 		echo $BASEPATH/$SUBPATH
-# 		return 0
-# 	fi
-# 	echo "Could not find file \"~cs/$SUBPATH\""
-# 	return 1
-# }
-# compdef "_directories -/ -W ~cs" cs-stuff
+#* Seems to work now without these flags? I can't remember how it behaved before, so idk
+# // #! `--mouse` flag breaks Windows Terminal selection inside of pagers (git log, man, etc.). See: https://github.com/microsoft/terminal/issues/9165#issuecomment-1398208221
+# // #! Holding shift down prevents this issue, but interaction still works the same (i.e. it will assume that you are selecting instead of deselecting because you are holding shift)
+# // # [[ "$LESS" != *--mouse* ]] && export LESS="$LESS --mouse" 					# Used for mouse functionality in less pagers (git log, man, etc.)
+# // # [[ "$LESS" != *--wheel-lines=* ]] && export LESS="$LESS --wheel-lines=2" 	# Change number of lines per scroll
+# // # [[ "$LESS" != *-N* ]] 	&& export LESS="$LESS -N" 							# Show line numbers in less by default
+# // #! disabled above because this messes with too many tools that use less
 
-#! `--mouse` flag breaks Windows Terminal selection inside of pagers (git log, man, etc.). See: https://github.com/microsoft/terminal/issues/9165#issuecomment-1398208221
-#! Holding shift down prevents this issue, but interaction still works the same (i.e. it will assume that you are selecting instead of deselecting because you are holding shift)
-[[ "$LESS" != *--mouse* ]] && export LESS="$LESS --mouse" 					# Used for mouse functionality in less pagers (git log, man, etc.)
-[[ "$LESS" != *--wheel-lines=* ]] && export LESS="$LESS --wheel-lines=2" 	# Change number of lines per scroll
-# [[ "$LESS" != *-N* ]] 	&& export LESS="$LESS -N" 							# Show line numbers in less by default
-#! disabled above because this messes with too many tools that use less
-
-#! Following commands use Windows Terminal, if you aren't using WT, remove the following
+#! Following commands use Windows Terminal, if you aren't using WT, remove/ignore the following
 # This command creates a new Powershell tab inside the current window of WT with the CWD as starting directory
 newps() {
 	wt.exe -w 0 new-tab -d `winpwd` Powershell

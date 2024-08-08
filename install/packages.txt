@@ -2,13 +2,24 @@
 
 // These are packages that get read from by `install.bash`, they're in the format:
 // `package-name  binary-name  alias-name` where `binary-name` and `alias-name` are for creating a symlink to `binary-name`, like `python` -> `python3`
-git      git       _       // 
-zsh      zsh       _       // 
-jq       jq        _       //
-// bc    bc        _       // 
-xsel     xsel      _       // 
-tmux     tmux      _       // 
-bat      batcat    bat     // 
-expect   unbuffer  _       // 
-python3  python3   python  // 
-git-delta delta	   _       //
+
+
+
+- ---------------------------- APT ---------------------------- -
+// package-name   binary-name   alias-name   minimum-version   comment
+git               git           _            _                 // 
+zsh               zsh           _            _                 // 
+jq                jq            _            _                 // 
+bc                bc            _            _                 // 
+xsel              xsel          _            _                 // 
+tmux              tmux          _            _                 // 
+bat               batcat        bat          _                 // 
+expect            unbuffer      _            _                 // 
+python3           python3       python       _                 // 
+git-delta         delta         _            23.10             // 
+ccze              ccze          _            _                 //
+- -------------------------- END APT -------------------------- -
+
+
+
+// Leaving the door open for other package managers

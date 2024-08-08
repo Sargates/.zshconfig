@@ -154,18 +154,25 @@ warning() {
 }
 
 
-	
+
 install-deps() {
 
 	local PACKAGES_TO_INSTALL="" failed="no"
+	local version="$(lsb_release -a 2>/dev/null | grep Release | awk '{ print $2 }')"
 
 	#! Change this to iterate once to install packages, and a second time to create aliases, prevents repeated calls to `apt install` and is more streamlined
 	while IFS=" " read -ra entry; do
-		package="${entry[0]}"; command="${entry[1]}"; alias="${entry[2]}"
+		package="${entry[0]}"; command="${entry[1]}"; alias="${entry[2]}"; min_version="${entry[3]}"
+
 
 		[ -z "$package" ] && continue 			# ignore empty lines
 		[[ "$package" = "//"* ]] && continue 	# ignore commented lines
-		PACKAGES_TO_INSTALL="$PACKAGES_TO_INSTALL $package"
+
+		# If there is a minumum required ubuntu version and the current version is below the minimum version, continue
+		{ [ ! $min_version = "_" ] && [ $version -lt $min_version  ]; } && continue
+
+
+		PACKAGES_TO_INSTALL="$package $PACKAGES_TO_INSTALL"
 
 	done < "$ZDOTDIR/install/packages.txt"
 
@@ -174,7 +181,7 @@ install-deps() {
 	sudo apt install $PACKAGES_TO_INSTALL -y || failed="yes"
 	if [ $failed == "no" ]; then
 		while IFS=" " read -ra entry; do
-			package="${entry[0]}"; command="${entry[1]}"; alias="${entry[2]}"
+			package="${entry[0]}"; command="${entry[1]}"; alias="${entry[2]}"; min_version="${entry[3]}"
 
 			[ -z "$package" ] && continue 			# ignore empty lines
 			[[ "$package" = "//"* ]] && continue 	# ignore commented lines
@@ -191,10 +198,17 @@ install-deps() {
 main() {
 	setup_color
 
-	command_exists git || {
-		fmt_error "git is not installed"
-		exit 1
-	}
+	local PRELIMINARY_PACKAGES=()
+	command_exists git || PRELIMINARY_PACKAGES+=("git")
+	command_exists zsh || PRELIMINARY_PACKAGES+=("zsh")
+
+	if [[ ${#PRELIMINARY_PACKAGES[@]} -eq 0 ]]; then
+
+		fmt_warning "The package(s): ${PRELIMINARY_PACKAGES[*]}, need to be installed."
+		sudo apt install $PRELIMINARY_PACKAGES
+	fi
+
+
 
 	warning
 	sudo echo -n

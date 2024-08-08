@@ -85,7 +85,7 @@ plugins=(
 	git
 	virtualenv
 	ssh-agent
-	# tmux
+	tmux
 	aliases
 	# dirpersist
 	# globalias
@@ -115,7 +115,9 @@ typeset -ix ISWSL # -i defines as integer, -x auto-exports variable. See http://
 # Change ZSH_COMPDUMP location to prevent cluttering user folder
 ZSH_CUSTOM=~/.zshconfig
 export ZDOTDIR="$HOME/.zshconfig"
-export HISTFILE="$HOME/.zsh_history" # OMZ defines HISTFILE using nullish coalescing, some environments (VSCode) set $HISTFILE before sourcing .zshrc, causing for the incorrect value to be used in those environments.
+# OMZ defines HISTFILE using nullish coalescing. Some terminal environments (VSCode) set $HISTFILE before sourcing .zshrc, causing for the incorrect value to be used in those environments.
+if [ -d "$HOME/.zshhistory" ]; then 	export HISTFILE="$HOME/.zshhistory/.zsh_history"
+else 									export HISTFILE="$HOME/.zsh_history"; fi
 export ZSH="$ZDOTDIR/ohmyzsh"
 export ZSH_COMPDUMP="$ZDOTDIR/.cache/.zcompdump-${HOST}-${ZSH_VERSION}"
 
@@ -153,4 +155,4 @@ zstyle ':completion:*:*:docker-*:*' option-stacking yes
 autoload -Uz compinit
 compinit -d $ZSH_COMPDUMP
 
-[ -s $HOME/.zprofile ] && source $HOME/.zprofile # Source .zprofile for additional, per-system aliases and setup
+[ -s "$HOME/.zprofile" ] && echo fortnite && source "$HOME/.zprofile" # Source .zprofile for additional, per-system aliases and setup
