@@ -155,4 +155,4 @@ zstyle ':completion:*:*:docker-*:*' option-stacking yes
 autoload -Uz compinit
 compinit -d $ZSH_COMPDUMP
 
-[ -s "$HOME/.zprofile" ] && echo fortnite && source "$HOME/.zprofile" # Source .zprofile for additional, per-system aliases and setup
+[ -s "$HOME/.zprofile" ] && source "$HOME/.zprofile" # Source .zprofile for additional, per-system aliases and setup
