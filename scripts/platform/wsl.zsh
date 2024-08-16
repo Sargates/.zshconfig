@@ -24,25 +24,26 @@ fi
 # alias winpython='winpy'
 
 
-open() {
-	# Check if url is valid. could use curl to do this, seems wasteful
-	content=$(curl --head --silent -gk "$*" | head -n 1)
-	if [ -n "$content" ]; then
-		powershell.exe Start-Process $1
-		return 0
-	fi
+# open() {
+# 	# Check if url is valid. could use curl to do this, seems wasteful
+# 	content=$(curl --head --silent -gk "$*" | head -n 1)
+# 	if [ -n "$content" ]; then
+# 		powershell.exe Start-Process $1
+# 		return 0
+# 	fi
 
 
-	#? Potential change: Use the `:A` expansion selector. evaluates relative path traversals 
-	#? like `.` and `..` and expands them to an absolute path. Use this instead of the double check
-	# Might still have issue when absolute path is passed, seems to work
-	if [[ -e ${1:A} ]]; then 				# check absolute path
-		explorer.exe "`wslpath -w ${1:A}`"
-		return 0
-	fi
-	echo "No such file or directory: $1"
-	return 1
-}
+# 	#? Potential change: Use the `:A` expansion selector. evaluates relative path traversals 
+# 	#? like `.` and `..` and expands them to an absolute path. Use this instead of the double check
+# 	# Might still have issue when absolute path is passed, seems to work
+# 	if [[ -e ${1:A} ]]; then 				# check absolute path
+# 		explorer.exe "`wslpath -w ${1:A}`"
+# 		return 0
+# 	fi
+# 	echo "No such file or directory: $1"
+# 	return 1
+# }
+alias open="wslview" # Apparently this has always existed
 alias psx="powershell.exe" # Syntax: `psx start .` (opens current dir)
 alias cmd="cmd.exe"
 alias cmdx="cmd /C"
@@ -55,6 +56,56 @@ export LIBGL_ALWAYS_SOFTWARE=1 # This being unset causes a segmentation fault in
 # Execute dotnet program in powershell to leverage Windows
 alias dnr="dotnet.exe run"
 alias dnb="dotnet.exe build"
+
+
+
+ffmpeg-compress() { # Custom function to compress a video to a specified bitrate. Uses NVenc to leverage GPU, requires an nvidia GPU. Only using in WSL for now
+	# See https://www.reddit.com/r/zsh/comments/s09vot/comment/hs1ixmx/
+	
+	emulate -L zsh
+	zmodload zsh/zutil || return
+
+	# Default option values can be specified as (value).
+	local help bitrate input output=(default)
+
+	# Brace expansions are great for specifying short and long
+	# option names without duplicating any information.
+	zparseopts -D -F -K -- \
+		{h,-help}=help       \
+		{b,-bitrate}:=bitrate \
+		{i,-input}:=input \
+		{o,-output}:=output || return
+	# zparseopts prints an error message if it cannot parse
+	# arguments, so we can simply return on error.
+
+	if (( $#help )); then
+		print -rC1 --      \
+		"$0 [-h|--help]" \
+		"$0 [-b|--bitrate] [-f|--input=<file>] [<message...>]"
+		return
+	fi
+
+	# Presence of options can be checked via (( $#option )).
+	if (( ! $#input )); then
+		echo "Error: Input file not given"
+		return 1
+	fi
+	if [[ ! -f "${input[-1]:A}" ]]; then
+		echo "Error: Input file does not exist"
+		return 1
+	fi
+	if (( ! $#output )); then
+		echo "Error: Output file not given"
+		return 1
+	fi
+	if (( ! $#bitrate )); then
+		echo "Error: Bitrate not given"
+		return 1
+	fi
+
+	ffmpeg -hwaccel cuda -extra_hw_frames 2 -i "${input[-1]:A}" -c:v h264_nvenc -b:v "${bitrate[-1]}" -c:a copy "${output[-1]:A}"
+}
+
 
 
 # export DISPLAY=192.168.176.1:0.0 # garbage for xserver
