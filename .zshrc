@@ -115,6 +115,7 @@ typeset -ix ISWSL # -i defines as integer, -x auto-exports variable. See http://
 # Change ZSH_COMPDUMP location to prevent cluttering user folder
 ZSH_CUSTOM=~/.zshconfig
 export ZDOTDIR="$HOME/.zshconfig"
+hash -d zshcfg="$ZDOTDIR"
 # OMZ defines HISTFILE using nullish coalescing. Some terminal environments (VSCode) set $HISTFILE before sourcing .zshrc, causing for the incorrect value to be used in those environments.
 if [ -d "$HOME/.zshhistory" ]; then 	export HISTFILE="$HOME/.zshhistory/.zsh_history"
 else 									export HISTFILE="$HOME/.zsh_history"; fi
