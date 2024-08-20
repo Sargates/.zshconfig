@@ -85,13 +85,13 @@ plugins=(
 	git
 	virtualenv
 	ssh-agent
-	tmux
 	aliases
 	# dirpersist
 	# globalias
-	docker
 	# virtualenvwrapper
 )
+(( ${+commands[tmux]} )) && plugins+=(tmux)
+(( ${+commands[docker]} )) && plugins+=(docker)
 
 #! This line changes `headline` to reset the clock in realtime -- causes issues in history traversal with arrow keys
 # TMOUT=1; TRAPALRM () { zle reset-prompt }
