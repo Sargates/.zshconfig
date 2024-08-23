@@ -72,15 +72,6 @@ DISABLE_UNTRACKED_FILES_DIRTY="true" #? testing this
 # # HEADLINE_RIGHT_PROMPT_ELEMENTS=(status virtualenv) # TODO: remove virtualenv here
 # HEADLINE_RIGHT_PROMPT_ELEMENTS=(status)
 
-#! This line changes `headline` to reset the clock in realtime -- causes issues in history traversal with arrow keys
-# TMOUT=1; TRAPALRM () { zle reset-prompt }
-
-#* Ex: (( $ISWSL )) && echo "This is WSL" || echo "This is not WSL"
-typeset -ix ISWSL # -i defines as integer, -x auto-exports variable. See http://devlib.symbian.slions.net/s3/GUID-D87C96CE-3F23-552D-927C-B6A1D61691BF.html
-[[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=1 || ISWSL=0
-
-
-
 plugins=(
 	git
 	virtualenv
@@ -93,8 +84,10 @@ plugins=(
 (( ${+commands[tmux]} )) && plugins+=(tmux)
 (( ${+commands[docker]} )) && plugins+=(docker)
 
-#! This line changes `headline` to reset the clock in realtime -- causes issues in history traversal with arrow keys
+#! This adds a hook to reset the prompt, thus resetting the clock and letting it be read at the time of execution instead of the time of last execution.
+#! This also causes the bug of setting the $CURSOR value to EOL, causing issues when traversing history with up/down arrows. there's no way around this as $CURSOR is read-only during the execution of TRAPALRM.
 # TMOUT=1; TRAPALRM () { zle reset-prompt }
+#* TLDR: SOL on accurate clock for now
 
 
 
