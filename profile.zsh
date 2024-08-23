@@ -17,7 +17,7 @@ alias cdzsh='cd $ZDOTDIR'
 local baseLS="ls -lah --color=always"											# Preserves coloring when piping to grep with --color=never flag i.e. `l | grep --color=never {PATTERN}`
 alias l="$baseLS --group-directories-first"										# Primary "ls" command, groups dirs first, top->bottom: .dirs, dirs, .files, files
 export LANG="C.UTF-8"															# Change LANG (mainly for sort order when calling ls -l)
-(( ${+commands[code]} )) && EDITOR="code"											# Use VSCode as primary EDITOR
+(( ${+commands[code]} )) && EDITOR="code"										# Use VSCode as primary EDITOR
 alias nano="/usr/bin/nano --nonewlines"											# Override nano command with passed argument `--nonewline` to prevent dumb newline at EOF
 
 alias zshcfg="$EDITOR ~/.zshconfig"												# Open zsh config in editor

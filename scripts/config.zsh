@@ -28,4 +28,4 @@ while IFS="=" read -r key value; do
 done < <(cat $ZDOTDIR/.zshconfig.json | sed 's/\/\/.*//' | sed 's/^[ \t]*//;s/[ \t]*$//' | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]')
 #? `sed 's/\/\/.*//'` 				- pipe to remove comments
 #? `sed 's/^[ \t]*//;s/[ \t]*$//'` 	- pipe to trim whitespace
-#* this creates a consistent format that `jq` doesn't throw a fit about
+#* this creates a consistent format so `jq` doesn't throw a fit
