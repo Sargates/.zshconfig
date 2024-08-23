@@ -29,7 +29,7 @@ alias gmnff="git merge --no-ff"		# shorthand for no-ff merge
 # git config --global user.email "$USER@$HOST" #! Was testing this, do not uncomment unless you want your git signature to be changed
 
 function glgrep() { # See: https://askubuntu.com/q/1502183/1764786 for extra info
-	git log --all --color=always --pretty=$'%C(bold blue)%h%C(reset)\t%C(bold cyan)%aD%C(reset)\t%C(white)%s%C(reset)%C(dim white) - %an%C(reset)' | GREP_COLORS="ms=41" grep -i $1 --color=always -A1 -B1 | column_ansi -t -s $'\t' | trim
+	git log --all --color=always --pretty=$'%C(bold blue)%h%C(reset)\t%C(bold cyan)%aD%C(reset)\t%C(white)%s%C(reset)%C(dim white) - %an%C(reset)' | GREP_COLORS="ms=41" grep -i $* --color=always -A1 -B1 | column_ansi -t -s $'\t' | trim
 	# Need to call `trim` (see profile.zsh for definition) after `column_ansi` (see scripts/column_ansi) to trim trailing newline
 }
 alias glg="glgrep"
