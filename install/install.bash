@@ -202,8 +202,7 @@ main() {
 	command_exists git || PRELIMINARY_PACKAGES+=("git")
 	command_exists zsh || PRELIMINARY_PACKAGES+=("zsh")
 
-	if [[ ${#PRELIMINARY_PACKAGES[@]} -eq 0 ]]; then
-
+	if (( ${#PRELIMINARY_PACKAGES[@]} )); then
 		fmt_warning "The package(s): ${PRELIMINARY_PACKAGES[*]}, need to be installed."
 		sudo apt install $PRELIMINARY_PACKAGES
 	fi
