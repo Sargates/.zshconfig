@@ -15,5 +15,5 @@ fi
 # 	fi
 # }
 
-alias tscon="sudo tailscale up --accept-routes --exit-node "home-network""
+alias tscon='sudo tailscale up --accept-routes --exit-node "truenas-scale"'
 alias tsdc="sudo tailscale down"
