@@ -5,8 +5,8 @@
 *[tT][oO][dD][oO]*
 *.patch
 
-.cache/*
-!.cache/.gitkeep
+cache/*
+!cache/.gitkeep
 *.zcompdump*
 .zshconfig.json
 .zsh_history # Prevent tracking of $HISTFILE if $HISTFILE defaults to $ZDOTDIR/.zsh_history instead of $HOME/.zsh_history
