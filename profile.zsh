@@ -48,19 +48,9 @@ alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"										# Trim leading and trailing 
 
 
 aptsearch() { #! If you're having issues with output, it's likely that the version of the package is not a valid semantic version.
-	# Get package server codename programatically, 22.04 -> jammy; 24.04 -> noble
-	local ID=$(grep '^ID=' /etc/os-release | cut -d= -f2)
-	local PACKAGE_SERVER
-	if [ $ID = 'ubuntu' ]; then
-		PACKAGE_SERVER="$(grep VERSION_CODENAME /etc/os-release | cut -d= -f2)"
-	elif [ $ID = 'debian' ]; then
-		PACKAGE_SERVER='stable'
-	else
-		/usr/bin/apt search $1
-		printf '\e[31mCould not determine consisted package release; OS not fully supported for `apt search` alias.
-Ran command: `/usr/bin/apt search %s`\e[m' $1
-		return 0
-	fi
+
+	# if (( ${+command[apt]} )) && (( $(/usr/bin/apt --version | awk '{print $2}') >= 2.9.0 )); do
+	# done
 
 
 	[ ${+commands[unbuffer]} -ne 0 ] && local PREFIX="unbuffer"
@@ -74,7 +64,7 @@ Ran command: `/usr/bin/apt search %s`\e[m' $1
 	local OUTPUT=$(
 		$PREFIX /usr/bin/apt search $@ | 										# Search for package
 		grep -v -e "^  " -e "^$" | 												# Remove description and spacing lines from `apt` output
-		tail -n +3 | 															# Remove info from output
+		# tail -n +3 | 															# Remove info from output. #! Commented out because doesn't show the first few packages. Breaking behavior occurs somewhere between versions 2.4.11 and 2.9.7
 		GREP_COLORS="ms=$GREP_COLORS" grep  --color=always -e "^" -e "$1" | 	# Highlight matches for $1 in $GREP_COLORS
 		sed -e $'s/\033[[]m/\033[40m/' 											# Fix ANSI color codes; Replace the first color reset (from previous `grep`) with background reset (because $GREP_COLORS changes background color)
 	)
