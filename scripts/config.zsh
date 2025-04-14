@@ -16,7 +16,7 @@ fi
 # Exit if `jq` is not installed
 if (( ! ${+commands[jq]} )); then
 	printf '\e[31m`jq` not installed. Unable to parse `%s/.zshconfig.json`\e[m\n' $ZDOTDIR
-	exit 1
+	return
 fi
 
 # https://stackoverflow.com/a/26717401
