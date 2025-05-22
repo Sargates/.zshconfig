@@ -47,53 +47,132 @@ alias gr='git -C `git root`'													# OMZ defines `gr` as `git remote`. Her
 alias trim="sed 's/^[ \t]*//;s/[ \t]*$//'"										# Trim leading and trailing whitespace
 
 
+
+#!          DON'T DELETE THIS UNTIL YOU WRITE DOWN THE IMPORTANT COMMENTS
+# aptsearch() { #! If you're having issues with output, it's likely that the version of the package is not a valid semantic version.
+#     zparseopts -D -E -F -- \
+#         {1,-first}=show_only_first       \
+#         {s,-strict}=strict_match         \
+#         || return
+#
+#     typeset -i FIRST_ONLY=$( (( $#show_only_first < 1 )); echo $? )
+#     typeset -i STRICT=$( (( $#strict_match < 1 )); echo $? )
+#
+#     if (( $# > 1 )); then
+#         echo "Ignoring arguments: ${@:2}"
+#     fi
+#
+#     [ ${+commands[unbuffer]} -ne 0 ] && local PREFIX="unbuffer"
+#
+#     # if (( $FIRST_ONLY )); then
+#     #     echo "-1 passed!!"
+#     # fi
+#
+#     #! This value of `GREP_ARGS` doesn't work currently. awk will break if `-A1 --group-separator=$SEPARATOR` is passed because output of grep will be weird
+#     # // local SEPARATOR=$'\033[F' # control char to move up a line, fixes double newline between grep matches
+#     # // local GREP_ARGS='--color=none -A1 --group-separator=$SEPARATOR'
+#
+#     [ ! $GREP_COLORS ] && local GREP_COLORS="48;5;239" # define $GREP_COLORS if its not defined already, (used for testing different colors without having to re-source .zshrc)
+#
+#     local OUTPUT=$(
+#         $PREFIX /usr/bin/apt search "$1" |                                        # Search for package
+#         grep -v -e "^  " -e "^$" |                                              # Remove description and spacing lines from `apt search` output
+#         # tail -n +3 |                                                             # Remove info from output. #! Commented out because doesn't show the first few packages. Breaking behavior occurs somewhere between versions 2.4.11 and 2.9.7
+#         # GREP_COLORS="ms=$GREP_COLORS" grep  --color=always -e "^" -e $( { (( $STRICT )) && echo "^${1}" } || echo "${1}" ) |       # Highlight matches for $1 in $GREP_COLORS
+#         GREP_COLORS="ms=$GREP_COLORS" grep  --color=always -e "^" -e "$1" |       # Highlight matches for $1 in $GREP_COLORS
+#         sed -e $'s/\033[[]m/\033[40m/'                                            # Fix ANSI color codes; Replace the first color reset (from previous `grep`) with background reset (because $GREP_COLORS changes background color)
+#     )
+#
+#
+#     # regex pattern for matching semantic versioning, official semver maintainers give a better matching pattern but I could get it to work, see https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+#     #! Pattern needs double escape here
+#     # local PATTERN='[0-9]*\\.[0-9]*'
+#
+#     # echo $OUTPUT | awk -F'[ /]' -v PATTERN="$PATTERN" '$3 ~ PATTERN {match($3, PATTERN); print $1"@"substr($3, RSTART, RLENGTH)"/"$2" "$5 }' #? Used for semantic versioning
+#     echo $OUTPUT | awk -F'[ /]' '{ print $1"@"$3"/"$2" "$5 }' | { { (( $FIRST_ONLY )) && head -3 } || cat - }
+#     
+#     [ ! $PREFIX ] && printf $'\e[33;4mThis command uses unbuffer to add coloring to this output. Install it using `apt install expect` or modify %s/profile.zsh to remove this notification\e[0m\n' $ZDOTDIR
+#     return 0
+# }
+
 aptsearch() { #! If you're having issues with output, it's likely that the version of the package is not a valid semantic version.
 
-	# if (( ${+command[apt]} )) && (( $(/usr/bin/apt --version | awk '{print $2}') >= 2.9.0 )); do
-	# done
+    local CRESET=$'\e[m'
+    local CFORERES=$'\e[30m'
+    local CFORERED=$'\e[31m'
+    local CFOREGRN=$'\e[32m'
+    local CFOREYLW=$'\e[33m'
+    local CFOREBLU=$'\e[36m'
+    local CFOREORN=$'\e[38;5;202m'
+
+    local CBACKRES=$'\e[40m'
+    local CBACKRED=$'\e[41m'
+    local CBACKGRN=$'\e[42m'
+    local CBACKYLW=$'\e[43m'
+    local CBACKBLU=$'\e[46m'
+    local CBACKORN=$'\e[48;5;202m'
+
+    local CREG=$'\e[0m' # same as CRESET but whatever
+    local CBOLD=$'\e[1m'
+    local CDIM=$'\e[2m'
+    local CITAL=$'\e[3m'
+    local CUNDR=$'\e[4m'
+    local CNUNDR=$'\e[24m' # NOT underlined
+    local CBLNK=$'\e[5m'
 
 
-	[ ${+commands[unbuffer]} -ne 0 ] && local PREFIX="unbuffer"
+    zparseopts -D -E -F -- \
+        {1,-first}=show_only_first       \
+        {s,-strict}=strict_match         \
+        || return
 
-	#! This value doesn't work currently. awk will break if `-A1 --group-separator=$SEPARATOR` is passed because output of grep will be weird
-	# // local SEPARATOR=$'\033[F' # control char to move up a line, fixes double newline between grep matches
-	# // local GREP_ARGS='--color=none -A1 --group-separator=$SEPARATOR'
+    typeset -i FIRST_ONLY=$( (( $#show_only_first < 1 )); echo $? )
+    typeset -i STRICT=$( (( $#strict_match < 1 )); echo $? )
 
-	[ ! $GREP_COLORS ] && local GREP_COLORS="48;5;239" # define $GREP_COLORS if its not defined already, (used for testing different colors without having to re-source .zshrc)
+    if (( $# > 1 )); then
+        echo "Ignoring arguments: ${@:2}"
+    fi
 
-	local OUTPUT=$(
-		$PREFIX /usr/bin/apt search $@ | 										# Search for package
-		grep -v -e "^  " -e "^$" | 												# Remove description and spacing lines from `apt` output
-		# tail -n +3 | 															# Remove info from output. #! Commented out because doesn't show the first few packages. Breaking behavior occurs somewhere between versions 2.4.11 and 2.9.7
-		GREP_COLORS="ms=$GREP_COLORS" grep  --color=always -e "^" -e "$1" | 	# Highlight matches for $1 in $GREP_COLORS
-		sed -e $'s/\033[[]m/\033[40m/' 											# Fix ANSI color codes; Replace the first color reset (from previous `grep`) with background reset (because $GREP_COLORS changes background color)
-	)
+    #! This value of `GREP_ARGS` doesn't work currently. awk will break if `-A1 --group-separator=$SEPARATOR` is passed because output of grep will be weird
+    # // local SEPARATOR=$'\033[F' # control char to move up a line, fixes double newline between grep matches
+    # // local GREP_ARGS='--color=none -A1 --group-separator=$SEPARATOR'
+    [ ! $GREP_COLORS ] && local GREP_COLORS="48;5;239" # define $GREP_COLORS if its not defined already, (used for testing different colors without having to re-source .zshrc)
+
+    local OUTPUT=$(
+        /usr/bin/apt search $( { (( $STRICT )) && echo "--names-only ^${1}" } || echo "${1}" ) |                                                    # Search for package
+        grep -vi -e "^$" -e "sorting" -e "full text search" |                                                                # Remove description and spacing lines from `apt search` output
+        GREP_COLORS="ms=$GREP_COLORS" grep --color=always -e "^" -e "$1"  |           # Highlight matches for $1 in $GREP_COLORS
+        sed -e $'s/\033[[]m/\033[40m/'                                                # Fix ANSI color codes; Replace the first color reset (from previous `grep`) with background reset (because $GREP_COLORS changes background color)
+    )
+
+    #! Pattern needs double escape here
+    # local PATTERN='[0-9]*\\.[0-9]*'
+
+    # echo $OUTPUT | awk -F'[ /]' -v PATTERN="$PATTERN" '$3 ~ PATTERN {match($3, PATTERN); print $1"@"substr($3, RSTART, RLENGTH)"/"$2" "$5 }' #? Used for semantic versioning
+    local TMP_FILE='/tmp/.zshconfig-aptsearch-tmp.txt'
+    echo $OUTPUT | awk -F'[ /]' '{ if (substr($0, 1, 1) != " ") printf "\033[32m%s\033[m\t@ \033[36m\033[4m%s\033[m/\t%s\t\033[38;5;202m%s\033[m\t", $1, $3, $2, $5; getline; print $0 }' \
+        | { { (( $FIRST_ONLY )) && grep "@" | head -1 } || cat - } \
+        | column_ansi -t -s $'\t' \
+        | { cat - > "$TMP_FILE"; { (( $(wc -l "$TMP_FILE" | cut -d' ' -f1) <= $(tput lines) )) && cat $TMP_FILE } || bat --wrap=never --style plain $TMP_FILE }  # check if bat would close automatically, if so then just cat to stdout
+    rm $TMP_FILE
 
 
-	# regex pattern for matching semantic versioning, official semver maintainers give a better matching pattern but I could get it to work, see https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
-	#! Pattern needs double escape here
-	# local PATTERN='[0-9]*\\.[0-9]*'
-
-	# echo $OUTPUT | awk -F'[ /]' -v PATTERN="$PATTERN" '$3 ~ PATTERN {match($3, PATTERN); print $1"@"substr($3, RSTART, RLENGTH)"/"$2" "$5 }' #? Used for semantic versioning
-	echo $OUTPUT | awk -F'[ /]' '{ print $1"@"$3"/"$2" "$5 }'
-	
-	[ ! $PREFIX ] && printf $'\e[33;4mThis command uses unbuffer to add coloring to this output. Install it using `apt install expect` or modify %s/profile.zsh to remove this notification\e[0m\n' $ZDOTDIR
-	return 0
+    return 0
 }
 
 #! Doesn't work if using `sudo apt` for obvious reasons
 apt() { # https://unix.stackexchange.com/a/670978
-	if [ "$1" = "search" ]; then
-		shift # eat the "shift" argument
-		# echo $#
-		if [ $# -eq 0 ]; then
-			command apt search
-			return $?
-		fi
-		aptsearch "$@"
-		return $?
-	fi
-	command apt "$@"
+    if [ "$1" = "search" ]; then
+        shift # eat the "shift" argument
+        # echo $#
+        if [ $# -eq 0 ]; then
+            command apt search
+            return $?
+        fi
+        aptsearch $@
+        return $?
+    fi
+    command apt "$@"
 }
 
 
