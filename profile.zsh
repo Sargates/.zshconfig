@@ -123,11 +123,13 @@ aptsearch() { #! If you're having issues with output, it's likely that the versi
 
     zparseopts -D -E -F -- \
         {1,-first}=show_only_first       \
+        {ss,-super-strict}=super_strict_match         \
         {s,-strict}=strict_match         \
         || return
 
     typeset -i FIRST_ONLY=$( (( $#show_only_first < 1 )); echo $? )
-    typeset -i STRICT=$( (( $#strict_match < 1 )); echo $? )
+    typeset -i SUPER_STRICT=$( (( $#super_strict_match < 1 )); echo $? )
+    typeset -i STRICT=$( (( $SUPER_STRICT < 1 )) && (( $#strict_match < 1 )); echo $? ) # demorgan's law fuckery because we're inverting the return value; exit(1) -> true
 
     if (( $# > 1 )); then
         echo "Ignoring arguments: ${@:2}"
@@ -137,9 +139,14 @@ aptsearch() { #! If you're having issues with output, it's likely that the versi
     # // local SEPARATOR=$'\033[F' # control char to move up a line, fixes double newline between grep matches
     # // local GREP_ARGS='--color=none -A1 --group-separator=$SEPARATOR'
     [ ! $GREP_COLORS ] && local GREP_COLORS="48;5;239" # define $GREP_COLORS if its not defined already, (used for testing different colors without having to re-source .zshrc)
-
+    
+    local search_string="$1"
+    local apt_options=""
+    (( $STRICT )) && apt_options="--names-only"
+    (( $SUPER_STRICT )) && search_string="^$1"
+        
     local OUTPUT=$(
-        /usr/bin/apt search $( { (( $STRICT )) && echo "--names-only ^${1}" } || echo "${1}" ) |                                                    # Search for package
+        /usr/bin/apt search $apt_options "$search_string" |                                                    # Search for package
         grep -vi -e "^$" -e "sorting" -e "full text search" |                                                                # Remove description and spacing lines from `apt search` output
         GREP_COLORS="ms=$GREP_COLORS" grep --color=always -e "^" -e "$1"  |           # Highlight matches for $1 in $GREP_COLORS
         sed -e $'s/\033[[]m/\033[40m/'                                                # Fix ANSI color codes; Replace the first color reset (from previous `grep`) with background reset (because $GREP_COLORS changes background color)
