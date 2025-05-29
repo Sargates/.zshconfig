@@ -160,14 +160,14 @@ aptsearch() { #! If you're having issues with output, it's likely that the versi
     echo $OUTPUT | awk -F'[ /]' '{ if (substr($0, 1, 1) != " ") printf "\033[32m%s\033[m\t@ \033[36m\033[4m%s\033[m/\t%s\t\033[38;5;202m%s\033[m\t", $1, $3, $2, $5; getline; print $0 }' \
         | { { (( $FIRST_ONLY )) && grep "@" | head -1 } || cat - } \
         | column_ansi -t -s $'\t' \
-        | { cat - > "$TMP_FILE"; { (( $(wc -l "$TMP_FILE" | cut -d' ' -f1) <= $(tput lines) )) && cat $TMP_FILE } || bat --wrap=never --style plain $TMP_FILE }  # check if bat would close automatically, if so then just cat to stdout
+        | { cat - > "$TMP_FILE"; { (( $(wc -l "$TMP_FILE" | cut -d' ' -f1) <= $(bc "$(tput lines)/2") )) && cat $TMP_FILE } || bat --wrap=never --style plain $TMP_FILE }  # check if bat would close automatically, if so then just cat to stdout
     rm $TMP_FILE
 
 
     return 0
 }
 
-#! Doesn't work if using `sudo apt` for obvious reasons
+#! Doesn't work if using `sudo apt` for obvious reasons #'
 apt() { # https://unix.stackexchange.com/a/670978
     if [ "$1" = "search" ]; then
         shift # eat the "shift" argument
