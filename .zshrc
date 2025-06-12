@@ -94,10 +94,7 @@ plugins=(
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-
-
+(( $#commands[nvim] )) && { EDITOR=nvim; SUDO_EDITOR=nvim }
 
 
 #* Ex: (( $ISWSL )) && echo "This is WSL" || echo "This is not WSL"
