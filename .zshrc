@@ -77,9 +77,7 @@ plugins=(
 	virtualenv
 	ssh-agent
 	aliases
-	# dirpersist
-	# globalias
-	# virtualenvwrapper
+	tailscale
 )
 (( ${+commands[tmux]} )) && plugins+=(tmux)
 (( ${+commands[docker]} )) && plugins+=(docker)
