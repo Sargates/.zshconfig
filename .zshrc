@@ -88,11 +88,10 @@ plugins=(
 #* TLDR: SOL on accurate clock for now
 
 
-
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
-(( $#commands[nvim] )) && { EDITOR=nvim; SUDO_EDITOR=nvim }
+(( $#commands[nvim] )) && { export EDITOR=nvim; export SUDO_EDITOR=nvim } # `export` is needed here to work properly. maybe because it's being elevated and it's not the same shell??
 
 
 #* Ex: (( $ISWSL )) && echo "This is WSL" || echo "This is not WSL"
