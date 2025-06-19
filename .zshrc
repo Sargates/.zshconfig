@@ -111,6 +111,8 @@ export ZSH_COMPDUMP="$ZDOTDIR/cache/.zcompdump-${HOST}-${ZSH_VERSION}"
 # export ZSH_COMPDUMP="$ZSH_CACHE_DIR/.zcompdump-${HOST}-${ZSH_VERSION}"
 export ZSH_CACHE_DIR="$ZDOTDIR/cache"
 
+export BASH_COMP_DEBUG_FILE=$ZDOTDIR/.cache/bash_comp_debug_file
+
 
 NVIM="${HOME:-/home/nobody}/.config/nvim"
 
