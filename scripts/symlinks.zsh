@@ -7,7 +7,7 @@ if [ -z $ZDOTDIR ]; then exit 1; fi
 #* This `if` will still process even if `ZSH_CONFIG` is actually set but every option is "no". shouldn't matter, just wasteful
 if (( ${+commands[jq]} )) && [ -z "$ZSH_CONFIG" ]; then source "$ZDOTDIR/scripts/config.zsh"; fi
 
-mkdir -p $ZDOTDIR/.cache/.old
+mkdir -p $ZDOTDIR/cache/.old
 local neededUpdate="no"
 
 needsUpdate() { # $1 is abs filepath and must be a symlink to work correctly
@@ -17,11 +17,11 @@ needsUpdate() { # $1 is abs filepath and must be a symlink to work correctly
 	return 1 # returning `1` will not update the symlink. Has to do with how shell script and error codes work.
 }
 
-makeBackup() { # $1 is abs filepath, save to $ZDOTDIR/.cache with date
+makeBackup() { # $1 is abs filepath, save to $ZDOTDIR/cache with date
 	[ ! -e "$1" ] && return 0 	# if file doesn't exist, don't make backup
 	[ -h "$1" ] && return 0 	# if file is already a symlink, no need to backup. return
-	mv "$1" "$ZDOTDIR/.cache/.old/$(date +"%m-%d-%Y-%H-%M-%S")${1:t}" #* no space needed between ${1:t} and datetime because its a dotfile, thus -> $DATE.gitconfig
-	# echo "$ZDOTDIR/.cache/.old/$(date +"%m-%d-%Y-%H-%M-%S")${1:t}"
+	mv "$1" "$ZDOTDIR/cache/.old/$(date +"%m-%d-%Y-%H-%M-%S")${1:t}" #* no period needed between ${1:t} and datetime because its a dotfile, thus -> $DATE.gitconfig
+	# echo "$ZDOTDIR/cache/.old/$(date +"%m-%d-%Y-%H-%M-%S")${1:t}"
 }
 
 makeLink() {
@@ -54,7 +54,7 @@ checkAndUpdate() {
 	done
 
 	if [ $neededUpdate = "yes" ]; then
-		echo 'File backups can be found at `$ZDOTDIR/.cache/.old`'
+		echo 'File backups can be found at `$ZDOTDIR/cache/.old`'
 	fi
 
 }

@@ -101,18 +101,23 @@ plugins=(
 typeset -ix ISWSL # -i defines as integer, -x auto-exports variable. See http://devlib.symbian.slions.net/s3/GUID-D87C96CE-3F23-552D-927C-B6A1D61691BF.html
 [[ -a "/proc/sys/fs/binfmt_misc/WSLInterop" ]] && ISWSL=1 || ISWSL=0
 
-
 # Change ZSH_COMPDUMP location to prevent cluttering user folder
-ZSH_CUSTOM=~/.zshconfig
+ZSH_CUSTOM=${HOME:-/home/nobody}/.zshconfig
 export ZDOTDIR="$HOME/.zshconfig"
 builtin hash -d zshcfg="$ZDOTDIR"
 # OMZ defines HISTFILE using nullish coalescing. Some terminal environments (VSCode) set $HISTFILE before sourcing .zshrc, causing for the incorrect value to be used in those environments.
 if [ -d "$HOME/.zshhistory" ]; then 	export HISTFILE="$HOME/.zshhistory/.zsh_history"
 else 									export HISTFILE="$HOME/.zsh_history"; fi
 export ZSH="$ZDOTDIR/ohmyzsh"
-export ZSH_COMPDUMP="$ZDOTDIR/.cache/.zcompdump-${HOST}-${ZSH_VERSION}"
+export ZSH_COMPDUMP="$ZDOTDIR/cache/.zcompdump-${HOST}-${ZSH_VERSION}"
+# export ZSH_COMPDUMP="$ZSH_CACHE_DIR/.zcompdump-${HOST}-${ZSH_VERSION}"
+export ZSH_CACHE_DIR="$ZDOTDIR/cache"
 
-# export dirstack_file="$ZDOTDIR/.cache/.dirpersist" #? Only needed for `dirpersist` plugin
+
+NVIM="${HOME:-/home/nobody}/.config/nvim"
+
+
+# export dirstack_file="$ZDOTDIR/cache/.dirpersist" #? Only needed for `dirpersist` plugin
 
 #* https://zsh.sourceforge.io/Doc/Release/Shell-Builtin-Commands.html
 # > `-t fmt` prints time and date stamps in the given format; fmt is formatted with the strftime function with the zsh extensions described for the %D{string} prompt format in Prompt Expansion. The resulting formatted string must be no more than 256 characters or will not be printed
