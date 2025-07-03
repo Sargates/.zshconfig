@@ -35,6 +35,12 @@ function glgrep() { # See: https://askubuntu.com/q/1502183/1764786 for extra inf
 alias glg="glgrep"
 
 function github() {
+	zparseopts -D -E -F -- \
+		{s,-force-ssh}=force_ssh       \
+		|| return
+	typeset -i FORCE_SSH=$( (( $#force_ssh < 1 )); echo $? )
+
+	
 	local REPONAME=""
 	local GHUBUSER='Sargates'		# Default name
 
@@ -64,7 +70,7 @@ function github() {
 	fi
 
 	#* To check if a repo is public, query github's API to see if the repo is accessible with no authentication.
-	if [ $(curl https://api.github.com/repos/$GHUBUSER/$REPONAME 2>/dev/null | jq '.["private"]') = "false" ]; then
+	if [ $(curl https://api.github.com/repos/$GHUBUSER/$REPONAME 2>/dev/null | jq '.["private"]') = "false" ] && (( ! $FORCE_SSH )); then
 		# Repository is public, return https URL
 		echo https://github.com/$GHUBUSER/$REPONAME.git
 	else
